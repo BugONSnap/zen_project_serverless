@@ -2,12 +2,12 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
-const connectionString = process.env.DATABASE_URL!;
-const sql = postgres(connectionString);
+const connectionString =
+  process.env.DATABASE_URL ||
+  "postgresql://postgres.axtofqptsjjqheigapot:[PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require";
 
-// Merge schema and tables
-const mergedSchema = {
-  ...schema,
-};
+const client = postgres(connectionString, {
+  prepare: false,
+});
 
-export const db = drizzle(sql, { schema: mergedSchema });
+export const db = drizzle(client);
