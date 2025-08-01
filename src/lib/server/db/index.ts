@@ -1,13 +1,13 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import * as schema from "./schema";
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import Database from 'better-sqlite3';
+import * as schema from './schema';
 
-const connectionString =
-  process.env.DATABASE_URL ||
-  "postgresql://postgres.axtofqptsjjqheigapot:[PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require";
+const sqlite = new Database('zen.db');
 
-const client = postgres(connectionString, {
-  prepare: false,
-});
+// Merge schema and tables
+const mergedSchema = {
+	...schema,
+	
+};
 
-export const db = drizzle(client);
+export const db = drizzle(sqlite, { schema: mergedSchema });
