@@ -19,8 +19,8 @@
     let showIntroModal = true;
     let nextQuizId: number | null = null;
 
-    // Debug log
-    console.log('quizData:', quizData);
+
+    console.log(quizData)
 
     async function saveQuizResult(finalScore: number, isCorrect: boolean) {
         try {
@@ -163,6 +163,7 @@
             } else {
                 nextQuizId = null;
             }
+
         }
     });
 

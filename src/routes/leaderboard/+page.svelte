@@ -4,7 +4,7 @@
 </script>
 
 <div class="min-h-screen bg-cover bg-center" style="background-image: url('/BG.jpg');">
-    <DashboardHeader title="Leaderboard" />
+    <DashboardHeader title="Leaderboard" user={data.user} />
 
     <div class="max-w-2xl mx-auto py-12">
         <div class="bg-white rounded-xl shadow-lg p-8">

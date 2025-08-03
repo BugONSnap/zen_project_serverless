@@ -44,36 +44,77 @@ export const load: PageServerLoad = async ({ url }) => {
     }
   }
 
+  // let questions = [];
+  // if (quiz?.options) {
+  //   try {
+  //     questions =
+  //       typeof quiz.options === "string" ? JSON.parse(quiz.options) : [];
+  //   } catch {
+  //     questions = [];
+  //   }
+  // }
+
+  // // If Complete the Code, Code Challenge or Identification and questions is empty, create a default question
+  // if (
+  //   (challengeTypeName === "Complete the Code" ||
+  //     challengeTypeName === "Code Challenge" ||
+  //     challengeTypeName === "Identification") &&
+  //   (!questions || questions.length === 0)
+  // ) {
+  //   questions = [
+  //     {
+  //       id: 1,
+  //       question: quiz.description,
+  //       starterCode:
+  //         challengeTypeName === "Code Challenge" ? quiz.answer : undefined, // Only include starterCode for Code Challenge
+  //       correctAnswer: quiz.answer,
+  //     },
+  //   ];
+  // }
+
   let questions = [];
-  if (quiz.options) {
+  if (quiz?.options) {
     try {
       questions =
-        typeof quiz.options === "string" ? JSON.parse(quiz.options) : [];
-    } catch (e) {
+        typeof quiz.options === "string"
+          ? JSON.parse(quiz.options)
+          : quiz.options;
+    } catch {
       questions = [];
     }
   }
 
-  // If Complete the Code, Code Challenge or Identification and questions is empty, create a default question
-  if (
-    (challengeTypeName === "Complete the Code" ||
+  // If questions is empty, create a default question for any challenge type
+  if (!questions || questions.length === 0) {
+    if (
+      challengeTypeName === "Complete the Code" ||
       challengeTypeName === "Code Challenge" ||
-      challengeTypeName === "Identification") &&
-    (!questions || questions.length === 0)
-  ) {
-    questions = [
-      {
-        id: 1,
-        question: quiz.description,
-        starterCode:
-          challengeTypeName === "Code Challenge" ? quiz.answer : undefined, // Only include starterCode for Code Challenge
-        correctAnswer: quiz.answer,
-      },
-    ];
+      challengeTypeName === "Identification"
+    ) {
+      questions = [
+        {
+          id: 1,
+          question: quiz.description,
+          starterCode:
+            challengeTypeName === "Code Challenge" ? quiz.answer : undefined,
+          correctAnswer: quiz.answer,
+        },
+      ];
+    } else if (challengeTypeName === "Multiple Choice") {
+      // For Multiple Choice, create a question from the quiz data
+      questions = [
+        {
+          id: 1,
+          question: quiz.description,
+          options: [quiz.answer], // You might want to add more options here
+          correctAnswer: 0,
+        },
+      ];
+    }
   }
 
   // Fetch all quizzes in the same category and difficulty, ordered by id
-  let allQuizzes: any[] = [];
+  let allQuizzes: (typeof quizzes.$inferSelect)[] = [];
   if (quiz && quiz.quizCategoryId != null && quiz.difficulty != null) {
     allQuizzes = await db.query.quizzes.findMany({
       where: and(
@@ -83,6 +124,13 @@ export const load: PageServerLoad = async ({ url }) => {
       orderBy: [quizzes.id],
     });
   }
+
+  console.log("Final quiz data:", {
+    id: quiz.id,
+    title: quiz.title,
+    challengeType: quiz.challengeTypeId,
+    options: quiz.options,
+  });
 
   return {
     quiz: {

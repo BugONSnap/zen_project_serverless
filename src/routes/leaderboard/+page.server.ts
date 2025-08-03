@@ -3,7 +3,7 @@ import { db } from "$lib/server";
 import { users, quizResults } from "$lib/server/db/schema";
 import { desc, sum, eq } from "drizzle-orm";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
   // Fetch leaderboard: username, total_points (sum of all quiz scores)
   const leaderboardRaw = await db
     .select({
@@ -21,5 +21,16 @@ export const load: PageServerLoad = async () => {
     rank: i + 1,
   }));
 
-  return { leaderboard };
+  console.log(leaderboard);
+
+  // Get user data for the header
+  const user = locals.user
+    ? {
+        id: locals.user.id,
+        username: locals.user.username,
+        email: locals.user.email,
+      }
+    : undefined;
+
+  return { leaderboard, user };
 };
