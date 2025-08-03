@@ -1,31 +1,17 @@
-import { relations, type InferSelectModel } from "drizzle-orm";
 import {
-  boolean,
-  integer,
-  jsonb,
   pgTable,
-  real,
   serial,
   text,
+  integer,
+  real,
   timestamp,
+  boolean,
+  jsonb,
   unique,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
-// user ranking table
-export const userRankings = pgTable("user_rankings", {
-  id: serial("id").primaryKey(),
-  rankName: text("rank_name").notNull(),
-  minPoints: integer("min_points").notNull(),
-  maxPoints: integer("max_points"),
-});
-
-// quiz categories table
-export const quizCategories = pgTable("quiz_categories", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-});
-
-// users table
+// Users table
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
@@ -37,7 +23,13 @@ export const users = pgTable("users", {
   rankId: integer("rank_id").references(() => userRankings.id),
 });
 
-// challenge types table
+// Quiz Categories table
+export const quizCategories = pgTable("quiz_categories", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+});
+
+// Challenge Types table
 export const challengeTypes = pgTable("challenge_types", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -47,7 +39,7 @@ export const challengeTypes = pgTable("challenge_types", {
   ),
 });
 
-// quizzes table
+// Quizzes table
 export const quizzes = pgTable("quizzes", {
   id: serial("id").primaryKey(),
   challengeTypeId: integer("challenge_type_id").references(
@@ -66,7 +58,7 @@ export const quizzes = pgTable("quizzes", {
   options: jsonb("options"),
 });
 
-// user progress table
+// User Progress table
 export const userProgress = pgTable(
   "user_progress",
   {
@@ -84,7 +76,15 @@ export const userProgress = pgTable(
   })
 );
 
-// quiz results table
+// User Rankings table
+export const userRankings = pgTable("user_rankings", {
+  id: serial("id").primaryKey(),
+  rankName: text("rank_name").notNull(),
+  minPoints: integer("min_points").notNull(),
+  maxPoints: integer("max_points"),
+});
+
+// Quiz Results table
 export const quizResults = pgTable("quiz_results", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id),
@@ -94,7 +94,7 @@ export const quizResults = pgTable("quiz_results", {
   pointsEarned: integer("points_earned"),
 });
 
-// code snippets table
+// Code Snippets table for playground
 export const codeSnippets = pgTable("code_snippets", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id),
@@ -185,5 +185,3 @@ export const codeSnippetsRelations = relations(codeSnippets, ({ one }) => ({
     references: [users.id],
   }),
 }));
-
-export type User = InferSelectModel<typeof users>;
