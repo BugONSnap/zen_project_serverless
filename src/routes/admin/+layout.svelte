@@ -1,145 +1,54 @@
 <script lang="ts">
-    import type { Snippet } from 'svelte';
-    import type { LayoutData } from './$types';
-    import { page } from '$app/stores';
-    import { goto } from '$app/navigation';
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
 
-    let { data, children }: { data: LayoutData, children: Snippet } = $props();
-
-    const navItems = [
-        { href: '/admin', label: 'Dashboard' },
-        { href: '/admin/users', label: 'Users' },
-        { href: '/admin/quizzes', label: 'Quizzes' },
-        { href: '/admin/categories', label: 'Categories' },
-        { href: '/admin/challengeTypes', label: 'Challenge Types' },
-        { href: '/admin/progress', label: 'User Progress' },
-        { href: '/admin/rankings', label: 'Rankings' },
-        { href: '/admin/results', label: 'Quiz Results' }
-    ];
-
-    async function handleLogout() {
-        try {
-            // Clear the admin cookie
-            document.cookie = 'isAdmin=false; path=/; max-age=0';
-            
-            // Redirect to main page
-            goto('/');
-        } catch (error) {
-            console.error('Logout failed:', error);
-        }
-    }
+  // Handle logout
+  async function handleLogout() {
+    // Clear session and isAdmin cookies
+    document.cookie = "session=; path=/; max-age=0";
+    document.cookie = "isAdmin=; path=/; max-age=0";
+    goto("/");
+  }
 </script>
 
-<div class="admin-layout">
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>Admin Panel</h2>
-        </div>
-        <nav class="sidebar-nav">
-            <ul>
-                {#each navItems as item}
-                    <li>
-                        <a 
-                            href={item.href} 
-                            class="sidebar-link" 
-                            class:active={$page.url.pathname === item.href}
-                        >
-                            {item.label}
-                        </a>
-                    </li>
-                {/each}
-            </ul>
-        </nav>
-        <div class="sidebar-footer">
-            <button class="logout-button" on:click={handleLogout}>
-                Logout
-            </button>
-        </div>
-    </aside>
-    <main class="content">
-        {@render children()}
-    </main>
+<div class="min-h-screen flex flex-col bg-gray-100">
+  <!-- Admin Header -->
+  <header class="bg-indigo-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <button
+      class="text-2xl font-bold font-serif bg-transparent border-none cursor-pointer focus:outline-none"
+      on:click={() => goto('/admin')}
+      type="button"
+    >
+      Zentry Admin
+    </button>
+      <nav class="flex space-x-4">
+        <a href="/admin/users" class="hover:text-indigo-200 transition-colors">Users</a>
+        <a href="/admin/quizzes" class="hover:text-indigo-200 transition-colors">Quizzes</a>
+        <a href="/admin/analytics" class="hover:text-indigo-200 transition-colors">Analytics</a>
+        <button
+          on:click={handleLogout}
+          class="hover:text-indigo-200 transition-colors focus:outline-none"
+        >
+          Logout
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <slot />
+  </main>
+
+  <!-- Footer (Optional) -->
+  <footer class="bg-gray-800 text-white py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p>&copy; 2025 Zentry Admin. All rights reserved.</p>
+    </div>
+  </footer>
 </div>
 
 <style>
-    .admin-layout {
-        display: flex;
-        min-height: 100vh;
-    }
-
-    .sidebar {
-        width: 250px;
-        background-color: #1a1a1a;
-        color: white;
-        padding: 1rem;
-        flex-shrink: 0;
-    }
-
-    .sidebar-header {
-        padding: 1rem 0;
-        border-bottom: 1px solid #333;
-        margin-bottom: 1rem;
-    }
-
-    .sidebar-header h2 {
-        margin: 0;
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .sidebar-nav ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .sidebar-nav li {
-        margin-bottom: 0.5rem;
-    }
-
-    .sidebar-link {
-        color: #fff;
-        text-decoration: none;
-        padding: 0.75rem 1rem;
-        display: block;
-        border-radius: 4px;
-        transition: background-color 0.2s, color 0.2s;
-    }
-
-    .sidebar-link:hover {
-        background-color: #333;
-    }
-
-    .sidebar-link.active {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .content {
-        flex-grow: 1;
-        padding: 2rem;
-        background-color: #f5f5f5;
-        overflow-y: auto; /* Add scrolling if content overflows */
-    }
-
-    .sidebar-footer {
-        margin-top: auto;
-        padding: 1rem 0;
-        border-top: 1px solid #333;
-    }
-
-    .logout-button {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
-
-    .logout-button:hover {
-        background-color: #c82333;
-    }
+  /* Add component-specific styles here if needed */
 </style>

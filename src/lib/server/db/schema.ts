@@ -35,6 +35,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
   totalPoints: integer("total_points").default(0),
   rankId: integer("rank_id").references(() => userRankings.id),
+  adminLevel: integer("admin_level").notNull().default(2), // 0 for super admin, 1 for admin, 2 for user
 });
 
 // challenge types table
@@ -172,7 +173,7 @@ export const quizResultsRelations = relations(quizResults, ({ one }) => ({
   user: one(users, {
     fields: [quizResults.userId],
     references: [users.id],
-  }),
+}),
   quiz: one(quizzes, {
     fields: [quizResults.quizId],
     references: [quizzes.id],

@@ -1,55 +1,66 @@
-import { db } from "$lib/server";
-import {
-  users,
-  quizzes,
-  quizCategories,
-  challengeTypes,
-  userProgress,
-  userRankings,
-  quizResults,
-} from "$lib/server/db/schema";
-import { error, redirect } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+import { redirect } from "@sveltejs/kit";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import { users } from "$lib/server/db/schema";
+import { eq } from "drizzle-orm";
 
-export async function load({ cookies }) {
-  // Simple admin check using a cookie
-  const isAdmin = cookies.get("isAdmin") === "true";
-  if (!isAdmin) {
-    throw redirect(302, "/");
-  }
+export const load: PageServerLoad = async ({ cookies }) => {
+  // Database connection
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL || "postgres://user:password@localhost:5432/dbname",
+  });
+  const db = drizzle(pool);
 
   try {
-    // Fetch all data from each table
-    const [
-      usersData,
-      quizzesData,
-      categoriesData,
-      challengeTypesData,
-      progressData,
-      rankingsData,
-      resultsData,
-    ] = await Promise.all([
-      db.select().from(users),
-      db.select().from(quizzes),
-      db.select().from(quizCategories),
-      db.select().from(challengeTypes),
-      db.select().from(userProgress),
-      db.select().from(userRankings),
-      db.select().from(quizResults),
-    ]);
+    // Check for session cookie
+    const session = cookies.get("session");
+    if (!session) {
+      throw redirect(302, "/");
+    }
+
+    // Fetch user data to verify adminLevel
+    const userData = await db
+      .select({
+        id: users.id,
+        username: users.username,
+        adminLevel: users.adminLevel,
+      })
+      .from(users)
+      .where(eq(users.id, parseInt(session)))
+      .limit(1);
+
+    if (userData.length === 0) {
+      throw redirect(302, "/");
+    }
+
+    const user = userData[0];
+    // Check if user is super admin (0) or admin (1)
+    const isAuthorized = user.adminLevel === 0 || user.adminLevel === 1;
+
+    if (!isAuthorized) {
+      throw redirect(302, "/");
+    }
 
     return {
-      tables: {
-        users: usersData,
-        quizzes: quizzesData,
-        categories: categoriesData,
-        challengeTypes: challengeTypesData,
-        progress: progressData,
-        rankings: rankingsData,
-        results: resultsData,
-      },
+      loading: false,
+      isAuthorized: true,
+      username: user.username,
+      error: "",
     };
-  } catch (e) {
-    console.error("Error fetching admin data:", e);
-    throw error(500, "Failed to fetch admin data");
+  } catch (error) {
+    // Handle redirect errors or other issues
+    if (error instanceof Response) {
+      throw error; // Redirect to /login
+    }
+    console.error("Admin page load error:", error);
+    return {
+      loading: false,
+      isAuthorized: false,
+      username: null,
+      error: "An error occurred while verifying access.",
+    };
+  } finally {
+    await pool.end();
   }
-}
+};

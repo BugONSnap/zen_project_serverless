@@ -32,7 +32,7 @@
                                     {entry.rank}
                                 </td>
                                 <td class="px-4 py-2">{entry.username}</td>
-                                <td class="px-4 py-2 text-center">{entry.total_points ?? 0}</td>
+                                <td class="px-4 py-2 text-center">{entry.total_points != null ? entry.total_points : 0}</td>
                             </tr>
                         {/each}
                     </tbody>

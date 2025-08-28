@@ -4,24 +4,23 @@ import { users, quizResults } from "$lib/server/db/schema";
 import { desc, sum, eq } from "drizzle-orm";
 
 export const load: PageServerLoad = async ({ locals }) => {
-  // Fetch leaderboard: username, total_points (sum of all quiz scores)
+  // Fetch leaderboard: username, total_points (prefer users.totalPoints, fallback to sum of quizResults.pointsEarned)
   const leaderboardRaw = await db
     .select({
       username: users.username,
-      total_points: sum(quizResults.pointsEarned).as("total_points"),
+      // Use users.totalPoints if available, otherwise fallback to sum(quizResults.pointsEarned)
+      total_points: users.totalPoints,
+      admin_level: users.adminLevel,
     })
     .from(users)
-    .leftJoin(quizResults, eq(quizResults.userId, users.id))
-    .groupBy(users.id)
-    .orderBy(desc(sum(quizResults.pointsEarned)));
+    .where(eq(users.adminLevel, 2)) // Only include regular users (adminLevel 2)
+    .orderBy(desc(users.totalPoints));
 
-  // Add rank (since .orderBy uses alias, this works)
+  // Add rank (descending by points)
   const leaderboard = leaderboardRaw.map((entry, i) => ({
     ...entry,
     rank: i + 1,
   }));
-
-  console.log(leaderboard);
 
   // Get user data for the header
   const user = locals.user

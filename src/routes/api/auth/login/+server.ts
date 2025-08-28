@@ -53,12 +53,23 @@ export async function POST({ request, cookies }) {
       maxAge: 60 * 60 * 24 * 7, // 1 week
     });
 
+    // Set isAdmin cookie based on adminLevel (0 = super admin, 1 = admin)
+    const isAdmin = user.adminLevel === 0 || user.adminLevel === 1;
+    cookies.set("isAdmin", isAdmin.toString(), {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+    });
+
     return json({
       message: "Login successful",
       user: {
         id: user.id,
         username: user.username,
         email: user.email,
+        adminLevel: user.adminLevel, // Include adminLevel in response
       },
     });
   } catch (error) {
