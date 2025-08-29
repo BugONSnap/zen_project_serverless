@@ -4,14 +4,16 @@
 
   // Handle logout
   async function handleLogout() {
-    // Clear session and isAdmin cookies
+    // Call server-side logout endpoint
+    await fetch('/api/logout', { method: 'POST' });
+    // Clear cookies client-side as a fallback
     document.cookie = "session=; path=/; max-age=0";
     document.cookie = "isAdmin=; path=/; max-age=0";
     goto("/");
   }
 </script>
 
-<div class="min-h-screen flex flex-col bg-gray-100">
+<div style="background-image: url('/BG.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" class="min-h-screen flex flex-col">  <!-- Admin Header -->
   <!-- Admin Header -->
   <header class="bg-indigo-600 text-white shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -51,4 +53,5 @@
 
 <style>
   /* Add component-specific styles here if needed */
+
 </style>
