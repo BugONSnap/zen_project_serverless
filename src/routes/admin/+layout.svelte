@@ -2,6 +2,8 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
 
+  let showMenu = false;
+
   // Handle logout
   async function handleLogout() {
     // Call server-side logout endpoint
@@ -24,7 +26,8 @@
     >
       Zentry Admin
     </button>
-      <nav class="flex space-x-4">
+      <!-- Responsive Nav -->
+      <nav class="hidden md:flex space-x-4">
         <a href="/admin/users" class="hover:text-indigo-200 transition-colors">Users</a>
         <a href="/admin/quizzes" class="hover:text-indigo-200 transition-colors">Quizzes</a>
         <a href="/admin/analytics" class="hover:text-indigo-200 transition-colors">Analytics</a>
@@ -35,6 +38,20 @@
           Logout
         </button>
       </nav>
+      <!-- Hamburger for mobile -->
+      <div class="md:hidden relative">
+        <button class="p-2 rounded focus:outline-none focus:ring-2 focus:ring-white" on:click={() => showMenu = !showMenu} aria-label="Open navigation menu">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        {#if showMenu}
+          <div class="absolute right-0 mt-2 w-48 bg-white text-indigo-700 rounded shadow-lg z-50 animate-fade-in">
+            <a href="/admin/users" class="block px-4 py-2 hover:bg-indigo-100" on:click={() => showMenu = false}>Users</a>
+            <a href="/admin/quizzes" class="block px-4 py-2 hover:bg-indigo-100" on:click={() => showMenu = false}>Quizzes</a>
+            <a href="/admin/analytics" class="block px-4 py-2 hover:bg-indigo-100" on:click={() => showMenu = false}>Analytics</a>
+            <button on:click={() => { showMenu = false; handleLogout(); }} class="block w-full text-left px-4 py-2 hover:bg-indigo-100">Logout</button>
+          </div>
+        {/if}
+      </div>
     </div>
   </header>
 
