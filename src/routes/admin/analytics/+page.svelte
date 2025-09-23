@@ -70,20 +70,20 @@ onMount(() => {
 </script>
 
 <div class="analytics-bg min-h-screen flex flex-col items-center justify-start py-10 px-2 md:px-0">
-    <div class="w-full max-w-4xl">
-        <h1 class="text-3xl md:text-4xl font-extrabold mb-8 text-center tracking-tight text-white drop-shadow-lg">{t('Analytics Dashboard')}</h1>
+    <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8">
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-8 text-center tracking-tight text-gray-800">{t('Analytics Dashboard')}</h1>
         {#if data.error}
             <div class="bg-red-200/80 text-red-900 p-3 rounded-xl mb-6 shadow-lg text-center font-semibold backdrop-blur-md">{data.error}</div>
         {/if}
         <div class="flex flex-col md:flex-row gap-6 mb-8 justify-center">
-            <div class="glass-card flex-1 flex flex-col items-center p-6">
+            <div class="flex-1 flex flex-col items-center p-6 border border-gray-200 rounded-lg bg-white">
                 <div class="text-blue-600 text-lg font-semibold flex items-center gap-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5"/><circle cx="12" cy="7" r="4"/></svg>
                     {t('Total Users')}
                 </div>
                 <div class="text-4xl font-bold mt-2">{data.totalUsers}</div>
             </div>
-            <div class="glass-card flex-1 flex flex-col items-center p-6">
+            <div class="flex-1 flex flex-col items-center p-6 border border-gray-200 rounded-lg bg-white">
                 <div class="text-green-600 text-lg font-semibold flex items-center gap-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v4m0 0l3-3m-3 3l-3-3"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
                     {t('Users With Progress')}
@@ -91,7 +91,7 @@ onMount(() => {
                 <div class="text-4xl font-bold mt-2">{data.usersWithProgress}</div>
             </div>
         </div>
-        <div class="glass-card mb-10 p-6">
+        <div class="mb-10 p-6 border border-gray-200 rounded-lg bg-white">
             <p class="mb-3 text-gray-900 text-base md:text-lg font-medium">{t('There are')} <span class="font-bold text-blue-700">{data.totalUsers}</span> {t('users in total')}, {t('of which')} <span class="font-bold text-green-700">{data.usersWithProgress}</span> {t('have started making progress.')}</p>
             <ul class="list-disc pl-6 space-y-1">
                 <li><span class="text-blue-700 font-semibold">{t('HTML Section')}</span>: <span class="font-bold">{data.sectionCounts['HTML'] ?? 0}</span> {t('users have started this section.')}</li>
@@ -102,19 +102,19 @@ onMount(() => {
         </div>
         <h2 class="text-2xl font-bold mb-6 text-center text-white drop-shadow">{t('Section Progress')}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div class="glass-card p-5 flex flex-col items-center">
+            <div class="p-5 flex flex-col items-center border border-gray-200 rounded-lg bg-white">
                 <h3 class="font-semibold mb-3 text-blue-700 text-lg">{t('HTML Section')}</h3>
                 <canvas bind:this={htmlChart}></canvas>
             </div>
-            <div class="glass-card p-5 flex flex-col items-center">
+            <div class="p-5 flex flex-col items-center border border-gray-200 rounded-lg bg-white">
                 <h3 class="font-semibold mb-3 text-blue-500 text-lg">{t('CSS Section')}</h3>
                 <canvas bind:this={cssChart}></canvas>
             </div>
-            <div class="glass-card p-5 flex flex-col items-center">
+            <div class="p-5 flex flex-col items-center border border-gray-200 rounded-lg bg-white">
                 <h3 class="font-semibold mb-3 text-yellow-600 text-lg">{t('JS Section')}</h3>
                 <canvas bind:this={jsChart}></canvas>
             </div>
-            <div class="glass-card p-5 flex flex-col items-center">
+            <div class="p-5 flex flex-col items-center border border-gray-200 rounded-lg bg-white">
                 <h3 class="font-semibold mb-3 text-green-600 text-lg">{t('Advanced JS Section')}</h3>
                 <canvas bind:this={advJsChart}></canvas>
             </div>

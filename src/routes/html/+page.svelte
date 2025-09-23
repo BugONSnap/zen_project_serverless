@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { PageData } from './$types';
     import DashboardHeader from '$lib/DashboardHeader.svelte';
+    import ResumeQuizNotice from '$lib/ResumeQuizNotice.svelte';
     import { goto } from '$app/navigation';
 
     export let data: PageData;
@@ -57,10 +58,23 @@
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    overflow: visible;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);    
     cursor: pointer;
     transition: transform 0.2s;
+    background: #222;
+}
+.book-cover:hover,
+.book-cover:focus,
+.book-cover:focus-visible {
+    z-index: 20;
+}
+.book-title-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1;
+    pointer-events: none;
 }
 .book-cover:hover {
     transform: scale(1.05);
@@ -79,9 +93,18 @@
     color: #fff;
     text-shadow: 0 2px 8px #000, 0 0 2px #000;
     text-align: center;
-    font-size: 2vh; /* Reverting to rem for better desktop display */
+    font-size: 1.08rem;
     font-weight: bold;
-    padding: 0 8px;
+    padding: 12px 10px 12px 10px;
+    line-height: 1.3;
+    max-width: 95%;
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    white-space: normal;
 }
 .flex-row-wrap {
     display: flex;
@@ -181,23 +204,52 @@
 h2 {
     font-family: 'Poppins', sans-serif !important;
 }
+.quiz-title-popup {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: -12px;
+    transform: translate(-50%, -100%);
+    background: rgba(24,24,24,0.97);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    white-space: pre-line;
+    min-width: 180px;
+    max-width: 320px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.23);
+    z-index: 10;
+    text-align: center;
+    pointer-events: none;
+    word-break: break-word;
+}
+.book-cover:hover .quiz-title-popup,
+.book-cover:focus .quiz-title-popup,
+.book-cover:focus-visible .quiz-title-popup {
+    display: block;
+}
 </style>
 
 <div class="min-h-screen bg-cover bg-center" style="background-image: url('/BG.jpg');">
-    <DashboardHeader title="HTML Quizzes" user={undefined} />
+    <DashboardHeader title="HTML Quizzes" user={data.user} />
     <main class="max-w-7xl mx-auto py-8 px-4">
         <div class="bg-white shadow rounded-lg p-6">
             <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Available HTML Quizzes</h2>
+            <ResumeQuizNotice category="HTML" />
 
             <div class="mb-10">
                 <div id="easy-area" class="section-header text-green-700">Easy Area</div>
                 <div class="flex-row-wrap">
                     {#each easyPaginated as quiz}
-                        <div class="book-cover" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} title={quiz.title}>
-                            <img src="/Module%20cover.png" alt="Book Cover" />
-                            <span class="book-title">{quiz.title}</span>
-                        </div>
-                    {/each}
+    <div class="book-cover group" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} tabindex="0">
+        <div class="book-title-overlay"></div>
+        <img src="/Module%20cover.png" alt="Book Cover" />
+        <span class="book-title">{quiz.title}</span>
+        <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+    </div>
+{/each}
                 </div>
                 <div class="pagination-controls">
                     <button on:click={() => easyPage = Math.max(1, easyPage-1)} disabled={easyPage === 1}>Prev</button>
@@ -210,11 +262,13 @@ h2 {
                 <div id="medium-area" class="section-header text-yellow-700">Medium Area</div>
                 <div class="flex-row-wrap">
                     {#each mediumPaginated as quiz}
-                        <div class="book-cover" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} title={quiz.title}>
-                            <img src="/Module%20cover.png" alt="Book Cover" />
-                            <span class="book-title">{quiz.title}</span>
-                        </div>
-                    {/each}
+    <div class="book-cover group" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} tabindex="0">
+        <div class="book-title-overlay"></div>
+        <img src="/Module%20cover.png" alt="Book Cover" />
+        <span class="book-title">{quiz.title}</span>
+        <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+    </div>
+{/each}
                 </div>
                 <div class="pagination-controls">
                     <button on:click={() => mediumPage = Math.max(1, mediumPage-1)} disabled={mediumPage === 1}>Prev</button>
@@ -227,11 +281,13 @@ h2 {
                 <div id="hard-area" class="section-header text-red-700">Hard Area</div>
                 <div class="flex-row-wrap">
                     {#each hardPaginated as quiz}
-                        <div class="book-cover" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} title={quiz.title}>
-                            <img src="/Module%20cover.png" alt="Book Cover" />
-                            <span class="book-title">{quiz.title}</span>
-                        </div>
-                    {/each}
+    <div class="book-cover group" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} tabindex="0">
+        <div class="book-title-overlay"></div>
+        <img src="/Module%20cover.png" alt="Book Cover" />
+        <span class="book-title">{quiz.title}</span>
+        <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+    </div>
+{/each}
                 </div>
                 <div class="pagination-controls">
                     <button on:click={() => hardPage = Math.max(1, hardPage-1)} disabled={hardPage === 1}>Prev</button>

@@ -15,9 +15,13 @@
   }
 </script>
 
-<div style="background-image: url('/BG.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" class="min-h-screen flex flex-col">  <!-- Admin Header -->
+<div style="background-image: url('/BG.jpg');bac;background-clip: unset; background-attachment: fixed;background-size: cover    background-attachment: fixed;
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+">
   <!-- Admin Header -->
-  <header class="bg-indigo-600 text-white shadow-md">
+  <header class="bg-indigo-600 text-white shadow-md" style="background-color: #50c5c1ab;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
     <button
       class="text-2xl font-bold font-serif bg-transparent border-none cursor-pointer focus:outline-none"

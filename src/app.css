@@ -1,10 +1,11 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/typography';
 
 html,
 body {
     height: 100%;
     margin: 0;
+    font-family: 'serif';
+    font-weight: 'extra-bold';  
     /* background-image: url('/BG.jpg'); */
     /* background-size: cover; */
     /* background-position: center; */

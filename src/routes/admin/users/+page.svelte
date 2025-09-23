@@ -35,28 +35,29 @@
     <p class="text-red-500 font-semibold">{error}</p>
   </div>
 {:else}
-  <div class="space-y-6">
-    <h1 class="text-3xl font-bold text-gray-800">User Management</h1>
-    <p class="text-gray-600">View all users, their roles, ranks, and progress across categories.</p>
-
-    {#if successMessage}
-      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-        <span class="block sm:inline">{successMessage}</span>
+  <div class="flex justify-center items-start min-h-[80vh] mt-10">
+    <div class="w-full max-w-5xl bg-white p-2 rounded-[12px] shadow-xl">
+      <div class="space-y-2 text-center mb-4">
+        <h1 class="text-4xl font-bold text-gray-800">User Management</h1>
+        <p class="text-gray-600 text-lg">View all users, their roles, ranks, and progress across categories.</p>
       </div>
-    {/if}
-    {#if actionError}
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <span class="block sm:inline">{actionError}</span>
-      </div>
-    {/if}
-
-    {#if users.length === 0}
-      <p class="text-gray-500">No users found.</p>
-    {:else}
-      <!-- Desktop Table -->
-      <div class="overflow-x-auto hidden md:block">
-        <table class="min-w-full bg-white rounded-lg shadow-lg">
-          <thead class="bg-indigo-600 text-white">
+      {#if successMessage}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <span class="block sm:inline">{successMessage}</span>
+        </div>
+      {/if}
+      {#if actionError}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <span class="block sm:inline">{actionError}</span>
+        </div>
+      {/if}
+      {#if users.length === 0}
+        <p class="text-gray-500">No users found.</p>
+      {:else}
+        <!-- Desktop Table -->
+        <div class="overflow-x-auto hidden md:block border-radius-[12px]">
+          <table class="min-w-full rounded-[15px] overflow-hidden shadow-lg">
+            <thead class="bg-indigo-600 text-Black border" style="background-color: #50c5c1ab;">
             <tr>
               <th class="py-4 px-6 text-left text-sm font-semibold">Username</th>
               <th class="py-4 px-6 text-left text-sm font-semibold">Email</th>
@@ -286,4 +287,5 @@
       </div>
     {/if}
   </div>
+</div>
 {/if}

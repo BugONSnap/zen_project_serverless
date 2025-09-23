@@ -18,6 +18,7 @@
   let passwordError = '';
   let usernameError = '';
   let passwordStrength = 0;
+  let resumeQuiz: any = null;
 
   // Validation patterns
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -217,6 +218,25 @@
     activeTab = tab;
     cleanup();
   }
+
+  function continueQuiz() {
+    if (resumeQuiz && resumeQuiz.quizId) {
+      window.location.href = `/quiz?id=${resumeQuiz.quizId}`;
+    }
+  }
+
+  // Fetch resume quiz data on component mount
+  onMount(async () => {
+    try {
+      const res = await fetch('/api/quiz/resume');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.quizId) {
+          resumeQuiz = data;
+        }
+      }
+    } catch (e) {}
+  });
 </script>
 
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background: url('/BG.jpg') center center / cover no-repeat;">
@@ -372,5 +392,17 @@
         </div>
       {/if}
     </form>
-  </div>
+    <!-- Continue where you left off section -->
+  {#if resumeQuiz}
+    <div class="mt-10 flex flex-col items-center">
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg px-6 py-4 shadow flex flex-col items-center w-full max-w-lg">
+        <span class="font-semibold text-lg text-gray-800 mb-2">Continue where you left off</span>
+        <span class="text-gray-700 mb-4">{resumeQuiz.title || 'Untitled Quiz'}</span>
+        <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" on:click={continueQuiz}>
+          Continue Quiz
+        </button>
+      </div>
+    </div>
+  {/if}
+</div>
 </div>

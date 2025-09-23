@@ -42,7 +42,23 @@
         selectedAnswer = optionIndex;
     }
 
-    function nextQuestion() {
+    async function saveProgress(statusOverride: string | null = null) {
+    // Save quiz progress to main quizAttempts table
+    try {
+        await fetch('/api/quiz/attempt', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                quizId: quizData.id,
+                currentStep: currentQuestionIndex,
+                status: statusOverride || (quizCompleted ? 'COMPLETED' : 'IN_PROGRESS'),
+                timeRemaining: timer
+            })
+        });
+    } catch (e) { /* ignore */ }
+}
+
+    async function nextQuestion() {
         const currentQ = quizData.questions[currentQuestionIndex];
         if (quizData.challengeType === 'Identification') {
             // Compare userInput (trimmed, case-insensitive) to correctAnswer
@@ -53,6 +69,7 @@
                 score++;
             }
             quizCompleted = true;
+            await saveProgress('COMPLETED');
             saveQuizResult(score, score > 0);
         } else if (
             quizData.challengeType === 'Complete the Code' || quizData.challengeType === 'Code Challenge'
@@ -65,6 +82,7 @@
                 codeFeedback = 'Incorrect. Try again or continue.';
             }
             quizCompleted = true;
+            await saveProgress('COMPLETED');
             saveQuizResult(score, score > 0);
         } else {
             let isCorrect = false;
@@ -92,11 +110,13 @@
             }
             if (currentQuestionIndex < quizData.questions.length - 1) {
                 currentQuestionIndex++;
+                saveProgress();
                 selectedAnswer = null;
                 userCode = '';
                 userInput = '';
             } else {
                 quizCompleted = true;
+                await saveProgress('COMPLETED');
                 stopTimer();
                 saveQuizResult(score, score === quizData.questions.length);
             }
@@ -143,12 +163,29 @@
         showIntroModal = false;
     }
 
-    function exitQuiz() {
+    async function exitQuiz() {
+        await saveProgress();
         // Go back or to a safe default route
         history.length > 1 ? history.back() : goto('/');
     }
 
-    onMount(() => {
+    onMount(async () => {
+        // Restore quiz progress from main quizAttempts table
+        try {
+            const res = await fetch(`/api/quiz/attempt?quizId=${quizData.id}`);
+            if (res.ok) {
+                const progress = await res.json();
+                if (progress && typeof progress.currentStep === 'number') {
+                    currentQuestionIndex = progress.currentStep;
+                }
+                if (progress && typeof progress.timeRemaining === 'number') {
+                    timer = progress.timeRemaining;
+                }
+            }
+        } catch (e) {
+            // ignore if not logged in or error
+        }
+
         // Try to get all quizzes for this category and difficulty from the server-rendered data (if available)
         // If not, fetch them from the API (not implemented here, but you can add it if needed)
         // For now, we assume the quizzes are ordered by id and consecutive
@@ -174,7 +211,7 @@
     }
 </script>
 
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen bg-cover bg-center overflow-y-auto" style="background-image: url('/BG.jpg');">
     <DashboardHeader title={quizData.title} user={undefined} />
     {#if showIntroModal}
         <div class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
@@ -223,19 +260,25 @@
                                 </div>
                             </div>
                         {:else if quizData.challengeType === 'Code Challenge' || quizData.challengeType === 'Complete the Code'}
-                            <div class="mb-6">
+                            <div class="mb-8">
                                 <h2 class="text-xl font-semibold text-gray-800 mb-4">
                                     {quizData.questions[currentQuestionIndex].question}
                                 </h2>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Starter Code:</label>
-                                <textarea class="w-full border rounded p-2 font-mono mb-2" rows="6" readonly>{quizData.questions[currentQuestionIndex].starterCode}</textarea>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Answer:</label>
-                                <textarea class="w-full border rounded p-2 font-mono" rows="6" bind:value={userCode} placeholder="Write or complete the code here..."></textarea>
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 shadow-sm relative">
+                                    <div class="mb-2">
+                                        <label class="block text-sm font-semibold text-gray-700">Starter Code</label>
+                                    </div>
+                                    <pre class="overflow-x-auto text-sm font-mono bg-gray-100 rounded p-3 border border-gray-200 whitespace-pre-wrap select-all" style="min-height: 120px;">{quizData.questions[currentQuestionIndex].starterCode}</pre>
+                                </div>
+                                <div class="bg-white border border-blue-200 rounded-lg p-4 mb-2 shadow-sm">
+                                    <label class="block text-sm font-semibold text-blue-700 mb-2">Your Answer</label>
+                                    <textarea class="w-full border border-blue-300 rounded-lg p-3 font-mono text-sm focus:ring-2 focus:ring-blue-400 transition outline-none" rows="7" bind:value={userCode} placeholder="Write or complete the code here..."></textarea>
+                                </div>
                                 {#if codeFeedback}
                                     <div class="mt-2 text-green-600">{codeFeedback}</div>
                                 {/if}
                                 <div class="flex justify-end mt-4">
-                                    <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" on:click={nextQuestion}>
+                                    <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow" on:click={nextQuestion}>
                                         Submit Code
                                     </button>
                                 </div>
@@ -273,15 +316,22 @@
                                 Unsupported challenge type.
                             </div>
                         {/if}
-                        <div class="flex justify-end">
-                            <button
-                                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                on:click={nextQuestion}
-                                disabled={quizData.challengeType === 'Multiple Choice' && selectedAnswer === null}
-                            >
-                                {currentQuestionIndex === quizData.questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
-                            </button>
-                        </div>
+                        <div class="flex justify-end space-x-2">
+    <button
+        class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-700 transition-colors"
+        on:click={() => saveProgress('IN_PROGRESS')}
+        type="button"
+    >
+        Save Progress
+    </button>
+    <button
+        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        on:click={nextQuestion}
+        disabled={quizData.challengeType === 'Multiple Choice' && selectedAnswer === null}
+    >
+        {currentQuestionIndex === quizData.questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+    </button>
+</div>
                     {:else}
                         <div class="text-center py-8">
                             <h2 class="text-2xl font-bold text-gray-900 mb-4">Quiz Completed!</h2>

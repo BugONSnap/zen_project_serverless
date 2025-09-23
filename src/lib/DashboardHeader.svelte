@@ -51,42 +51,43 @@
 </script>
 
 <header
+    style="background-color: #50c5c1ab;"
   class="shadow sticky top-0 z-50"
   class:bg-white={!isPlaygroundPage}
   class:bg-[#ffffff]={isPlaygroundPage}
   class:text-white={isPlaygroundPage}
-  style={headerStyle}
+  
 >
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    <div class="max-w-7xl mx-auto py-2 px-2 sm:px-4 lg:px-8 flex justify-between items-center">
         <h1 class="text-3xl font-bold text-gray-900">{title}</h1>
         <!-- Desktop nav -->
         <div class="hidden md:flex items-center space-x-4">
             {#if $page.url.pathname !== '/dashboard'}
                 <button
-                    class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    class="text-white text-sm font-medium hover:underline focus:outline-none"
                     on:click={goBackToDashboard}
                 >
                     Dashboard
                 </button>   
             {/if}
             {#if $page.url.pathname !== '/playground'}
-                <a href="/playground" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-gray bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center space-x-2" title="Code Playground">
+                <a href="/playground" class="text-white text-sm font-medium hover:underline flex items-center space-x-2 focus:outline-none" title="Code Playground">
                      Playground
                 </a>
             {/if}
-            <a href="/leaderboard" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" title="Leaderboard">
+            <a href="/leaderboard" class="text-white text-sm font-medium hover:underline focus:outline-none" title="Leaderboard">
                 Leaderboard
             </a>
             <!-- Profile avatar -->
          
             <button
-                class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                class="text-red-600 text-sm font-medium hover:underline focus:outline-none"
                 on:click={handleLogout}
             >
                 Logout
             </button>
             <a href="/profile" title="Profile">
-                <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-lg font-bold text-white hover:bg-indigo-600 transition">
+                <div class="w-10 h-10 rounded-full bg-white-500 flex items-center underline justify-center text-lg font-bold text-Black hover:bg-white-600 transition">
                     {user && user.username ? user.username.charAt(0).toUpperCase() : 'U'}
                 </div>
             </a>

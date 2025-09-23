@@ -1,9 +1,9 @@
 import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server";
-import { quizzes, quizCategories } from "$lib/server/db/schema";
+import { quizzes, quizCategories, users } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
   // Find the CSS category
   const cssCategory = await db.query.quizCategories.findFirst({
     where: eq(quizCategories.name, "CSS"),
@@ -28,5 +28,14 @@ export const load: PageServerLoad = async () => {
     answer: q.answer,
   }));
 
-  return { quizzes: quizzesList };
+  const userId = locals.user?.id;
+  let user = undefined;
+  if (userId) {
+    user = await db.query.users.findFirst({ where: eq(users.id, userId) });
+    if (user) {
+      user = { id: user.id, username: user.username, email: user.email };
+    }
+  }
+  return { quizzes: quizzesList, user };
+
 };

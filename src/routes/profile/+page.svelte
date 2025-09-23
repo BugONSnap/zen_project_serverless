@@ -7,6 +7,21 @@
     user: { id: number; username: string; email: string; totalPoints: number; createdAt: string };
     categories: { id: number; name: string; completed: number; total: number; progress: number }[];
   };
+
+  // In-progress quiz attempts
+  let inProgressAttempts: Array<any> = [];
+
+  // Fetch in-progress attempts on mount
+  import { onMount } from 'svelte';
+  onMount(async () => {
+    try {
+      const res = await fetch('/api/profile/progress');
+      if (res.ok) {
+        const { attempts } = await res.json();
+        inProgressAttempts = attempts || [];
+      }
+    } catch (e) { /* ignore */ }
+  });
   
   let user = data.user;
   let categories = data.categories;
@@ -185,6 +200,21 @@
       <p class="text-gray-500">{user.email}</p>
     </div>
     <p class="text-gray-700 mb-6">Welcome to your profile page!</p>
+    <div class="text-left mb-8">
+      <h3 class="text-lg font-semibold mb-2">Current In-Progress Quizzes</h3>
+      {#if inProgressAttempts.length === 0}
+        <p class="text-gray-500">No in-progress quizzes found.</p>
+      {:else}
+        <ul class="space-y-4">
+          {#each inProgressAttempts as attempt}
+            <li class="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-purple-50 shadow-md flex items-center justify-between">
+              <span class="font-semibold text-base text-gray-800 truncate">{attempt.title || 'Untitled Quiz'}</span>
+              <span class="ml-4 px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold border border-yellow-300">In Progress</span>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+    </div>
     <div class="text-left">
       <h3 class="text-lg font-semibold mb-2">Category Progress</h3>
       {#if categories.length === 0}

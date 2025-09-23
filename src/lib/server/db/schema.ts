@@ -79,6 +79,9 @@ export const userProgress = pgTable(
     totalQuizzes: integer("total_quizzes").default(0),
     completedQuizzes: integer("completed_quizzes").default(0),
     completionPercentage: real("completion_percentage").default(0),
+    // Bookmark fields for quiz resume
+    lastQuizId: integer("last_quiz_id"),
+    lastQuestionIndex: integer("last_question_index"),
   },
   (table) => ({
     uniqueUserCategory: unique().on(table.userId, table.quizCategoryId),
@@ -94,6 +97,26 @@ export const quizResults = pgTable("quiz_results", {
   isCorrect: boolean("is_correct").notNull(),
   pointsEarned: integer("points_earned"),
 });
+
+// quiz attempts (for resume/bookmark)
+export const quizAttempts = pgTable(
+  "quiz_attempts",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id").references(() => users.id),
+    quizId: integer("quiz_id").references(() => quizzes.id),
+    status: text("status").notNull().default("IN_PROGRESS"), // IN_PROGRESS | COMPLETED | ABANDONED
+    answers: jsonb("answers"), // partial answers/state
+    currentStep: integer("current_step").default(0),
+    timeRemaining: integer("time_remaining"),
+    startedAt: timestamp("started_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => ({
+    // enforce uniqueness by (user, quiz, status). This ensures at most one IN_PROGRESS per quiz per user.
+    uniqueAttemptPerStatus: unique().on(table.userId, table.quizId, table.status),
+  })
+);
 
 // code snippets table
 export const codeSnippets = pgTable("code_snippets", {
@@ -115,6 +138,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   }),
   progress: many(userProgress),
   quizResults: many(quizResults),
+  quizAttempts: many(quizAttempts),
   codeSnippets: many(codeSnippets),
 }));
 
@@ -148,6 +172,7 @@ export const quizzesRelations = relations(quizzes, ({ one, many }) => ({
     references: [quizCategories.id],
   }),
   results: many(quizResults),
+  attempts: many(quizAttempts),
 }));
 
 export const userProgressRelations = relations(
@@ -176,6 +201,17 @@ export const quizResultsRelations = relations(quizResults, ({ one }) => ({
 }),
   quiz: one(quizzes, {
     fields: [quizResults.quizId],
+    references: [quizzes.id],
+  }),
+}));
+
+export const quizAttemptsRelations = relations(quizAttempts, ({ one }) => ({
+  user: one(users, {
+    fields: [quizAttempts.userId],
+    references: [users.id],
+  }),
+  quiz: one(quizzes, {
+    fields: [quizAttempts.quizId],
     references: [quizzes.id],
   }),
 }));
