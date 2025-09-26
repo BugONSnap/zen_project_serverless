@@ -20,7 +20,6 @@
     let nextQuizId: number | null = null;
 
 
-    console.log(quizData)
 
     async function saveQuizResult(finalScore: number, isCorrect: boolean) {
         try {
@@ -34,7 +33,6 @@
                 })
             });
         } catch (e) {
-            console.error('Failed to save quiz result:', e);
         }
     }
 
@@ -216,7 +214,7 @@
     {#if showIntroModal}
         <div class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
             <div class="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full relative">
-                <button class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none" on:click={exitQuiz} aria-label="Close">&times;</button>
+                <button class="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none" on:click={closeIntroModal} aria-label="Close">&times;</button>
                 <h2 class="text-2xl font-bold mb-4">{quizData.title}</h2>
                 <div class="mb-4">
                     <span class="block text-lg text-gray-900 font-semibold">Description:</span>

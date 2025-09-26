@@ -14,6 +14,19 @@ export async function POST({ request, locals }: RequestEvent) {
   const userId = locals.user?.id;
   if (!userId) return json({ error: "Unauthorized" }, { status: 401 });
 
+  // Check if already answered correctly
+  const existingResult = await db.query.quizResults.findFirst({
+    where: and(
+      eq(quizResults.userId, userId),
+      eq(quizResults.quizId, quizId),
+      eq(quizResults.isCorrect, true)
+    )
+  });
+  if (existingResult) {
+    return json({ alreadyAnswered: true });
+  }
+
+
   // Fetch the quiz to get its points value and category
   const quiz = await db.query.quizzes.findFirst({
     where: eq(quizzes.id, quizId),

@@ -2,6 +2,7 @@
     import type { PageData } from './$types';
     import DashboardHeader from '$lib/DashboardHeader.svelte';
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
 
     export let data: PageData;
 
@@ -20,6 +21,21 @@
     };
 
     let categories: Category[] = data.categories;
+
+    // In-progress quiz attempts
+    let inProgressAttempts: any[] = [];
+
+    onMount(async () => {
+        try {
+            const res = await fetch('/api/profile/progress');
+            if (res.ok) {
+                const result = await res.json();
+                inProgressAttempts = result.attempts || [];
+            }
+        } catch (e) {
+            // Ignore errors
+        }
+    });
 </script>
 
 <div class="min-h-screen bg-cover bg-center overflow-y-auto" style="background-image: url('/BG.jpg');">
@@ -27,6 +43,27 @@
     <DashboardHeader user={data.user} />
 
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Resume In-Progress Quizzes -->
+        {#if inProgressAttempts.length > 0}
+        <div class="mb-8">
+            <div class="bg-yellow-100 shadow rounded-lg p-6">
+                <h3 class="text-lg font-bold text-yellow-800 mb-2">Resume Your In-Progress Quizzes</h3>
+                <ul class="divide-y divide-yellow-200">
+                    {#each inProgressAttempts as attempt}
+                        <li class="py-4 flex items-center justify-between">
+                            <div>
+                                <span class="font-semibold">{attempt.title}</span>
+                                <span class="ml-2 text-sm text-gray-600">(Step {attempt.currentStep + 1})</span>
+                            </div>
+                            <button class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors" on:click={() => goto(`/quiz?category=${attempt.categoryId}&id=${attempt.quizId}`)}>
+                                Resume
+                            </button>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
+        </div>
+        {/if}
         <!-- Quick Actions -->
         <div class="mt-8 mb-8">
             <div class="bg-white shadow rounded-lg">

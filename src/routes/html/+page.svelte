@@ -1,10 +1,30 @@
 <script lang="ts">
     import type { PageData } from './$types';
     import DashboardHeader from '$lib/DashboardHeader.svelte';
-    import ResumeQuizNotice from '$lib/ResumeQuizNotice.svelte';
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
 
     export let data: PageData;
+
+    // Resume quiz state
+    let loadingResume = true;
+    let inProgressQuiz: any = null;
+    onMount(async () => {
+        try {
+            const res = await fetch('/api/quiz/resume');
+            if (res.ok) {
+                const quiz = await res.json();
+                if (quiz && quiz.quizId && quiz.categoryId && quiz.status === 'IN_PROGRESS') {
+                    // Only show for HTML category
+                    if (quiz.categoryId === data.quizzes[0]?.quizCategoryId || quiz.category === 'HTML') {
+                        inProgressQuiz = quiz;
+                    }
+                }
+            }
+        } finally {
+            loadingResume = false;
+        }
+    });
 
     // Pagination state for each difficulty
     let easyPage = 1;
@@ -230,6 +250,21 @@ h2 {
 .book-cover:focus-visible .quiz-title-popup {
     display: block;
 }
+.done-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #34d399;
+    color: #fff;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 10;
+    pointer-events: none;
+    letter-spacing: 1px;
+}
 </style>
 
 <div class="min-h-screen bg-cover bg-center" style="background-image: url('/BG.jpg');">
@@ -237,17 +272,33 @@ h2 {
     <main class="max-w-7xl mx-auto py-8 px-4">
         <div class="bg-white shadow rounded-lg p-6">
             <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Available HTML Quizzes</h2>
-            <ResumeQuizNotice category="HTML" />
 
+            {#if !loadingResume && inProgressQuiz}
+    <div style="position: absolute; left: 50%; top: 24px; transform: translateX(-50%); z-index: 1001; width: 100%; max-width: 400px;">
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg px-6 py-4 shadow flex flex-col items-center w-full">
+            <span class="font-semibold text-lg text-yellow-700 mb-2">You have an in-progress quiz!</span>
+            <button class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors" on:click={() => goto(`/quiz?category=${inProgressQuiz.categoryId}&id=${inProgressQuiz.quizId}`)}>
+                Resume Quiz
+            </button>
+        </div>
+    </div>
+{/if}
+            
             <div class="mb-10">
                 <div id="easy-area" class="section-header text-green-700">Easy Area</div>
                 <div class="flex-row-wrap">
                     {#each easyPaginated as quiz}
-    <div class="book-cover group" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} tabindex="0">
+    <div class="book-cover group {data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'answered' : ''}"
+        on:click={() => !data.answeredQuizIds?.includes(quiz.id) && startQuiz('HTML', quiz.difficulty, quiz.id)}
+        tabindex="0"
+        style={data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'opacity:0.5; pointer-events:none; position:relative;' : ''}>
         <div class="book-title-overlay"></div>
         <img src="/Module%20cover.png" alt="Book Cover" />
         <span class="book-title">{quiz.title}</span>
         <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+        {#if data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id)}
+            <span class="done-badge">DONE</span>
+        {/if}
     </div>
 {/each}
                 </div>
@@ -262,11 +313,17 @@ h2 {
                 <div id="medium-area" class="section-header text-yellow-700">Medium Area</div>
                 <div class="flex-row-wrap">
                     {#each mediumPaginated as quiz}
-    <div class="book-cover group" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} tabindex="0">
+    <div class="book-cover group {data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'answered' : ''}"
+        on:click={() => !data.answeredQuizIds?.includes(quiz.id) && startQuiz('HTML', quiz.difficulty, quiz.id)}
+        tabindex="0"
+        style={data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'opacity:0.5; pointer-events:none; position:relative;' : ''}>
         <div class="book-title-overlay"></div>
         <img src="/Module%20cover.png" alt="Book Cover" />
         <span class="book-title">{quiz.title}</span>
         <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+        {#if data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id)}
+            <span class="done-badge">DONE</span>
+        {/if}
     </div>
 {/each}
                 </div>
@@ -281,11 +338,17 @@ h2 {
                 <div id="hard-area" class="section-header text-red-700">Hard Area</div>
                 <div class="flex-row-wrap">
                     {#each hardPaginated as quiz}
-    <div class="book-cover group" on:click={() => startQuiz('HTML', quiz.difficulty, quiz.id)} tabindex="0">
+    <div class="book-cover group {data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'answered' : ''}"
+        on:click={() => !data.answeredQuizIds?.includes(quiz.id) && startQuiz('HTML', quiz.difficulty, quiz.id)}
+        tabindex="0"
+        style={data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'opacity:0.5; pointer-events:none; position:relative;' : ''}>
         <div class="book-title-overlay"></div>
         <img src="/Module%20cover.png" alt="Book Cover" />
         <span class="book-title">{quiz.title}</span>
         <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+        {#if data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id)}
+            <span class="done-badge">DONE</span>
+        {/if}
     </div>
 {/each}
                 </div>

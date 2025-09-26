@@ -85,6 +85,21 @@
     .book-cover:focus-visible .quiz-title-popup {
         display: block;
     }
+    .done-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #34d399;
+        color: #fff;
+        font-weight: bold;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        z-index: 10;
+        pointer-events: none;
+        letter-spacing: 1px;
+    }
     .book-cover img {
         position: absolute;
         inset: 0;
@@ -163,12 +178,21 @@
             <div class="section-header text-blue-700">Identification Challenges</div>
             <div class="flex-row-wrap">
                 {#each identificationPaginated as quiz}
-                    <div class="book-cover group" role="button" tabindex="0" aria-label={quiz.title} on:click={() => startQuiz(quiz.id)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { startQuiz(quiz.id); }}} >
-    <div class="book-title-overlay"></div>
-    <img src="/Module%20cover.png" alt="Book Cover" />
-    <span class="book-title">{quiz.title}</span>
-    <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
-</div>
+                    <div class="book-cover group {data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'answered' : ''}"
+                        role="button"
+                        tabindex="0"
+                        aria-label={quiz.title}
+                        on:click={() => !data.answeredQuizIds?.includes(quiz.id) && startQuiz(quiz.id)}
+                        on:keydown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !data.answeredQuizIds?.includes(quiz.id)) { startQuiz(quiz.id); }}}
+                        style={data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'opacity:0.5; pointer-events:none; position:relative;' : ''}>
+                        <div class="book-title-overlay"></div>
+                        <img src="/Module%20cover.png" alt="Book Cover" />
+                        <span class="book-title">{quiz.title}</span>
+                        <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+                        {#if data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id)}
+                            <span class="done-badge">DONE</span>
+                        {/if}
+                    </div>
                 {/each}
             </div>
             <div class="pagination-controls">
@@ -183,12 +207,21 @@
             <div class="section-header text-red-700">Code Challenges</div>
             <div class="flex-row-wrap">
                 {#each codeChallengePaginated as quiz}
-                    <div class="book-cover group" role="button" tabindex="0" aria-label={quiz.title} on:click={() => startQuiz(quiz.id)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { startQuiz(quiz.id); }}} >
-    <div class="book-title-overlay"></div>
-    <img src="/Module%20cover.png" alt="Book Cover" />
-    <span class="book-title">{quiz.title}</span>
-    <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
-</div>
+                    <div class="book-cover group {data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'answered' : ''}"
+                        role="button"
+                        tabindex="0"
+                        aria-label={quiz.title}
+                        on:click={() => !data.answeredQuizIds?.includes(quiz.id) && startQuiz(quiz.id)}
+                        on:keydown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !data.answeredQuizIds?.includes(quiz.id)) { startQuiz(quiz.id); }}}
+                        style={data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'opacity:0.5; pointer-events:none; position:relative;' : ''}>
+                        <div class="book-title-overlay"></div>
+                        <img src="/Module%20cover.png" alt="Book Cover" />
+                        <span class="book-title">{quiz.title}</span>
+                        <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
+                        {#if data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id)}
+                            <span class="done-badge">DONE</span>
+                        {/if}
+                    </div>
                 {/each}
             </div>
             <div class="pagination-controls">

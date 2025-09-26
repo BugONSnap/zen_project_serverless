@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server";
-import { quizzes, quizCategories, userProgress } from "$lib/server/db/schema";
+import { quizzes, quizCategories, userProgress, quizResults } from "$lib/server/db/schema";
 import { eq, and } from "drizzle-orm";
 import { redirect, error as svelteError } from "@sveltejs/kit";
 
@@ -37,12 +37,22 @@ export const load = (async ({ locals }) => {
   // });
   // console.log('Fetched User Progress:', progress);
 
+  // Get IDs of quizzes already answered correctly by this user
+  const results = await db.query.quizResults.findMany({
+    where: and(
+      eq(quizResults.userId, userId),
+      eq(quizResults.isCorrect, true)
+    )
+  });
+  const answeredQuizIds = results.map(r => r.quizId).filter((id): id is number => id !== null);
+
   return {
     category: {
       id: category.id,
       name: category.name,
     },
     quizzes: advJsQuizzesData,
+    answeredQuizIds,
     // Remove progress data from the return object
     // progress: {
     //     completed: progress?.completedQuizzes || 0,
