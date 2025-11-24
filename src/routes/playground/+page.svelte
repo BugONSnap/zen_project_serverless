@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { onMount as useOnMount } from 'svelte';
     import { writable } from 'svelte/store';
     import CodeEditor from '$lib/components/CodeEditor.svelte';
     import DashboardHeader from '$lib/DashboardHeader.svelte';
@@ -12,7 +12,7 @@
 
     // Dynamically import Preview component
     let Preview: any;
-    onMount(async () => {
+    useOnMount(async () => {
         if (browser) {
             const module = await import('$lib/components/Preview.svelte');
             Preview = module.default;
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const renderedCssCode = writable('');
     const renderedJsCode = writable('');
 
-    onMount(() => {
+    useOnMount(() => {
         runCode(); // Run code initially after component mounts
     });
 
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div class="h-screen flex flex-col bg-gray-900 text-white" class:fixed={isFullscreen} class:inset-0={isFullscreen} class:z-50={isFullscreen}>
     <!-- Header -->
-    <DashboardHeader user={data.user || undefined} isPlaygroundPage={true} />
+    <DashboardHeader user={data.user || undefined} />
 
     <!-- Main Content -->
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
@@ -235,81 +235,3 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
-
-<style>
-    .playground-container {
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background: #1a1a1a;
-        color: #fff;
-    }
-
-    .playground-container.fullscreen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 9999;
-    }
-
-    .playground-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 2rem;
-        background: #2d2d2d;
-        border-bottom: 1px solid #444;
-        flex-shrink: 0;
-    }
-
-    .header-left h1 {
-        margin: 0;
-        font-size: 1.5rem;
-        color: #4CAF50;
-    }
-
-    .header-left p {
-        margin: 0.25rem 0 0 0;
-        color: #ccc;
-        font-size: 0.9rem;
-    }
-
-    .header-controls {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .btn {
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.2s;
-        background: #4CAF50;
-        color: white;
-    }
-
-    .btn:hover {
-        background: #45a049;
-        transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-        background: #666;
-    }
-
-    .btn-secondary:hover {
-        background: #555;
-    }
-
-    @media (max-width: 768px) {
-        .playground-header {
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
-        }
-    }
-</style> 

@@ -13,6 +13,10 @@
 
     let headerStyle = '';
 
+    $: headerClasses = !isPlaygroundPage
+        ? 'bg-gradient-to-r from-[#FF0606] via-[#6F1414] to-[#050202] text-white bg-white/10 backdrop-blur-xl border border-white/15 shadow-2xl'
+        : 'bg-white text-gray-900';
+
 
     async function handleLogout() {
         try {
@@ -50,16 +54,9 @@
     });
 </script>
 
-<header
-    style="background-color: #50c5c1ab;"
-  class="shadow sticky top-0 z-50"
-  class:bg-white={!isPlaygroundPage}
-  class:bg-[#ffffff]={isPlaygroundPage}
-  class:text-white={isPlaygroundPage}
-  
->
+<header class={`shadow sticky top-0 z-50 transition-colors duration-300 ${headerClasses}`}>
     <div class="max-w-7xl mx-auto py-2 px-2 sm:px-4 lg:px-8 flex justify-between items-center">
-        <h1 class="text-3xl font-bold text-gray-900">{title}</h1>
+        <h1 class="text-3xl font-bold text-white" style="color: #ffffff">{title}</h1>
         <!-- Desktop nav -->
         <div class="hidden md:flex items-center space-x-4">
             {#if $page.url.pathname !== '/dashboard'}
@@ -71,17 +68,20 @@
                 </button>   
             {/if}
             {#if $page.url.pathname !== '/playground'}
-                <a href="/playground" class="text-white text-sm font-medium hover:underline flex items-center space-x-2 focus:outline-none" title="Code Playground">
+            <a href="/playground" class="text-white text-sm font-medium hover:underline flex items-center space-x-2 focus:outline-none" title="Code Playground">
                      Playground
                 </a>
             {/if}
+            <a href="/learn" class="text-white text-sm font-medium hover:underline focus:outline-none" title="Learn">
+                Learn
+            </a>
             <a href="/leaderboard" class="text-white text-sm font-medium hover:underline focus:outline-none" title="Leaderboard">
                 Leaderboard
             </a>
             <!-- Profile avatar -->
          
             <button
-                class="text-red-600 text-sm font-medium hover:underline focus:outline-none"
+                class="text-white text-sm font-medium hover:underline focus:outline-none"
                 on:click={handleLogout}
             >
                 Logout
@@ -107,24 +107,29 @@
                 <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-2 border">
                     {#if $page.url.pathname !== '/dashboard'}
                         <button
-                            class="block w-full text-left px-4 py-2 text-sm text-indigo-700 hover:bg-indigo-100"
+                            class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-indigo-100"
                             on:click={() => { goBackToDashboard(); menuOpen = false; }}
                         >
                             Back to Dashboard
                         </button>
                     {/if}
                     {#if $page.url.pathname !== '/playground'}
-                        <a href="/playground" title="Code Playground" class="block px-4 py-2 text-sm text-green-700 hover:bg-green-100" on:click={() => { menuOpen = false; }}>
+                        <a href="/playground" title="Code Playground" class="block px-4 py-2 text-sm text-white hover:bg-green-100" on:click={() => { menuOpen = false; }}>
                             🚀 Playground
                         </a>
                     {/if}
+                    {#if $page.url.pathname !== '/learn'}
+                        <a href="/learn" title="Learn" class="block px-4 py-2 text-sm text-white hover:bg-green-100" on:click={() => { menuOpen = false; }}>
+                            Learn
+                        </a>
+                    {/if}
                     {#if $page.url.pathname !== '/leaderboard'}
-                        <a href="/leaderboard" title="Leaderboard" class="block px-4 py-2 text-sm text-green-700 hover:bg-green-100" on:click={() => { menuOpen = false; }}>
+                        <a href="/leaderboard" title="Leaderboard" class="block px-4 py-2 text-sm text-white hover:bg-green-100" on:click={() => { menuOpen = false; }}>
                             Leaderboard
                         </a>
                     {/if}
                     {#if $page.url.pathname !== '/profile'}
-                        <a href="/profile" title="Profile" class="block px-4 py-2 text-sm text-indigo-700 hover:bg-indigo-100" on:click={() => { menuOpen = false; }}>
+                        <a href="/profile" title="Profile" class="block px-4 py-2 text-sm text-white hover:bg-indigo-100" on:click={() => { menuOpen = false; }}>
                             Profile
                         </a>
                     {/if}

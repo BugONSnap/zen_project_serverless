@@ -99,73 +99,60 @@
   }
 </script>
 
-<DashboardHeader user={user} />
+<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
+  <DashboardHeader title="Profile" user={user} />
 
-<!-- Edit Username Modal -->
-{#if showEditModal}
-  <div class="fixed inset-0 flex items-center justify-center z-50">
-    <div class="bg-[#f8f8f87c] rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
-      <h3 class="text-xl font-bold mb-4">Edit Username</h3>
-      <div class="mb-4">
-        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">New Username</label>
-        <input
-          type="text"
-          id="username"
-          bind:value={newUsername}
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          maxlength="20"
-          placeholder="Enter new username"
-        />
-      </div>
-      <div class="flex justify-end gap-2">
-        <button
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          on:click={cancelEdit}
-        >
-          Cancel
-        </button>
-        <button
-          class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          on:click={saveUsername}
-        >
-          Save Changes
-        </button>
+  {#if showEditModal}
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
+      <div class="w-full max-w-md rounded-2xl border border-white/10 bg-black/60 p-6 shadow-2xl text-white">
+        <h3 class="text-2xl font-semibold mb-4">Edit Username</h3>
+        <div class="mb-4">
+          <label for="username" class="block text-sm uppercase tracking-[0.3em] text-white/60 mb-2">New Username</label>
+          <input
+            type="text"
+            id="username"
+            bind:value={newUsername}
+            class="w-full rounded-xl border border-white/20 bg-transparent px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            maxlength="20"
+            placeholder="Enter new username"
+          />
+        </div>
+        <div class="flex justify-end gap-2">
+          <button class="rounded-full border border-white/20 px-4 py-2 text-sm text-white/70 hover:border-white/40" on:click={cancelEdit}>
+            Cancel
+          </button>
+          <button class="rounded-full border border-emerald-400/70 px-4 py-2 text-sm text-emerald-100 hover:bg-emerald-400/10" on:click={saveUsername}>
+            Save Changes
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-{/if}
+  {/if}
 
-<!-- Delete Profile Modal -->
-{#if showDeleteModal}
-  <div class="fixed inset-0 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
-      <h3 class="text-xl font-bold mb-4 text-red-600">Delete Profile</h3>
-      <p class="text-gray-700 mb-6">
-        Are you sure you want to delete your profile? This action cannot be undone and all your data will be permanently deleted.
-      </p>
-      <div class="flex justify-end gap-2">
-        <button
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          on:click={() => showDeleteModal = false}
-        >
-          Cancel
-        </button>
-        <button
-          class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-          on:click={handleDeleteProfile}
-        >
-          Delete Profile
-        </button>
+  {#if showDeleteModal}
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
+      <div class="w-full max-w-md rounded-2xl border border-red-400/40 bg-black/60 p-6 shadow-2xl text-white">
+        <h3 class="text-2xl font-semibold text-red-200 mb-4">Delete Profile</h3>
+        <p class="text-white/80 mb-6">
+          Are you sure you want to delete your profile? This action cannot be undone and all your data will be permanently deleted.
+        </p>
+        <div class="flex justify-end gap-2">
+          <button class="rounded-full border border-white/20 px-4 py-2 text-sm text-white/70 hover:border-white/40" on:click={() => showDeleteModal = false}>
+            Cancel
+          </button>
+          <button class="rounded-full border border-red-400/70 px-4 py-2 text-sm text-red-100 hover:bg-red-500/10" on:click={handleDeleteProfile}>
+            Delete Profile
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-{/if}
+  {/if}
 
-<div class="min-h-screen bg-cover bg-center flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background-image: url('/BG.jpg');">
-  <div class="bg-[#fff2f2ba] p-8 rounded-lg shadow-md w-full max-w-md text-center relative">
+  <div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
+    <section class="rounded-3xl border border-white/15 bg-black/30 p-8 shadow-2xl backdrop-blur relative">
     <!-- Settings Button -->
     <button
-      class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
+      class="absolute top-4 right-4 text-white/70 hover:text-white focus:outline-none"
       on:click={toggleDropdown}
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -174,17 +161,16 @@
       </svg>
     </button>
 
-    <!-- Dropdown Menu -->
     {#if showDropdown}
-      <div class="absolute top-12 right-4 bg-white rounded-lg shadow-lg py-2 w-48 z-10">
+      <div class="absolute top-12 right-4 w-48 rounded-2xl border border-white/10 bg-black/80 py-2 shadow-xl">
         <button
-          class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          class="w-full text-left px-4 py-2 text-sm text-white/80 hover:bg-white/10"
           on:click={handleEditClick}
         >
           Edit Profile
         </button>
         <button
-          class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+          class="w-full text-left px-4 py-2 text-sm text-red-300 hover:bg-white/10"
           on:click={handleDeleteClick}
         >
           Delete Profile
@@ -193,44 +179,51 @@
     {/if}
 
     <div class="flex flex-col items-center mb-6">
-      <div class="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center text-3xl font-bold text-white mb-2">
+      <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 text-3xl font-bold text-white">
         {user.username.charAt(0).toUpperCase()}
       </div>
-      <h2 class="text-2xl font-bold mb-1">{user.username}</h2>
-      <p class="text-gray-500">{user.email}</p>
+      <h2 class="text-3xl font-semibold text-white">{user.username}</h2>
+      <p class="text-white/60">{user.email}</p>
     </div>
-    <p class="text-gray-700 mb-6">Welcome to your profile page!</p>
-    <div class="text-left mb-8">
-      <h3 class="text-lg font-semibold mb-2">Current In-Progress Quizzes</h3>
+    <p class="text-center text-white/70">Track your journey, manage your identity, and jump back into unfinished work.</p>
+
+    <div class="mt-8 text-left space-y-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-white/60">In-progress</p>
+        <h3 class="mt-1 text-2xl font-semibold text-white">Current Quizzes</h3>
+      </div>
       {#if inProgressAttempts.length === 0}
-        <p class="text-gray-500">No in-progress quizzes found.</p>
+        <p class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No in-progress quizzes found.</p>
       {:else}
         <ul class="space-y-4">
           {#each inProgressAttempts as attempt}
-            <li class="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-purple-50 shadow-md flex items-center justify-between">
-              <span class="font-semibold text-base text-gray-800 truncate">{attempt.title || 'Untitled Quiz'}</span>
-              <span class="ml-4 px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold border border-yellow-300">In Progress</span>
+            <li class="flex items-center justify-between rounded-2xl border border-white/10 bg-black/40 p-4 shadow-inner">
+              <span class="font-semibold text-white truncate">{attempt.title || 'Untitled Quiz'}</span>
+              <span class="ml-4 rounded-full border border-amber-300/60 px-3 py-1 text-xs text-amber-100">In Progress</span>
             </li>
           {/each}
         </ul>
       {/if}
     </div>
-    <div class="text-left">
-      <h3 class="text-lg font-semibold mb-2">Category Progress</h3>
+    <div class="text-left space-y-4 mt-10">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-white/60">Progress</p>
+        <h3 class="mt-1 text-2xl font-semibold text-white">Category mastery</h3>
+      </div>
       {#if categories.length === 0}
-        <p class="text-gray-500">No categories found.</p>
+        <p class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No categories found.</p>
       {:else}
         <ul class="space-y-4">
           {#each categories as category}
-            <li>
-              <div class="flex justify-between items-center mb-1">
-                <span class="font-medium">{category.name}</span>
-                <span class="text-sm text-gray-500">{category.completed} / {category.total} quizzes</span>
+            <li class="rounded-2xl border border-white/10 bg-black/40 p-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold text-white">{category.name}</span>
+                <span class="text-sm text-white/60">{category.completed} / {category.total} quizzes</span>
               </div>
-              <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-indigo-500 h-2 rounded-full" style="width: {category.progress}%"></div>
+              <div class="w-full bg-white/10 rounded-full h-2">
+                <div class="bg-gradient-to-r from-emerald-400 to-emerald-600 h-2 rounded-full" style={`width: ${category.progress}%`}></div>
               </div>
-              <div class="text-right text-xs text-gray-500 mt-1">{category.progress}%</div>
+              <div class="text-right text-xs text-white/60 mt-1">{category.progress}%</div>
             </li>
           {/each}
         </ul>

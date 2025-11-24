@@ -3,64 +3,45 @@
     export let data;
 </script>
 
-<div class="min-h-screen bg-cover bg-center" style="background-image: url('/BG.jpg');">
+<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
     <DashboardHeader title="Leaderboard" user={data.user} />
 
-    <div class="max-w-2xl mx-auto py-12">
-        <div class="bg-white rounded-xl shadow-lg p-8">
-            <h1 class="text-3xl font-bold mb-8 text-center text-indigo-800">🏆 Leaderboard</h1>
+    <section class="max-w-4xl mx-auto px-4 py-10 space-y-6">
+        <div class="rounded-3xl border border-white/15 bg-black/30 p-8 shadow-2xl backdrop-blur">
+            <div class="text-center space-y-2 mb-8">
+                <p class="text-xs uppercase tracking-[0.35em] text-white/60">Top Performers</p>
+                <h1 class="text-4xl font-semibold text-white">🏆 Leaderboard</h1>
+                <p class="text-white/70">Real-time snapshot of the brightest builders in Zentry.</p>
+            </div>
             <div class="overflow-x-auto">
-                <table class="min-w-full rounded">
+                <table class="min-w-full divide-y divide-white/10 text-left text-sm">
                     <thead>
-                        <tr>
-                            <th class="px-4 py-2 text-left">Rank</th>
-                            <th class="px-4 py-2 text-left">Username</th>
-                            <th class="px-4 py-2 text-left">Total Points</th>
+                        <tr class="text-white/70">
+                            <th class="px-4 py-3 font-medium uppercase tracking-[0.3em]">Rank</th>
+                            <th class="px-4 py-3 font-medium uppercase tracking-[0.3em]">Username</th>
+                            <th class="px-4 py-3 font-medium uppercase tracking-[0.3em] text-right">Total Points</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {#each data.leaderboard as entry, i}
-                            <tr class="border-t hover:bg-gray-50 {i === 0 ? 'bg-yellow-100 font-bold' : i === 1 ? 'bg-gray-200 font-semibold' : i === 2 ? 'bg-orange-100 font-semibold' : ''}">
-                                <td class="px-4 py-2 text-center">
+                    <tbody class="divide-y divide-white/10">
+                        {#each data.leaderboard as entry}
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="px-4 py-4 flex items-center gap-2 font-semibold text-white">
                                     {#if entry.rank === 1}
-                                        🥇
+                                        <span>🥇</span>
                                     {:else if entry.rank === 2}
-                                        🥈
+                                        <span>🥈</span>
                                     {:else if entry.rank === 3}
-                                        🥉
+                                        <span>🥉</span>
                                     {/if}
-                                    {entry.rank}
+                                    <span>{entry.rank}</span>
                                 </td>
-                                <td class="px-4 py-2">{entry.username}</td>
-                                <td class="px-4 py-2 text-center">{entry.total_points != null ? entry.total_points : 0}</td>
+                                <td class="px-4 py-4 text-white/90">{entry.username}</td>
+                                <td class="px-4 py-4 text-right text-emerald-200 font-semibold">{entry.total_points != null ? entry.total_points : 0}</td>
                             </tr>
                         {/each}
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+    </section>
 </div>
-
-<style>
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-th, td {
-    border-bottom: 1px solid #e5e7eb;
-}
-th {
-    background: #f3f4f6;
-    font-weight: 700;
-}
-.bg-yellow-100 {
-    background: #fef9c3 !important;
-}
-.bg-gray-200 {
-    background: #e5e7eb !important;
-}
-.bg-orange-100 {
-    background: #ffedd5 !important;
-}
-</style> 
