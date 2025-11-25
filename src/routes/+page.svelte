@@ -239,170 +239,148 @@
   });
 </script>
 
-<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background: url('/BG.jpg') center center / cover no-repeat;">
-  <div class="max-w-md w-full space-y-5 bg-white/95 p-8 rounded-lg shadow-2xl border border-gray-200 relative z-10 overflow-hidden">
-    <h1 class="text-center text-[10vh] font-extrabold font-serif text-gray-900 mb-1">Zentry</h1>
-    <!-- Tabs -->
-    <div class="flex border-b border-gray-200">
-      <button
-        class="flex-1 py-4 px-1 text-center border-b-2 font-medium text-sm {activeTab === 'login' 
-          ? 'border-indigo-500 text-indigo-600' 
-          : 'border-transparent text-gray-500 hover:text-indigo-700 hover:border-indigo-700'}"
-        on:click={() => switchTab('login')}
-      >
-        Login
-      </button>
-      <button
-        class="flex-1 py-4 px-1 text-center border-b-2 font-medium text-sm {activeTab === 'register' 
-          ? 'border-indigo-500 text-indigo-600' 
-          : 'border-transparent text-gray-500 hover:text-indigo-700 hover:border-indigo-700'}"
-        on:click={() => switchTab('register')}
-      >
-        Register
-      </button>
-    </div>
-
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        {activeTab === 'login' ? 'Sign in to your account' : 'Create a new account'}
-      </h2>
-    </div>
-
-    {#if error}
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <span class="block sm:inline">{error}</span>
+<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-white">
+  <div class="w-full max-w-md flex flex-col gap-4">
+    <div class="mb-1">
+      <div class="rounded-3xl border border-white/1 bg-transparent/10 p-1  flex flex-col items-center mx-auto w-full">
+        <!-- Zentry Logo -->
+        <img src="/zentry logo.png" alt="Zentry Logo" class="h-58 w-auto" />
       </div>
-    {/if}
-
-    {#if successMessage}
-      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-        <span class="block sm:inline">{successMessage}</span>
+    </div>
+    <div class="rounded-3xl border border-white/10 bg-black/30 p-8 shadow-2xl backdrop-blur w-full space-y-5 relative z-10 overflow-hidden">
+      <h1 class="text-5xl font-bold text-center text-white mb-6">Zentry</h1>
+      <div class="flex justify-center gap-4 mb-6">
+        
+        <button
+          class="px-6 py-2 rounded-full border transition font-semibold focus:outline-none text-base disabled:opacity-50 {activeTab === 'login' ? 'bg-emerald-600/40 text-emerald-100 border-emerald-400 shadow' : 'bg-white/10 text-white border-white/10 hover:bg-white/20'}"
+          on:click={() => switchTab('login')}
+          disabled={activeTab === 'login'}
+        >
+          Login
+        </button>
+        <button
+          class="px-6 py-2 rounded-full border transition font-semibold focus:outline-none text-base disabled:opacity-50 {activeTab === 'register' ? 'bg-emerald-600/40 text-emerald-100 border-emerald-400 shadow' : 'bg-white/10 text-white border-white/10 hover:bg-white/20'}"
+          on:click={() => switchTab('register')}
+          disabled={activeTab === 'register'}
+        >
+          Register
+        </button>
       </div>
-    {/if}
-
-    <form 
-      class="mt-8 space-y-6" 
-      on:submit|preventDefault={handleSubmit}
-      bind:this={formElement}
-    >
-      <div class="rounded-md shadow-sm space-y-4">
-        {#if activeTab === 'register'}
+      <form 
+        class="mt-8 space-y-6" 
+        on:submit|preventDefault={handleSubmit}
+        bind:this={formElement}
+      >
+        <div class="space-y-4">
+          {#if activeTab === 'register'}
+            <div>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                value={username}
+                on:input={handleUsernameInput}
+                class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                placeholder="Username"
+              />
+              {#if usernameError}
+                <p class="mt-1 text-sm text-amber-300">{usernameError}</p>
+              {/if}
+            </div>
+            <div>
+              <input
+                id="uniqueInfo"
+                name="uniqueInfo"
+                type="text"
+                required
+                value={uniqueInfo}
+                on:input={handleUniqueInfoInput}
+                class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                placeholder="Unique Recovery Info (e.g., Mother's maiden name)"
+              />
+            </div>
+          {/if}
           <div>
-            <label for="username" class="sr-only">Username</label>
             <input
-              id="username"
-              name="username"
-              type="text"
+              id="email"
+              name="email"
+              type="email"
               required
-              value={username}
-              on:input={handleUsernameInput}
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border {usernameError ? 'border-red-300' : 'border-indigo-200'} placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 focus:z-10 sm:text-sm"
-              placeholder="Username"
+              value={email}
+              on:input={handleEmailInput}
+              class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              placeholder="Email address"
             />
-            {#if usernameError}
-              <p class="mt-1 text-sm text-red-600">{usernameError}</p>
+            {#if emailError}
+              <p class="mt-1 text-sm text-amber-300">{emailError}</p>
             {/if}
           </div>
           <div>
-            <label for="uniqueInfo" class="sr-only">Unique Recovery Information</label>
             <input
-              id="uniqueInfo"
-              name="uniqueInfo"
-              type="text"
+              id="password"
+              name="password"
+              type="password"
               required
-              value={uniqueInfo}
-              on:input={handleUniqueInfoInput}
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border {error ? 'border-red-300' : 'border-indigo-200'} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 focus:z-10 sm:text-sm"
-              placeholder="Unique Recovery Information (e.g., Mother's maiden name)"
+              value={password}
+              on:input={handlePasswordInput}
+              class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              placeholder="Password"
             />
+            {#if passwordError}
+              <p class="mt-1 text-sm text-amber-300">{passwordError}</p>
+            {/if}
+            {#if activeTab === 'register' && password}
+              <div class="mt-2">
+                <div class="flex space-x-2">
+                  {#each Array(4) as _, i}
+                    <div class="flex-1 h-2 rounded-full {i < passwordStrength ? 'bg-emerald-400' : 'bg-white/15'}"></div>
+                  {/each}
+                </div>
+                <p class="mt-1 text-xs text-white/70">
+                  Password strength: {['Weak', 'Fair', 'Good', 'Strong'][passwordStrength - 1] || 'None'}
+                </p>
+              </div>
+            {/if}
+          </div>
+        </div>
+        <div>
+          <button
+            type="submit"
+            disabled={loading}
+            class="w-full flex justify-center py-3 px-4 border border-emerald-400 text-base font-semibold rounded-lg text-white bg-emerald-600/70 hover:bg-emerald-700 transition shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50"
+          >
+            {#if loading}
+              <svg class="animate-spin h-5 w-5 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+            {/if}
+            {activeTab === 'login' ? 'Sign in' : 'Register'}
+          </button>
+        </div>
+        {#if activeTab === 'login'}
+          <div class="text-center">
+            <a
+              href="/reset-password"
+              class="text-sm text-emerald-300 hover:text-white transition"
+            >
+              Forgot your password?
+            </a>
           </div>
         {/if}
-        <div>
-          <label for="email" class="sr-only">Email address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            value={email}
-            on:input={handleEmailInput}
-            class="appearance-none rounded-none relative block w-full px-3 py-2 border {emailError ? 'border-red-300' : 'border-indigo-200'} placeholder-gray-500 text-gray-900 {activeTab === 'login' ? 'rounded-t-md' : ''} focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 focus:z-10 sm:text-sm"
-            placeholder="Email address"
-          />
-          {#if emailError}
-            <p class="mt-1 text-sm text-red-600">{emailError}</p>
-          {/if}
-        </div>
-        <div>
-          <label for="password" class="sr-only">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            value={password}
-            on:input={handlePasswordInput}
-            class="appearance-none rounded-none relative block w-full px-3 py-2 border {passwordError ? 'border-red-300' : 'border-indigo-200'} placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-600 focus:border-indigo-600 focus:z-10 sm:text-sm"
-            placeholder="Password"
-          />
-          {#if passwordError}
-            <p class="mt-1 text-sm text-red-600">{passwordError}</p>
-          {/if}
-          {#if activeTab === 'register' && password}
-            <div class="mt-2">
-              <div class="flex space-x-2">
-                {#each Array(4) as _, i}
-                  <div class="flex-1 h-2 rounded-full {i < passwordStrength ? 'bg-green-500' : 'bg-gray-200'}"></div>
-                {/each}
-              </div>
-              <p class="mt-1 text-xs text-gray-500">
-                Password strength: {['Weak', 'Fair', 'Good', 'Strong'][passwordStrength - 1] || 'None'}
-              </p>
-            </div>
-          {/if}
-        </div>
-      </div>
-
-      <div>
-        <button
-          type="submit"
-          disabled={loading}
-          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-        >
-          {#if loading}
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-            </span>
-          {/if}
-          {activeTab === 'login' ? 'Sign in' : 'Register'}
-        </button>
-      </div>
-
-      {#if activeTab === 'login'}
-        <div class="text-center">
-          <a
-            href="/reset-password"
-            class="text-sm text-indigo-600 hover:text-indigo-700"
-          >
-            Forgot your password?
-          </a>
-        </div>
-      {/if}
-    </form>
-    <!-- Continue where you left off section -->
+      </form>
+    </div>
+  </div>
   {#if resumeQuiz}
     <div class="mt-10 flex flex-col items-center">
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg px-6 py-4 shadow flex flex-col items-center w-full max-w-lg">
-        <span class="font-semibold text-lg text-gray-800 mb-2">Continue where you left off</span>
-        <span class="text-gray-700 mb-4">{resumeQuiz.title || 'Untitled Quiz'}</span>
-        <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" on:click={continueQuiz}>
+      <div class="rounded-2xl border border-amber-300/40 bg-amber-400/10 px-6 py-5 shadow-xl backdrop-blur flex flex-col items-center w-full max-w-lg mx-auto">
+        <span class="font-semibold text-lg text-white mb-2">Continue where you left off</span>
+        <span class="text-amber-100 mb-4">{resumeQuiz.title || 'Untitled Quiz'}</span>
+        <button class="px-6 py-2 bg-emerald-600/80 text-white rounded-lg hover:bg-emerald-700 transition-colors font-semibold shadow" on:click={continueQuiz}>
           Continue Quiz
         </button>
       </div>
     </div>
   {/if}
-</div>
 </div>

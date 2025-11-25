@@ -14,7 +14,7 @@
     let headerStyle = '';
 
     $: headerClasses = !isPlaygroundPage
-        ? 'bg-gradient-to-r from-[#FF0606] via-[#6F1414] to-[#050202] text-white bg-white/10 backdrop-blur-xl border border-white/15 shadow-2xl'
+        ? 'bg-[#6F1414] text-white shadow-lg'
         : 'bg-white text-gray-900';
 
 
@@ -56,7 +56,10 @@
 
 <header class={`shadow sticky top-0 z-50 transition-colors duration-300 ${headerClasses}`}>
     <div class="max-w-7xl mx-auto py-2 px-2 sm:px-4 lg:px-8 flex justify-between items-center">
-        <h1 class="text-3xl font-bold text-white" style="color: #ffffff">{title}</h1>
+        <div class="flex items-center space-x-2">
+    <img src="/zentry%20logo.png" alt="Zentry Logo" class="h-10 w-auto" />
+    <h1 class="text-3xl font-bold text-white">{title}</h1>
+</div>
         <!-- Desktop nav -->
         <div class="hidden md:flex items-center space-x-4">
             {#if $page.url.pathname !== '/dashboard'}

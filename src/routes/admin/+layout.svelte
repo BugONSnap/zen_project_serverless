@@ -15,58 +15,49 @@
   }
 </script>
 
-<div style="background-image: url('/BG.jpg');bac;background-clip: unset; background-attachment: fixed;background-size: cover    background-attachment: fixed;
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-">
-  <!-- Admin Header -->
-  <header class="bg-indigo-600 text-white shadow-md" style="background-color: #50c5c1ab;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-    <button
-      class="text-2xl font-bold font-serif bg-transparent border-none cursor-pointer focus:outline-none"
-      on:click={() => goto('/admin')}
-      type="button"
-    >
-      Zentry Admin
-    </button>
-      <!-- Responsive Nav -->
-      <nav class="hidden md:flex space-x-4">
-        <a href="/admin/users" class="hover:text-indigo-200 transition-colors">Users</a>
-        <a href="/admin/quizzes" class="hover:text-indigo-200 transition-colors">Quizzes</a>
-        <a href="/admin/analytics" class="hover:text-indigo-200 transition-colors">Analytics</a>
-        <button
-          on:click={handleLogout}
-          class="hover:text-indigo-200 transition-colors focus:outline-none"
-        >
-          Logout
-        </button>
-      </nav>
-      <!-- Hamburger for mobile -->
+<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] flex flex-col">
+  <!-- Admin Header, Main Content, Footer will render inside -->
+  <header class="shadow-2xl sticky top-0 z-50 transition-colors duration-300 bg-gradient-to-r from-[#FF0606] via-[#6F1414] to-[#050202] text-white bg-white/10 backdrop-blur-xl border border-white/15 w-full">
+    <div class="max-w-7xl mx-auto py-2 px-2 sm:px-4 lg:px-8 flex justify-between items-center">
+      <button type="button" class="text-3xl font-bold text-white font-serif bg-transparent border-none cursor-pointer focus:outline-none hover:underline" on:click={() => goto('/admin')} aria-label="Go to Admin Home">
+        Zentry Admin
+      </button>
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="/admin" class="text-white text-sm font-medium hover:underline focus:outline-none">Home</a>
+        <a href="/admin/users" class="text-white text-sm font-medium hover:underline focus:outline-none">Users</a>
+        <a href="/admin/quizzes" class="text-white text-sm font-medium hover:underline focus:outline-none">Quizzes</a>
+        <a href="/admin/analytics" class="text-white text-sm font-medium hover:underline focus:outline-none">Analytics</a>
+        <button class="text-white text-sm font-medium hover:underline focus:outline-none" on:click={handleLogout}>Logout</button>
+      </div>
+      <!-- Mobile/Tablet nav -->
       <div class="md:hidden relative">
-        <button class="p-2 rounded focus:outline-none focus:ring-2 focus:ring-white" on:click={() => showMenu = !showMenu} aria-label="Open navigation menu">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <button
+          class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          on:click={() => { showMenu = !showMenu; }}
+          aria-label="Open menu"
+        >
+          <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
         </button>
         {#if showMenu}
-          <div class="absolute right-0 mt-2 w-48 bg-white text-indigo-700 rounded shadow-lg z-50 animate-fade-in">
-            <a href="/admin/users" class="block px-4 py-2 hover:bg-indigo-100" on:click={() => showMenu = false}>Users</a>
-            <a href="/admin/quizzes" class="block px-4 py-2 hover:bg-indigo-100" on:click={() => showMenu = false}>Quizzes</a>
-            <a href="/admin/analytics" class="block px-4 py-2 hover:bg-indigo-100" on:click={() => showMenu = false}>Analytics</a>
-            <button on:click={() => { showMenu = false; handleLogout(); }} class="block w-full text-left px-4 py-2 hover:bg-indigo-100">Logout</button>
+          <div class="absolute right-0 mt-2 w-48 bg-black/90 rounded-xl shadow-2xl z-50 py-2 border border-white/10 backdrop-blur-xl">
+            <a href="/admin" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Home</a>
+            <a href="/admin/users" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Users</a>
+            <a href="/admin/quizzes" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Quizzes</a>
+            <a href="/admin/analytics" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Analytics</a>
+            <button class="block w-full text-left px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => { handleLogout(); showMenu = false; }}>Logout</button>
           </div>
         {/if}
       </div>
     </div>
   </header>
-
-  <!-- Main Content -->
   <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <slot />
   </main>
-
-  <!-- Footer (Optional) -->
-  <footer class="bg-gray-800 text-white py-4">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+  <footer class="rounded-b-3xl border-t border-white/10 bg-black/50 shadow-2xl backdrop-blur py-4 mt-8 text-center text-white/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <p>&copy; 2025 Zentry Admin. All rights reserved.</p>
     </div>
   </footer>

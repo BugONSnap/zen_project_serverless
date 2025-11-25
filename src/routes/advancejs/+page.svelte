@@ -29,206 +29,108 @@
     }
 </script>
 
-<style>
-    .book-cover {
-        position: relative;
-        width: 160px;
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 12px;
-        overflow: visible;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-        cursor: pointer;
-        transition: transform 0.2s;
-        background: #222;
-    }
-    .book-cover:hover,
-    .book-cover:focus,
-    .book-cover:focus-visible {
-        z-index: 20;
-    }
-    .book-title-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0,0,0,0.45);
-        z-index: 1;
-        pointer-events: none;
-    }
-    .book-cover:hover {
-        transform: scale(1.05);
-    }
-    .quiz-title-popup {
-        display: none;
-        position: absolute;
-        left: 50%;
-        top: -12px;
-        transform: translate(-50%, -100%);
-        background: rgba(24,24,24,0.97);
-        color: #fff;
-        padding: 10px 18px;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 500;
-        white-space: pre-line;
-        min-width: 180px;
-        max-width: 320px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.23);
-        z-index: 10;
-        text-align: center;
-        pointer-events: none;
-        word-break: break-word;
-    }
-    .book-cover:hover .quiz-title-popup,
-    .book-cover:focus .quiz-title-popup,
-    .book-cover:focus-visible .quiz-title-popup {
-        display: block;
-    }
-    .done-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #34d399;
-        color: #fff;
-        font-weight: bold;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        z-index: 10;
-        pointer-events: none;
-        letter-spacing: 1px;
-    }
-    .book-cover img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: brightness(0.95) contrast(1.1);
-    }
-    .book-title {
-        position: relative;
-        z-index: 2;
-        color: #fff;
-        text-shadow: 0 2px 8px #000, 0 0 2px #000;
-        text-align: center;
-        font-size: 1.08rem;
-        font-weight: bold;
-        padding: 12px 10px 12px 10px;
-        line-height: 1.3;
-        max-width: 95%;
-        word-break: break-word;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        line-clamp: 3;
-        -webkit-box-orient: vertical;
-        white-space: normal;
-    }
-    .flex-row-wrap {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-        justify-content: flex-start;
-    }
-    .section-header {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        text-align: left;
-    }
-    .pagination-controls {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        margin-top: 16px;
-    }
-    .pagination-controls button {
-        padding: 4px 12px;
-        border-radius: 6px;
-        background: #e5e7eb;
-        color: #222;
-        font-size: 0.95rem;
-        border: none;
-        cursor: pointer;
-        transition: background 0.15s;
-    }
-    .pagination-controls button:disabled {
-        background: #f3f4f6;
-        color: #aaa;
-        cursor: not-allowed;
-    }
-</style>
-
-<div class="min-h-screen bg-cover bg-center" style="background-image: url('/BG.jpg');">
-    <!-- Using data.category.name for the title -->
+<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
     <DashboardHeader title={data.category.name} user={data.user} />
-
-    <main class="max-w-7xl mx-auto bg-white rounded-lg mt-10 py-2 px-2">
-        <!-- Using data.category.name for the main heading -->
-        <div>
-            <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">{data.category.name} Quizzes</h2>
-            <ResumeQuizNotice category={data.category?.name || 'AdvanceJS'} />
-        </div>
-
-        <!-- Identification Quizzes Section -->
-        <div class="mb-10">
-            <div class="section-header text-blue-700">Identification Challenges</div>
-            <div class="flex-row-wrap">
-                {#each identificationPaginated as quiz}
-                    <div class="book-cover group {data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'answered' : ''}"
-                        role="button"
-                        tabindex="0"
-                        aria-label={quiz.title}
-                        on:click={() => !data.answeredQuizIds?.includes(quiz.id) && startQuiz(quiz.id)}
-                        on:keydown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !data.answeredQuizIds?.includes(quiz.id)) { startQuiz(quiz.id); }}}
-                        style={data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'opacity:0.5; pointer-events:none; position:relative;' : ''}>
-                        <div class="book-title-overlay"></div>
-                        <img src="/Module%20cover.png" alt="Book Cover" />
-                        <span class="book-title">{quiz.title}</span>
-                        <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
-                        {#if data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id)}
-                            <span class="done-badge">DONE</span>
-                        {/if}
-                    </div>
-                {/each}
+    <main class="max-w-6xl mx-auto px-4 py-10 space-y-10">
+        <section class="rounded-3xl border border-white/10 bg-black/30 p-8 shadow-2xl backdrop-blur text-center space-y-2">
+            <p class="text-xs uppercase tracking-[0.35em] text-white/60">Advanced JavaScript Track</p>
+            <h2 class="text-4xl font-semibold">Available quizzes</h2>
+            <p class="text-white/70">Push your skills with async, patterns, code writing and architecture. Challenges below.</p>
+        </section>
+        <ResumeQuizNotice category={data.category?.name || 'AdvanceJS'} />
+        <section class="rounded-3xl border border-white/15 bg-black/30 p-6 shadow-xl backdrop-blur space-y-6" id="identification-area">
+            <div>
+                <p class="text-xs uppercase tracking-[0.35em] text-white/60">Identification Challenges</p>
+                <h3 class="mt-2 text-3xl font-semibold text-white">Spot and Identify</h3>
+                <p class="text-white/70">Quick recognition and conceptual comprehension challenges. Name it right!</p>
             </div>
-            <div class="pagination-controls">
-                <button on:click={() => identificationPage = Math.max(1, identificationPage - 1)} disabled={identificationPage === 1}>Prev</button>
-                <span>Page {identificationPage} of {identificationPages}</span>
-                <button on:click={() => identificationPage = Math.min(identificationPages, identificationPage + 1)} disabled={identificationPage === identificationPages}>Next</button>
+            <div class="grid gap-4 md:grid-cols-2">
+                {#if identificationPaginated.length === 0}
+                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No quizzes available.</div>
+                {:else}
+                    {#each identificationPaginated as quiz}
+                        <button
+                            class={`relative rounded-2xl border border-white/10 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
+                            on:click={() => !(data.answeredQuizIds ?? []).includes(quiz.id) && startQuiz(quiz.id)}
+                        >
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm uppercase tracking-[0.35em] text-white/60">Identification</span>
+                                {#if (data.answeredQuizIds ?? []).includes(quiz.id)}
+                                    <span class="rounded-full border border-emerald-400/70 px-3 py-1 text-xs text-emerald-200">Done</span>
+                                {/if}
+                            </div>
+                            <p class="mt-2 text-lg font-semibold text-white">{quiz.title}</p>
+                            <p class="text-sm text-white/60">Tap to launch challenge</p>
+                        </button>
+                    {/each}
+                {/if}
             </div>
-        </div>
-
-        <!-- Code Challenge Quizzes Section -->
-        <div class="mb-10">
-            <div class="section-header text-red-700">Code Challenges</div>
-            <div class="flex-row-wrap">
-                {#each codeChallengePaginated as quiz}
-                    <div class="book-cover group {data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'answered' : ''}"
-                        role="button"
-                        tabindex="0"
-                        aria-label={quiz.title}
-                        on:click={() => !data.answeredQuizIds?.includes(quiz.id) && startQuiz(quiz.id)}
-                        on:keydown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !data.answeredQuizIds?.includes(quiz.id)) { startQuiz(quiz.id); }}}
-                        style={data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id) ? 'opacity:0.5; pointer-events:none; position:relative;' : ''}>
-                        <div class="book-title-overlay"></div>
-                        <img src="/Module%20cover.png" alt="Book Cover" />
-                        <span class="book-title">{quiz.title}</span>
-                        <div class="quiz-title-popup" aria-hidden="true">{quiz.title}</div>
-                        {#if data.answeredQuizIds && data.answeredQuizIds.includes(quiz.id)}
-                            <span class="done-badge">DONE</span>
-                        {/if}
-                    </div>
-                {/each}
+            {#if identificationPages > 1}
+                <div class="flex items-center justify-center gap-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/80 shadow-lg backdrop-blur">
+                    <button
+                        class="rounded-full border border-white/15 px-4 py-1 hover:border-white/40 disabled:opacity-30"
+                        on:click={() => identificationPage = Math.max(1, identificationPage - 1)}
+                        disabled={identificationPage === 1}
+                    >
+                        Prev
+                    </button>
+                    <span>Page {identificationPage} of {identificationPages}</span>
+                    <button
+                        class="rounded-full border border-white/15 px-4 py-1 hover:border-white/40 disabled:opacity-30"
+                        on:click={() => identificationPage = Math.min(identificationPages, identificationPage + 1)}
+                        disabled={identificationPage === identificationPages}
+                    >
+                        Next
+                    </button>
+                </div>
+            {/if}
+        </section>
+        <section class="rounded-3xl border border-white/15 bg-black/30 p-6 shadow-xl backdrop-blur space-y-6" id="code-challenge-area">
+            <div>
+                <p class="text-xs uppercase tracking-[0.35em] text-white/60">Code Challenge Block</p>
+                <h3 class="mt-2 text-3xl font-semibold text-white">Write and Debug</h3>
+                <p class="text-white/70">Put your skills to the test—solve code, debug, and architect solutions.</p>
             </div>
-            <div class="pagination-controls">
-                <button on:click={() => codeChallengePage = Math.max(1, codeChallengePage - 1)} disabled={codeChallengePage === 1}>Prev</button>
-                <span>Page {codeChallengePage} of {codeChallengePages}</span>
-                <button on:click={() => codeChallengePage = Math.min(codeChallengePages, codeChallengePage + 1)} disabled={codeChallengePage === codeChallengePages}>Next</button>
+            <div class="grid gap-4 md:grid-cols-2">
+                {#if codeChallengePaginated.length === 0}
+                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No quizzes available.</div>
+                {:else}
+                    {#each codeChallengePaginated as quiz}
+                        <button
+                            class={`relative rounded-2xl border border-white/10 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
+                            on:click={() => !(data.answeredQuizIds ?? []).includes(quiz.id) && startQuiz(quiz.id)}
+                        >
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm uppercase tracking-[0.35em] text-white/60">Code Challenge</span>
+                                {#if (data.answeredQuizIds ?? []).includes(quiz.id)}
+                                    <span class="rounded-full border border-emerald-400/70 px-3 py-1 text-xs text-emerald-200">Done</span>
+                                {/if}
+                            </div>
+                            <p class="mt-2 text-lg font-semibold text-white">{quiz.title}</p>
+                            <p class="text-sm text-white/60">Tap to launch challenge</p>
+                        </button>
+                    {/each}
+                {/if}
             </div>
-        </div>
+            {#if codeChallengePages > 1}
+                <div class="flex items-center justify-center gap-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/80 shadow-lg backdrop-blur">
+                    <button
+                        class="rounded-full border border-white/15 px-4 py-1 hover:border-white/40 disabled:opacity-30"
+                        on:click={() => codeChallengePage = Math.max(1, codeChallengePage - 1)}
+                        disabled={codeChallengePage === 1}
+                    >
+                        Prev
+                    </button>
+                    <span>Page {codeChallengePage} of {codeChallengePages}</span>
+                    <button
+                        class="rounded-full border border-white/15 px-4 py-1 hover:border-white/40 disabled:opacity-30"
+                        on:click={() => codeChallengePage = Math.min(codeChallengePages, codeChallengePage + 1)}
+                        disabled={codeChallengePage === codeChallengePages}
+                    >
+                        Next
+                    </button>
+                </div>
+            {/if}
+        </section>
     </main>
 </div>
