@@ -99,29 +99,40 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
+<div class="min-h-screen bg-gradient-to-b from-[#ffbdbd] via-[#ff9b9b] to-[#ff7b7b] text-[#4a1c1c] font-medium">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+    
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+  </style>
   <DashboardHeader title="Profile" user={user} />
 
   {#if showEditModal}
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-      <div class="w-full max-w-md rounded-2xl border border-white/10 bg-black/60 p-6 shadow-2xl text-white">
+      <div class="w-full max-w-md rounded-2xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-6 shadow-2xl text-[#4a1c1c]">
         <h3 class="text-2xl font-semibold mb-4">Edit Username</h3>
         <div class="mb-4">
-          <label for="username" class="block text-sm uppercase tracking-[0.3em] text-white/60 mb-2">New Username</label>
+          <label for="username" class="block text-sm uppercase tracking-[0.3em] text-[#4a1c1c]/80 mb-2">New Username</label>
           <input
             type="text"
             id="username"
             bind:value={newUsername}
-            class="w-full rounded-xl border border-white/20 bg-transparent px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-400"
+            class="w-full rounded-xl border-2 border-white/30 bg-white/70 px-3 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#ff7b7b] focus:border-transparent placeholder-[#4a1c1c]/50"
             maxlength="20"
             placeholder="Enter new username"
           />
         </div>
         <div class="flex justify-end gap-2">
-          <button class="rounded-full border border-white/20 px-4 py-2 text-sm text-white/70 hover:border-white/40" on:click={cancelEdit}>
+          <button class="rounded-full border-2 border-white/30 px-4 py-2 text-sm text-[#4a1c1c] hover:bg-white/60 transition-colors" on:click={cancelEdit}>
             Cancel
           </button>
-          <button class="rounded-full border border-emerald-400/70 px-4 py-2 text-sm text-emerald-100 hover:bg-emerald-400/10" on:click={saveUsername}>
+          <button class="rounded-full border-2 border-[#ff7b7b] bg-[#ff7b7b] px-4 py-2 text-sm text-white hover:bg-[#ff5e5e] transition-colors" on:click={saveUsername}>
             Save Changes
           </button>
         </div>
@@ -131,16 +142,16 @@
 
   {#if showDeleteModal}
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-      <div class="w-full max-w-md rounded-2xl border border-red-400/40 bg-black/60 p-6 shadow-2xl text-white">
-        <h3 class="text-2xl font-semibold text-red-200 mb-4">Delete Profile</h3>
-        <p class="text-white/80 mb-6">
+      <div class="w-full max-w-md rounded-2xl border-2 border-red-300 bg-white p-6 shadow-2xl text-[#4a1c1c]">
+        <h3 class="text-2xl font-semibold text-red-600 mb-4">Delete Profile</h3>
+        <p class="text-[#4a1c1c]/80 mb-6">
           Are you sure you want to delete your profile? This action cannot be undone and all your data will be permanently deleted.
         </p>
         <div class="flex justify-end gap-2">
-          <button class="rounded-full border border-white/20 px-4 py-2 text-sm text-white/70 hover:border-white/40" on:click={() => showDeleteModal = false}>
+          <button class="rounded-full border-2 border-white/30 px-4 py-2 text-sm text-[#4a1c1c] hover:bg-gray-100 transition-colors" on:click={() => showDeleteModal = false}>
             Cancel
           </button>
-          <button class="rounded-full border border-red-400/70 px-4 py-2 text-sm text-red-100 hover:bg-red-500/10" on:click={handleDeleteProfile}>
+          <button class="rounded-full border-2 border-red-500 bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600 transition-colors" on:click={handleDeleteProfile}>
             Delete Profile
           </button>
         </div>
@@ -149,10 +160,10 @@
   {/if}
 
   <div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
-    <section class="rounded-3xl border border-white/15 bg-black/30 p-8 shadow-2xl backdrop-blur relative">
+    <section class="rounded-3xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-8 shadow-2xl relative">
     <!-- Settings Button -->
     <button
-      class="absolute top-4 right-4 text-white/70 hover:text-white focus:outline-none"
+      class="absolute top-4 right-4 text-[#4a1c1c]/70 hover:text-[#4a1c1c] focus:outline-none transition-colors"
       on:click={toggleDropdown}
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -162,15 +173,15 @@
     </button>
 
     {#if showDropdown}
-      <div class="absolute top-12 right-4 w-48 rounded-2xl border border-white/10 bg-black/80 py-2 shadow-xl">
+      <div class="absolute top-12 right-4 w-48 rounded-2xl border-2 border-white/30 bg-white/90 py-2 shadow-xl z-50">
         <button
-          class="w-full text-left px-4 py-2 text-sm text-white/80 hover:bg-white/10"
+          class="w-full text-left px-4 py-2 text-sm text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors"
           on:click={handleEditClick}
         >
           Edit Profile
         </button>
         <button
-          class="w-full text-left px-4 py-2 text-sm text-red-300 hover:bg-white/10"
+          class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 transition-colors"
           on:click={handleDeleteClick}
         >
           Delete Profile
@@ -179,27 +190,27 @@
     {/if}
 
     <div class="flex flex-col items-center mb-6">
-      <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 text-3xl font-bold text-white">
+      <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[#ff7b7b] to-[#ff5e5e] text-3xl font-bold text-white shadow-md">
         {user.username.charAt(0).toUpperCase()}
       </div>
       <h2 class="text-3xl font-semibold text-white">{user.username}</h2>
       <p class="text-white/60">{user.email}</p>
     </div>
-    <p class="text-center text-white/70">Track your journey, manage your identity, and jump back into unfinished work.</p>
+    <p class="text-center text-[#4a1c1c]/80">Track your journey, manage your identity, and jump back into unfinished work.</p>
 
     <div class="mt-8 text-left space-y-6">
       <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-white/60">In-progress</p>
-        <h3 class="mt-1 text-2xl font-semibold text-white">Current Quizzes</h3>
+        <p class="text-xs uppercase tracking-[0.35em] text-[#4a1c1c]/70">In-progress</p>
+        <h3 class="mt-1 text-2xl font-semibold text-[#4a1c1c]">Current Quizzes</h3>
       </div>
       {#if inProgressAttempts.length === 0}
-        <p class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No in-progress quizzes found.</p>
+        <p class="rounded-2xl border-2 border-white/30 bg-white/50 p-4 text-[#4a1c1c]/80">No in-progress quizzes found.</p>
       {:else}
         <ul class="space-y-4">
           {#each inProgressAttempts as attempt}
-            <li class="flex items-center justify-between rounded-2xl border border-white/10 bg-black/40 p-4 shadow-inner">
-              <span class="font-semibold text-white truncate">{attempt.title || 'Untitled Quiz'}</span>
-              <span class="ml-4 rounded-full border border-amber-300/60 px-3 py-1 text-xs text-amber-100">In Progress</span>
+            <li class="flex items-center justify-between rounded-2xl border-2 border-white/30 bg-white/50 p-4 shadow-md">
+              <span class="font-semibold text-[#4a1c1c] truncate">{attempt.title || 'Untitled Quiz'}</span>
+              <span class="ml-4 rounded-full border-2 border-[#ff7b7b] bg-white/80 px-3 py-1 text-xs text-[#4a1c1c]">In Progress</span>
             </li>
           {/each}
         </ul>
@@ -207,23 +218,23 @@
     </div>
     <div class="text-left space-y-4 mt-10">
       <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-white/60">Progress</p>
-        <h3 class="mt-1 text-2xl font-semibold text-white">Category mastery</h3>
+        <p class="text-xs uppercase tracking-[0.35em] text-[#4a1c1c]/70">Progress</p>
+        <h3 class="mt-1 text-2xl font-semibold text-[#4a1c1c]">Category mastery</h3>
       </div>
       {#if categories.length === 0}
-        <p class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No categories found.</p>
+        <p class="rounded-2xl border-2 border-white/30 bg-white/50 p-4 text-[#4a1c1c]/80">No categories found.</p>
       {:else}
         <ul class="space-y-4">
           {#each categories as category}
-            <li class="rounded-2xl border border-white/10 bg-black/40 p-4">
+            <li class="rounded-2xl border-2 border-white/30 bg-white/50 p-4 shadow-md">
               <div class="flex justify-between items-center mb-2">
-                <span class="font-semibold text-white">{category.name}</span>
-                <span class="text-sm text-white/60">{category.completed} / {category.total} quizzes</span>
+                <span class="font-semibold text-[#4a1c1c]">{category.name}</span>
+                <span class="text-sm text-[#4a1c1c]/80">{category.completed} / {category.total} quizzes</span>
               </div>
-              <div class="w-full bg-white/10 rounded-full h-2">
-                <div class="bg-gradient-to-r from-emerald-400 to-emerald-600 h-2 rounded-full" style={`width: ${category.progress}%`}></div>
+              <div class="w-full bg-white/70 rounded-full h-2.5">
+                <div class="bg-gradient-to-r from-[#ff7b7b] to-[#ff5e5e] h-2.5 rounded-full" style="width: {category.progress}%"></div>
               </div>
-              <div class="text-right text-xs text-white/60 mt-1">{category.progress}%</div>
+              <div class="text-right text-xs text-[#4a1c1c]/80 mt-1">{category.progress}%</div>
             </li>
           {/each}
         </ul>

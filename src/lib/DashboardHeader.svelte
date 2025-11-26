@@ -136,7 +136,7 @@
                     {/if}
                     {#if $page.url.pathname !== '/playground'}
                         <a href="/playground" title="Code Playground" class="block px-4 py-2 text-sm text-gray-900 hover:bg-green-100" on:click={() => { menuOpen = false; }}>
-                            🚀 Playground
+                            Playground
                         </a>
                     {/if}
                     {#if $page.url.pathname !== '/learn'}

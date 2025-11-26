@@ -7,7 +7,7 @@ import { redirect, error as svelteError } from "@sveltejs/kit";
 export const load: PageServerLoad = async ({ locals }) => {
   const userId = locals.user?.id;
   if (!userId) {
-    throw redirect(302, "/login");
+    throw redirect(302, "/");
   }
 
   // Get user data

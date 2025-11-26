@@ -7,7 +7,7 @@ import type { PageServerLoad, Actions } from './$types';
 // Load quizzes and related data
 export const load: PageServerLoad = async ({ locals }) => {
   if (!locals.user || locals.user.adminLevel > 1) {
-    throw redirect(302, '/login');
+    throw redirect(302, '/');
   }
 
   const quizList = await db

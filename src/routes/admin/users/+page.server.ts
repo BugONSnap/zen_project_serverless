@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     // Check for session cookie
     const session = cookies.get("session");
     if (!session) {
-      throw redirect(302, "/login");
+      throw redirect(302, "/");
     }
 
     // Verify admin access and get current user's adminLevel
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
       .limit(1);
 
     if (currentUserData.length === 0 || (currentUserData[0].adminLevel !== 0 && currentUserData[0].adminLevel !== 1)) {
-      throw redirect(302, "/login");
+      throw redirect(302, "/");
     }
 
     // Fetch all users with their rank and progress

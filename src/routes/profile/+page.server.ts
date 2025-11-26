@@ -8,7 +8,7 @@ import type { Locals } from "$lib/server/types";
 export const load: PageServerLoad = async ({ locals }: { locals: Locals }) => {
   const userId = locals.user?.id;
   if (!userId) {
-    throw redirect(302, "/login");
+    throw redirect(302, "/");
   }
 
   // Get user data
