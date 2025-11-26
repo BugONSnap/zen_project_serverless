@@ -14,7 +14,7 @@
     let headerStyle = '';
 
     $: headerClasses = !isPlaygroundPage
-        ? 'bg-[#6F1414] text-white shadow-lg'
+        ? 'text-white shadow-lg gradient-header'
         : 'bg-white text-gray-900';
 
 
@@ -54,11 +54,29 @@
     });
 </script>
 
-<header class={`shadow sticky top-0 z-50 transition-colors duration-300 ${headerClasses}`}>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
+
+.header-title {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+.header-support {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+.gradient-header {
+    background: linear-gradient(to right, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);
+}
+</style>
+
+<header class={`shadow sticky top-0 z-50 transition-colors duration-300 ${headerClasses}`} style="position: sticky; top: 0; z-index: 1000;">
     <div class="max-w-7xl mx-auto py-2 px-2 sm:px-4 lg:px-8 flex justify-between items-center">
         <div class="flex items-center space-x-2">
-    <img src="/zentry%20logo.png" alt="Zentry Logo" class="h-10 w-auto" />
-    <h1 class="text-3xl font-bold text-white">{title}</h1>
+    <img src="/server-logo.png" alt="Zentry Logo" class="h-10 w-auto hidden md:block" />
+    <h1 class="header-title text-white">{title}</h1>
 </div>
         <!-- Desktop nav -->
         <div class="hidden md:flex items-center space-x-4">
@@ -110,29 +128,29 @@
                 <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-2 border">
                     {#if $page.url.pathname !== '/dashboard'}
                         <button
-                            class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-indigo-100"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-indigo-100"
                             on:click={() => { goBackToDashboard(); menuOpen = false; }}
                         >
                             Back to Dashboard
                         </button>
                     {/if}
                     {#if $page.url.pathname !== '/playground'}
-                        <a href="/playground" title="Code Playground" class="block px-4 py-2 text-sm text-white hover:bg-green-100" on:click={() => { menuOpen = false; }}>
+                        <a href="/playground" title="Code Playground" class="block px-4 py-2 text-sm text-gray-900 hover:bg-green-100" on:click={() => { menuOpen = false; }}>
                             🚀 Playground
                         </a>
                     {/if}
                     {#if $page.url.pathname !== '/learn'}
-                        <a href="/learn" title="Learn" class="block px-4 py-2 text-sm text-white hover:bg-green-100" on:click={() => { menuOpen = false; }}>
+                        <a href="/learn" title="Learn" class="block px-4 py-2 text-sm text-gray-900 hover:bg-green-100" on:click={() => { menuOpen = false; }}>
                             Learn
                         </a>
                     {/if}
                     {#if $page.url.pathname !== '/leaderboard'}
-                        <a href="/leaderboard" title="Leaderboard" class="block px-4 py-2 text-sm text-white hover:bg-green-100" on:click={() => { menuOpen = false; }}>
+                        <a href="/leaderboard" title="Leaderboard" class="block px-4 py-2 text-sm text-gray-900 hover:bg-green-100" on:click={() => { menuOpen = false; }}>
                             Leaderboard
                         </a>
                     {/if}
                     {#if $page.url.pathname !== '/profile'}
-                        <a href="/profile" title="Profile" class="block px-4 py-2 text-sm text-white hover:bg-indigo-100" on:click={() => { menuOpen = false; }}>
+                        <a href="/profile" title="Profile" class="block px-4 py-2 text-sm text-gray-900 hover:bg-indigo-100" on:click={() => { menuOpen = false; }}>
                             Profile
                         </a>
                     {/if}

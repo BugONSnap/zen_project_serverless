@@ -209,7 +209,7 @@
     }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
+<div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
     <DashboardHeader title={quizData.title} user={undefined} />
     {#if showIntroModal}
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
@@ -226,11 +226,11 @@
     {/if}
     {#if !showIntroModal}
         <div class="max-w-3xl mx-auto px-4 py-10">
-            <div class="rounded-3xl border border-white/10 bg-black/35 p-6 shadow-2xl backdrop-blur">
+            <div class="rounded-3xl border border-white/15 bg-[#090303]/70 p-6 shadow-2xl backdrop-blur">
                 {#if quizData.questions && quizData.questions.length > 0}
                     {#if !quizCompleted}
                         <div class="mb-6">
-                            <div class="flex justify-between items-center text-white/70 text-sm">
+                            <div class="flex justify-between items-center text-white/80 text-sm">
                                 <span>Question {currentQuestionIndex + 1} of {quizData.questions.length}</span>
                                 {#if quizData.challengeType === 'Time Trial'}
                                     <span class="text-red-300 font-semibold">Time left: {timer}s</span>
@@ -251,7 +251,7 @@
                                             class={`w-full text-left rounded-2xl border px-4 py-3 transition ${
                                                 selectedAnswer === index
                                                     ? 'border-emerald-400 bg-emerald-400/10 text-white'
-                                                    : 'border-white/10 bg-white/5 text-white/80 hover:border-white/30'
+                                                    : 'border-white/15 bg-white/5 text-white/80 hover:border-white/30'
                                             }`}
                                             on:click={() => handleAnswer(index)}
                                         >
@@ -265,13 +265,13 @@
                                 <h2 class="text-xl font-semibold text-white mb-4">
                                     {quizData.questions[currentQuestionIndex].question}
                                 </h2>
-                                <div class="mb-4 rounded-2xl border border-white/10 bg-black/40 p-4 shadow-inner">
+                                <div class="mb-4 rounded-2xl border border-white/15 bg-black/40 p-4 shadow-inner">
                                     <div class="mb-2">
                                         <label class="block text-sm uppercase tracking-[0.3em] text-white/60">Starter Code</label>
                                     </div>
-                                    <pre class="min-h-[120px] whitespace-pre-wrap rounded-xl border border-white/10 bg-black/60 p-3 font-mono text-sm text-emerald-200 select-all">{quizData.questions[currentQuestionIndex].starterCode}</pre>
+                                    <pre class="min-h-[120px] whitespace-pre-wrap rounded-xl border border-white/15 bg-black/60 p-3 font-mono text-sm text-emerald-200 select-all">{quizData.questions[currentQuestionIndex].starterCode}</pre>
                                 </div>
-                                <div class="mb-2 rounded-2xl border border-white/15 bg-black/30 p-4">
+                                <div class="mb-2 rounded-2xl border border-white/15 bg-[#090303]/70 p-4">
                                     <label class="block text-sm uppercase tracking-[0.3em] text-white/60 mb-2">Your Answer</label>
                                     <textarea class="w-full rounded-xl border border-white/15 bg-black/40 p-3 font-mono text-sm text-white focus:ring-2 focus:ring-emerald-400 outline-none" rows="7" bind:value={userCode} placeholder="Write or complete the code here..."></textarea>
                                 </div>
@@ -289,7 +289,7 @@
                                 <h2 class="text-xl font-semibold text-white mb-4">
                                     {quizData.questions[currentQuestionIndex].question}
                                 </h2>
-                                <input class="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white focus:ring-2 focus:ring-emerald-400 outline-none" type="text" bind:value={userInput} placeholder="Type your answer here..." />
+                                <input class="w-full rounded-2xl border border-white/15 bg-[#090303]/70 px-4 py-3 text-white focus:ring-2 focus:ring-emerald-400 outline-none" type="text" bind:value={userInput} placeholder="Type your answer here..." />
                                 <div class="flex justify-end mt-4">
                                     <button class="rounded-full border border-emerald-400/70 px-6 py-2 text-sm text-emerald-100 hover:bg-emerald-400/10 transition" on:click={nextQuestion}>
                                         Submit Answer
@@ -307,7 +307,7 @@
                                             class={`w-full text-left rounded-2xl border px-4 py-3 transition ${
                                                 selectedAnswer === index
                                                     ? 'border-emerald-400 bg-emerald-400/10 text-white'
-                                                    : 'border-white/10 bg-white/5 text-white/80 hover:border-white/30'
+                                                    : 'border-white/15 bg-white/5 text-white/80 hover:border-white/30'
                                             }`}
                                             on:click={() => handleAnswer(index)}
                                         >
@@ -344,7 +344,7 @@
                                 Your score: {score} out of {quizData.questions.length}
                             </p>
                             {#if quizData.explanation}
-                                <div class="mb-6 text-white/70">
+                                <div class="mb-6 text-white/80">
                                     <span class="block text-lg font-semibold">Explanation:</span>
                                     <p class="text-md">{quizData.explanation}</p>
                                 </div>

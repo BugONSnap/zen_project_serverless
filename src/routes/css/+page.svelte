@@ -39,32 +39,32 @@
     }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
+<div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
     <DashboardHeader title="CSS Quizzes" user={data.user} />
     <main class="max-w-6xl mx-auto px-4 py-10 space-y-10">
-        <section class="rounded-3xl border border-white/10 bg-black/30 p-8 shadow-2xl backdrop-blur">
+        <section class="rounded-3xl border border-white/15 bg-[#090303]/70 p-8 shadow-2xl backdrop-blur">
             <div class="text-center space-y-2">
                 <p class="text-xs uppercase tracking-[0.35em] text-white/60">CSS track</p>
                 <h2 class="text-4xl font-semibold">Available quizzes</h2>
-                <p class="text-white/70">Master layout systems, selectors, and animation flows.</p>
+                <p class="text-white/80">Master layout systems, selectors, and animation flows.</p>
             </div>
         </section>
 
         <ResumeQuizNotice category="CSS" />
 
-        <section class="rounded-3xl border border-white/15 bg-black/30 p-6 shadow-xl backdrop-blur space-y-6" id="easy-area">
+        <section class="rounded-3xl border border-white/15 bg-[#090303]/70 p-6 shadow-xl backdrop-blur space-y-6" id="easy-area">
             <div>
                 <p class="text-xs uppercase tracking-[0.35em] text-white/60">Easy Area</p>
                 <h3 class="mt-2 text-3xl font-semibold text-white">Foundational drills</h3>
-                <p class="text-white/70">Selectors, spacing, and core cascade exercises.</p>
+                <p class="text-white/80">Selectors, spacing, and core cascade exercises.</p>
             </div>
             <div class="grid gap-4 md:grid-cols-2">
                 {#if easyPaginated.length === 0}
-                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No quizzes available.</div>
+                    <div class="rounded-2xl border border-white/15 bg-white/5 p-4 text-white/80">No quizzes available.</div>
                 {:else}
                     {#each easyPaginated as quiz}
                         <button
-                            class={`relative rounded-2xl border border-white/10 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
+                            class={`relative rounded-2xl border border-white/15 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
                             on:click={() => !(data.answeredQuizIds ?? []).includes(quiz.id) && startQuiz('CSS', quiz.difficulty, quiz.id)}
                         >
                             <div class="flex items-center justify-between">
@@ -80,7 +80,7 @@
                 {/if}
             </div>
             {#if easyPages > 1}
-                <div class="flex items-center justify-center gap-4 text-sm text-white/70">
+                <div class="flex items-center justify-center gap-4 text-sm text-white/80">
                     <button class="rounded-full border border-white/15 px-4 py-1 hover:border-white/40 disabled:opacity-30" on:click={() => easyPage = Math.max(1, easyPage - 1)} disabled={easyPage === 1}>
                         Prev
                     </button>
@@ -92,19 +92,19 @@
             {/if}
         </section>
 
-        <section class="rounded-3xl border border-white/15 bg-black/30 p-6 shadow-xl backdrop-blur space-y-6" id="medium-area">
+        <section class="rounded-3xl border border-white/15 bg-[#090303]/70 p-6 shadow-xl backdrop-blur space-y-6" id="medium-area">
             <div>
                 <p class="text-xs uppercase tracking-[0.35em] text-white/60">Medium Area</p>
                 <h3 class="mt-2 text-3xl font-semibold text-white">Layout patterns</h3>
-                <p class="text-white/70">Responsive grids, pseudo-classes, and flexbox thought exercises.</p>
+                <p class="text-white/80">Responsive grids, pseudo-classes, and flexbox thought exercises.</p>
             </div>
             <div class="grid gap-4 md:grid-cols-2">
                 {#if mediumPaginated.length === 0}
-                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No quizzes available.</div>
+                    <div class="rounded-2xl border border-white/15 bg-white/5 p-4 text-white/80">No quizzes available.</div>
                 {:else}
                     {#each mediumPaginated as quiz}
                         <button
-                            class={`relative rounded-2xl border border-white/10 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
+                            class={`relative rounded-2xl border border-white/15 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
                             on:click={() => !(data.answeredQuizIds ?? []).includes(quiz.id) && startQuiz('CSS', quiz.difficulty, quiz.id)}
                         >
                             <div class="flex items-center justify-between">
@@ -120,7 +120,7 @@
                 {/if}
             </div>
             {#if mediumPages > 1}
-                <div class="flex items-center justify-center gap-4 text-sm text-white/70">
+                <div class="flex items-center justify-center gap-4 text-sm text-white/80">
                     <button class="rounded-full border border-white/15 px-4 py-1 hover:border-white/40 disabled:opacity-30" on:click={() => mediumPage = Math.max(1, mediumPage - 1)} disabled={mediumPage === 1}>
                         Prev
                     </button>
@@ -132,19 +132,19 @@
             {/if}
         </section>
 
-        <section class="rounded-3xl border border-white/15 bg-black/30 p-6 shadow-xl backdrop-blur space-y-6" id="hard-area">
+        <section class="rounded-3xl border border-white/15 bg-[#090303]/70 p-6 shadow-xl backdrop-blur space-y-6" id="hard-area">
             <div>
                 <p class="text-xs uppercase tracking-[0.35em] text-white/60">Hard Area</p>
                 <h3 class="mt-2 text-3xl font-semibold text-white">Deep dives</h3>
-                <p class="text-white/70">Animations, complex state handling, and CSS architecture puzzles.</p>
+                <p class="text-white/80">Animations, complex state handling, and CSS architecture puzzles.</p>
             </div>
             <div class="grid gap-4 md:grid-cols-2">
                 {#if hardPaginated.length === 0}
-                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No quizzes available.</div>
+                    <div class="rounded-2xl border border-white/15 bg-white/5 p-4 text-white/80">No quizzes available.</div>
                 {:else}
                     {#each hardPaginated as quiz}
                         <button
-                            class={`relative rounded-2xl border border-white/10 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
+                            class={`relative rounded-2xl border border-white/15 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
                             on:click={() => !(data.answeredQuizIds ?? []).includes(quiz.id) && startQuiz('CSS', quiz.difficulty, quiz.id)}
                         >
                             <div class="flex items-center justify-between">
@@ -160,7 +160,7 @@
                 {/if}
             </div>
             {#if hardPages > 1}
-                <div class="flex items-center justify-center gap-4 text-sm text-white/70">
+                <div class="flex items-center justify-center gap-4 text-sm text-white/80">
                     <button class="rounded-full border border-white/15 px-4 py-1 hover:border-white/40 disabled:opacity-30" on:click={() => hardPage = Math.max(1, hardPage - 1)} disabled={hardPage === 1}>
                         Prev
                     </button>

@@ -239,27 +239,23 @@
   });
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 text-white">
-  <div class="w-full max-w-md flex flex-col gap-4">
-    <div class="mb-1">
-      <div class="rounded-3xl border border-white/1 bg-transparent/10 p-1  flex flex-col items-center mx-auto w-full">
-        <!-- Zentry Logo -->
-        <img src="/zentry logo.png" alt="Zentry Logo" class="h-58 w-auto" />
-      </div>
-    </div>
-    <div class="rounded-3xl border border-white/10 bg-black/30 p-8 shadow-2xl backdrop-blur w-full space-y-5 relative z-10 overflow-hidden">
-      <h1 class="text-5xl font-bold text-center text-white mb-6">Zentry</h1>
-      <div class="flex justify-center gap-4 mb-6">
+<div class="min-h-screen text-[#4a1c1c] font-medium relative overflow-hidden dashboard-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);">
+  <div class="w-full max-w-md flex flex-col gap-6">
+    <div class="rounded-3xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-8 shadow-2xl backdrop-blur w-full space-y-6 relative z-10 overflow-hidden flex flex-col items-center">
+      <!-- Logo -->
+      <img src="/server-logo.png" alt="Zen-Try Logo" class="h-24 w-24 mb-3" />
+      <h1 class="text-4xl font-bold text-center text-[#4a1c1c] mb-4">ZenTry</h1>
+      <div class="flex justify-center gap-3 mb-4">
         
         <button
-          class="px-6 py-2 rounded-full border transition font-semibold focus:outline-none text-base disabled:opacity-50 {activeTab === 'login' ? 'bg-emerald-600/40 text-emerald-100 border-emerald-400 shadow' : 'bg-white/10 text-white border-white/10 hover:bg-white/20'}"
+          class="px-5 py-1.5 rounded-full border transition font-semibold focus:outline-none text-sm disabled:opacity-50 {activeTab === 'login' ? 'bg-emerald-500/80 text-[#4a1c1c] border-emerald-600 shadow' : 'bg-white/80 text-[#4a1c1c] border-white/30 hover:bg-white'}"
           on:click={() => switchTab('login')}
           disabled={activeTab === 'login'}
         >
           Login
         </button>
         <button
-          class="px-6 py-2 rounded-full border transition font-semibold focus:outline-none text-base disabled:opacity-50 {activeTab === 'register' ? 'bg-emerald-600/40 text-emerald-100 border-emerald-400 shadow' : 'bg-white/10 text-white border-white/10 hover:bg-white/20'}"
+          class="px-5 py-1.5 rounded-full border transition font-semibold focus:outline-none text-sm disabled:opacity-50 {activeTab === 'register' ? 'bg-emerald-500/80 text-[#4a1c1c] border-emerald-600 shadow' : 'bg-white/80 text-[#4a1c1c] border-white/30 hover:bg-white'}"
           on:click={() => switchTab('register')}
           disabled={activeTab === 'register'}
         >
@@ -267,11 +263,11 @@
         </button>
       </div>
       <form 
-        class="mt-8 space-y-6" 
+        class="w-full mt-4 space-y-5" 
         on:submit|preventDefault={handleSubmit}
         bind:this={formElement}
       >
-        <div class="space-y-4">
+        <div class="space-y-3">
           {#if activeTab === 'register'}
             <div>
               <input
@@ -281,11 +277,11 @@
                 required
                 value={username}
                 on:input={handleUsernameInput}
-                class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
                 placeholder="Username"
               />
               {#if usernameError}
-                <p class="mt-1 text-sm text-amber-300">{usernameError}</p>
+                <p class="mt-1 text-sm text-[#4a1c1c]">{usernameError}</p>
               {/if}
             </div>
             <div>
@@ -296,7 +292,7 @@
                 required
                 value={uniqueInfo}
                 on:input={handleUniqueInfoInput}
-                class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
                 placeholder="Unique Recovery Info (e.g., Mother's maiden name)"
               />
             </div>
@@ -309,11 +305,11 @@
               required
               value={email}
               on:input={handleEmailInput}
-              class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
               placeholder="Email address"
             />
             {#if emailError}
-              <p class="mt-1 text-sm text-amber-300">{emailError}</p>
+              <p class="mt-1 text-sm text-[#4a1c1c]">{emailError}</p>
             {/if}
           </div>
           <div>
@@ -324,11 +320,11 @@
               required
               value={password}
               on:input={handlePasswordInput}
-              class="block w-full px-4 py-3 bg-black/30 text-white border border-white/10 rounded-lg placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
               placeholder="Password"
             />
             {#if passwordError}
-              <p class="mt-1 text-sm text-amber-300">{passwordError}</p>
+              <p class="mt-1 text-sm text-[#4a1c1c]">{passwordError}</p>
             {/if}
             {#if activeTab === 'register' && password}
               <div class="mt-2">
@@ -348,7 +344,7 @@
           <button
             type="submit"
             disabled={loading}
-            class="w-full flex justify-center py-3 px-4 border border-emerald-400 text-base font-semibold rounded-lg text-white bg-emerald-600/70 hover:bg-emerald-700 transition shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50"
+            class="w-full flex justify-center py-2.5 px-4 border-0 text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-[#ff9b9b] via-[#ff7b7b] to-[#ff5d5d] hover:opacity-90 transition-all shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff9b9b] disabled:opacity-50"
           >
             {#if loading}
               <svg class="animate-spin h-5 w-5 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -363,7 +359,7 @@
           <div class="text-center">
             <a
               href="/reset-password"
-              class="text-sm text-emerald-300 hover:text-white transition"
+              class="text-sm text-[#4a1c1c] hover:text-[#2a0c0c] transition"
             >
               Forgot your password?
             </a>

@@ -39,7 +39,7 @@
     }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
+<div class="min-h-screen text-[#4a1c1c] font-medium relative overflow-hidden dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);">
     <DashboardHeader title="JavaScript Quizzes" user={data.user} />
     <main class="max-w-6xl mx-auto px-4 py-10 space-y-10">
         <section class="rounded-3xl border border-white/10 bg-black/30 p-8 shadow-2xl backdrop-blur">
@@ -181,3 +181,38 @@
         <a href="#hard-area" class="hover:text-emerald-200" on:click|preventDefault={() => scrollToSection('hard-area')}>Hard</a>
     </div>
 </nav>
+<style>
+.dashboard-bg, body, html {
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+h1, h2, h3, h4, h5, h6, .dashboard-heading {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 700;
+}
+p, span, small, .dashboard-body, .text-sm, .text-xs {
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.dashboard-heading {
+    font-size: 2.5rem;
+}
+.dashboard-subheading {
+    font-size: 1.5rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+}
+.dashboard-stat {
+    font-size: 2rem;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 700;
+}
+.dashboard-body {
+    font-size: 1.1rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.card-candy {
+    background: #ffdcdc;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(255, 155, 155, 0.15);
+    border: 2px solid #ffbdbd;
+}
+</style>

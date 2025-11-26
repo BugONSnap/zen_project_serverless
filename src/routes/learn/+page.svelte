@@ -1,5 +1,6 @@
 <script lang="ts">
     import DashboardHeader from '$lib/DashboardHeader.svelte';
+import MiniHeader from './MiniHeader.svelte';
     export let data: { user: { id: number; username: string; email: string } | null };
 
     type Reference = {
@@ -1276,8 +1277,49 @@
     }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] text-white">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
+
+.dashboard-bg, body, html {
+    font-family: 'Montserrat', Arial, sans-serif;
+    overflow: visible;
+}
+h1, h2, h3, h4, h5, h6, .dashboard-heading {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 700;
+}
+p, span, small, .dashboard-body, .text-sm, .text-xs {
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.dashboard-heading {
+    font-size: 2.5rem;
+}
+.dashboard-subheading {
+    font-size: 1.5rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+}
+.dashboard-stat {
+    font-size: 2rem;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 700;
+}
+.dashboard-body {
+    font-size: 1.1rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+.card-candy {
+    background: #ffdcdc;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(255, 155, 155, 0.15);
+    border: 2px solid #ffbdbd;
+}
+</style>
+
+
+<div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
     <DashboardHeader title="Learn" user={data.user || undefined} />
+    <MiniHeader />
 
     <section class="max-w-6xl mx-auto px-4 py-10 space-y-10">
         <div class="rounded-3xl border border-white/15 bg-[#090303]/70 p-8 shadow-2xl backdrop-blur">
@@ -1512,4 +1554,3 @@
         </div>
     </section>
 </div>
-

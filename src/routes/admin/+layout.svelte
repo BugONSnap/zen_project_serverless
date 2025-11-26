@@ -15,39 +15,138 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#FF0606] via-[#6F1414] to-[#050202] flex flex-col">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
+
+  body, html {
+    font-family: 'Montserrat', Arial, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 700;
+    color: #4a1c1c;
+  }
+  p, span, small, .text-sm, .text-xs {
+    font-family: 'Montserrat', Arial, sans-serif;
+    color: #4a1c1c;
+  }
+  .dashboard-heading {
+    font-size: 2.5rem;
+  }
+  .dashboard-subheading {
+    font-size: 1.5rem;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+  }
+  
+  .admin-layout {
+    min-height: 100vh;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    color: #4a1c1c;
+    background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);
+  }
+  .admin-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.05;
+    background-image: radial-gradient(#ff4d4d 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+  .admin-header {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    background: linear-gradient(to right, #ff9b9b, #ff7b7b);
+    color: #4a1c1c;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    width: 100%;
+  }
+  .admin-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(20px);
+    padding: 1rem 0;
+    margin-top: 2rem;
+    text-align: center;
+    color: #4a1c1c;
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+  .btn-primary {
+    background-color: #7a2a2a;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  .btn-primary:hover {
+    background-color: #5a1a1a;
+  }
+  .nav-link {
+    color: #4a1c1c;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-link:hover {
+    color: #7a2a2a;
+    text-decoration: underline;
+  }
+</style>
+
+<div class="admin-layout">
   <!-- Admin Header, Main Content, Footer will render inside -->
-  <header class="shadow-2xl sticky top-0 z-50 transition-colors duration-300 bg-gradient-to-r from-[#FF0606] via-[#6F1414] to-[#050202] text-white bg-white/10 backdrop-blur-xl border border-white/15 w-full">
-    <div class="max-w-7xl mx-auto py-2 px-2 sm:px-4 lg:px-8 flex justify-between items-center">
-      <button type="button" class="text-3xl font-bold text-white font-serif bg-transparent border-none cursor-pointer focus:outline-none hover:underline" on:click={() => goto('/admin')} aria-label="Go to Admin Home">
+  <header class="admin-header">
+    <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <button 
+        type="button" 
+        class="text-3xl font-bold text-[#4a1c1c] bg-transparent border-none cursor-pointer focus:outline-none hover:underline font-['Poppins']" 
+        on:click={() => goto('/admin')} 
+        aria-label="Go to Admin Home"
+      >
         Zentry Admin
       </button>
       <!-- Desktop nav -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a href="/admin" class="text-white text-sm font-medium hover:underline focus:outline-none">Home</a>
-        <a href="/admin/users" class="text-white text-sm font-medium hover:underline focus:outline-none">Users</a>
-        <a href="/admin/quizzes" class="text-white text-sm font-medium hover:underline focus:outline-none">Quizzes</a>
-        <a href="/admin/analytics" class="text-white text-sm font-medium hover:underline focus:outline-none">Analytics</a>
-        <button class="text-white text-sm font-medium hover:underline focus:outline-none" on:click={handleLogout}>Logout</button>
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="/admin" class="nav-link">Home</a>
+        <a href="/admin/users" class="nav-link">Users</a>
+        <a href="/admin/quizzes" class="nav-link">Quizzes</a>
+        <a href="/admin/analytics" class="nav-link">Analytics</a>
+        <button class="btn-primary" on:click={handleLogout}>Logout</button>
       </div>
       <!-- Mobile/Tablet nav -->
       <div class="md:hidden relative">
         <button
-          class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7a2a2a]"
           on:click={() => { showMenu = !showMenu; }}
           aria-label="Open menu"
         >
-          <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-6 w-6 text-[#4a1c1c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
         {#if showMenu}
-          <div class="absolute right-0 mt-2 w-48 bg-black/90 rounded-xl shadow-2xl z-50 py-2 border border-white/10 backdrop-blur-xl">
-            <a href="/admin" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Home</a>
-            <a href="/admin/users" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Users</a>
-            <a href="/admin/quizzes" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Quizzes</a>
-            <a href="/admin/analytics" class="block px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => showMenu = false}>Analytics</a>
-            <button class="block w-full text-left px-4 py-2 text-sm text-white hover:text-emerald-300" on:click={() => { handleLogout(); showMenu = false; }}>Logout</button>
+          <div class="absolute right-0 mt-2 w-56 bg-white/95 rounded-xl shadow-2xl z-50 py-2 border border-white/30 backdrop-blur-xl">
+            <a href="/admin" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Home</a>
+            <a href="/admin/users" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Users</a>
+            <a href="/admin/quizzes" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Quizzes</a>
+            <a href="/admin/analytics" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Analytics</a>
+            <button class="block w-full text-left px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => { handleLogout(); showMenu = false; }}>Logout</button>
           </div>
         {/if}
       </div>
@@ -62,8 +161,3 @@
     </div>
   </footer>
 </div>
-
-<style>
-  /* Add component-specific styles here if needed */
-
-</style>
