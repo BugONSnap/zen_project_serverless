@@ -1,10 +1,27 @@
 import type { PageServerLoad } from "./$types";
 import { db } from "$lib/server";
-import { quizzes, quizCategories, challengeTypes } from "$lib/server/db/schema";
+import { quizzes, quizCategories, challengeTypes, users } from "$lib/server/db/schema";
 import { eq, and } from "drizzle-orm";
 import { error as svelteError } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, locals }) => {
+  const userId = locals.user?.id;
+  
+  // Get user data
+  let user = null;
+  if (userId) {
+    const userData = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+    if (userData) {
+      user = {
+        id: userData.id,
+        username: userData.username,
+        email: userData.email,
+      };
+    }
+  }
+
   const id = url.searchParams.get("id");
   let quiz;
 
@@ -133,6 +150,7 @@ export const load: PageServerLoad = async ({ url }) => {
   });
 
   return {
+    user,
     quiz: {
       id: quiz.id,
       title: quiz.title,

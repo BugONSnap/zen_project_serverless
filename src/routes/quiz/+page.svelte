@@ -210,7 +210,7 @@
 </script>
 
 <div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
-    <DashboardHeader title={quizData.title} user={undefined} />
+    <DashboardHeader title={quizData.title} user={data.user} />
     {#if showIntroModal}
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
             <div class="relative w-full max-w-lg rounded-2xl border border-white/15 bg-black/70 p-8 text-white shadow-2xl">

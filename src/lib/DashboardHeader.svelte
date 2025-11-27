@@ -107,11 +107,13 @@
             >
                 Logout
             </button>
-            <a href="/profile" title="Profile">
-                <div class="w-10 h-10 rounded-full bg-white-500 flex items-center underline justify-center text-lg font-bold text-Black hover:bg-white-600 transition">
-                    {user && user.username ? user.username.charAt(0).toUpperCase() : 'U'}
-                </div>
-            </a>
+            {#if user && user.username}
+                <a href="/profile" title="Profile">
+                    <div class="w-10 h-10 rounded-full bg-white-500 flex items-center underline justify-center text-lg font-bold text-Black hover:bg-white-600 transition">
+                        {user.username.charAt(0).toUpperCase()}
+                    </div>
+                </a>
+            {/if}
         </div>
         <!-- Mobile/Tablet nav -->
         <div class="md:hidden relative" bind:this={menuRef}>

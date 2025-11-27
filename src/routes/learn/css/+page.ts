@@ -1,5 +1,6 @@
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async () => {
-  return { user: null };
+export const load: PageLoad = async ({ parent }) => {
+  const parentData = await parent();
+  return { user: parentData.user };
 };

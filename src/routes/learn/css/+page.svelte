@@ -2,6 +2,8 @@
 import DashboardHeader from '$lib/DashboardHeader.svelte';
 import MiniHeader from '../MiniHeader.svelte';
 
+export let data: { user: { id: number; username: string; email: string } | null };
+
 const lastUpdated = '08 Nov, 2025';
 
 const introPoints = [
@@ -199,7 +201,7 @@ function goToPage(page: number) {
 </script>
 
 <div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
-  <DashboardHeader title="Learn CSS" />
+  <DashboardHeader title="Learn CSS" user={data.user || undefined} />
   <MiniHeader />
 
   <section class="max-w-6xl mx-auto px-4 py-10 space-y-10">
