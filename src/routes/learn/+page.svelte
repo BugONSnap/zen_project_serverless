@@ -1317,17 +1317,21 @@ p, span, small, .dashboard-body, .text-sm, .text-xs {
 </style>
 
 
-<div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
-    <DashboardHeader title="Learn HTML" user={data.user || undefined} />
+<div class="min-h-screen text-white font-medium relative dashboard-bg" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); overflow: visible; font-family: poppins;">
+    <!-- Animated gradient overlay -->
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+    <!-- Subtle dot pattern -->
+    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+    <DashboardHeader title="Learn HTML" user={data.user || undefined} pageName="Learn" />
     <MiniHeader />
 
     <section class="max-w-6xl mx-auto px-4 py-10 space-y-10">
         <div class="rounded-3xl border border-white/15 bg-[#090303]/70 p-8 shadow-2xl backdrop-blur">
             <div class="flex flex-col gap-8 lg:flex-row">
                 <div class="flex-1 space-y-4">
-                    <div class="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-white/60">
+                    <div class="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-amber-300">
                         <span>HTML Introduction</span>
-                        <span class="h-3 w-px bg-white/30"></span>
+                        <span class="h-3 w-px bg-amber-400/50"></span>
                         <span>Last Updated · {lastUpdated}</span>
                     </div>
                     <h1 class="text-4xl font-semibold text-white">Build the Skeleton of the Web</h1>
@@ -1344,17 +1348,17 @@ p, span, small, .dashboard-body, .text-sm, .text-xs {
                         {/each}
                     </ul>
                     <div class="grid gap-4 sm:grid-cols-3">
-                        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Language Type</p>
-                            <p class="mt-2 text-xl font-semibold text-white">Markup · Declarative</p>
+                        <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4">
+                            <p class="text-xs uppercase tracking-[0.3em] text-amber-300 font-semibold">Language Type</p>
+                            <p class="mt-2 text-xl font-semibold text-amber-100">Markup · Declarative</p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Primary Job</p>
-                            <p class="mt-2 text-xl font-semibold text-white">Structure & Semantics</p>
+                        <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4">
+                            <p class="text-xs uppercase tracking-[0.3em] text-amber-300 font-semibold">Primary Job</p>
+                            <p class="mt-2 text-xl font-semibold text-amber-100">Structure & Semantics</p>
                         </div>
-                        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                            <p class="text-xs uppercase tracking-[0.3em] text-white/50">Best Combo</p>
-                            <p class="mt-2 text-xl font-semibold text-white">CSS + JS</p>
+                        <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4">
+                            <p class="text-xs uppercase tracking-[0.3em] text-amber-300 font-semibold">Best Combo</p>
+                            <p class="mt-2 text-xl font-semibold text-amber-100">CSS + JS</p>
                         </div>
                     </div>
                 </div>
@@ -1376,25 +1380,25 @@ p, span, small, .dashboard-body, .text-sm, .text-xs {
 
         <div class="grid gap-6 lg:grid-cols-3">
             {#each conceptCards as card}
-                <div class="rounded-2xl border border-white/10 bg-black/50 p-6 shadow-lg backdrop-blur">
-                    <p class="text-xs uppercase tracking-[0.35em] text-white/60">{card.title}</p>
+                <div class="rounded-2xl border border-amber-500/40 bg-gradient-to-br from-black/60 to-amber-950/20 p-6 shadow-lg backdrop-blur hover:border-amber-400/60 transition">
+                    <p class="text-xs uppercase tracking-[0.35em] text-amber-300 font-semibold">{card.title}</p>
                     <p class="mt-3 text-white/85">{card.description}</p>
-                    <p class="mt-4 rounded-lg bg-white/10 px-3 py-2 text-sm text-emerald-200">{card.highlight}</p>
+                    <p class="mt-4 rounded-lg bg-amber-500/20 px-3 py-2 text-sm text-amber-200 border border-amber-500/30">{card.highlight}</p>
                 </div>
             {/each}
         </div>
 
-        <div class="rounded-3xl border border-white/10 bg-black/40 p-8 shadow-xl backdrop-blur">
+        <div class="rounded-3xl border border-amber-500/30 bg-black/40 p-8 shadow-xl backdrop-blur">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <p class="text-xs uppercase tracking-[0.35em] text-white/60">HTML Elements vs Tags</p>
+                    <p class="text-xs uppercase tracking-[0.35em] text-amber-300 font-semibold">HTML Elements vs Tags</p>
                     <h2 class="text-3xl font-semibold text-white">Name the pieces correctly</h2>
                 </div>
                 <a
                     href="https://www.geeksforgeeks.org/html-elements/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 px-4 py-2 text-sm text-emerald-200 transition hover:bg-emerald-400/10"
+                    class="inline-flex items-center gap-2 rounded-full border border-amber-400/50 px-4 py-2 text-sm text-amber-200 transition hover:bg-amber-400/10"
                 >
                     Deep dive on GeeksforGeeks →
                 </a>

@@ -144,7 +144,9 @@
     }
 </script>
 
-<div style="background-image: url('/BG.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;" class=" min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <!-- Animated gradient overlay -->
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
     <div class="max-w-md w-full space-y-5 bg-white/95 p-8 rounded-lg shadow-2xl border border-gray-200">
         <h1 class="text-center text-3xl font-extrabold text-gray-900">
             Reset Password

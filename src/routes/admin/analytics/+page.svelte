@@ -178,7 +178,7 @@
     });
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 py-10 px-4 sm:px-6 lg:px-8 rounded-[20px]">
+<div class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 py-10 px-4 sm:px-6 lg:px-8 rounded-[20px]" style="font-family: poppins;">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-12" in:fly={{ y: -20, duration: 400 }}>

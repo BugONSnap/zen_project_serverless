@@ -119,7 +119,7 @@
         <p class="text-[#7a2a2a]">View and manage all users, their roles, and progress across categories.</p>
       </div>
     {#if successMessage}
-      <div class="bg-green-500/20 border border-green-600/30 text-[#4a1c1c] px-6 py-3 rounded-xl mb-6 backdrop-blur flex items-center justify-center" role="alert">
+      <div class="bg-green-500/20 border border-green-600/30 text-green-300 px-6 py-3 rounded-xl mb-6 backdrop-blur flex items-center justify-center" role="alert">
         <span class="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -129,7 +129,7 @@
       </div>
     {/if}
     {#if actionError}
-      <div class="bg-red-500/20 border border-red-600/30 text-red-800 px-6 py-3 rounded-xl mb-6 backdrop-blur flex items-center justify-center" role="alert">
+      <div class="bg-red-500/20 border border-red-600/30 text-red-300 px-6 py-3 rounded-xl mb-6 backdrop-blur flex items-center justify-center" role="alert">
         <span class="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
@@ -142,33 +142,33 @@
       <p class="text-gray-500">No users found.</p>
     {:else}
       <!-- Desktop Table (hidden on tablets and mobile) -->
-      <div class="hidden lg:block bg-white/30 backdrop-blur-sm rounded-2xl p-1 w-full">
+      <div class="hidden lg:block bg-gray-900/30 backdrop-blur-sm rounded-2xl p-1 w-full">
         <div class="overflow-x-auto">
           <table class="w-full min-w-[900px] lg:min-w-0">
             <thead>
-            <tr class="bg-white/20">
-              <th class="py-3 px-4 text-left text-xs font-medium text-[#4a1c1c] uppercase tracking-wider whitespace-nowrap">Username</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-[#4a1c1c]/80 whitespace-nowrap">Email</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-[#4a1c1c]/80 whitespace-nowrap">Role</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-[#4a1c1c]/80 whitespace-nowrap">Rank</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-[#4a1c1c]/80 whitespace-nowrap">Progress</th>
+            <tr class="bg-gray-900/50">
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">Username</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Email</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Role</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Rank</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Progress</th>
               {#if currentUserAdminLevel === 0}
-                <th class="py-3 px-4 text-left text-xs font-medium text-[#4a1c1c]/80 whitespace-nowrap">Actions</th>
+                <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Actions</th>
               {/if}
             </tr>
           </thead>
           <tbody>
             {#each users as user, index}
-              <tr class="border-b border-[#4a1c1c]/5 hover:bg-[#4a1c1c]/5 transition-colors">
-                <td class="py-3 px-4 text-[#4a1c1c]/90 whitespace-nowrap">
+              <tr class="border-b border-gray-800 hover:bg-gray-900/30 transition-colors">
+                <td class="py-3 px-4 text-gray-300 whitespace-nowrap">
                   <div class="flex items-center gap-2 min-w-0">
-                    <div class="w-7 h-7 rounded-full bg-[#4a1c1c]/10 flex-shrink-0 flex items-center justify-center">
-                      <span class="text-xs text-[#4a1c1c]">{user.username[0].toUpperCase()}</span>
+                    <div class="w-7 h-7 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
+                      <span class="text-xs text-gray-300">{user.username[0].toUpperCase()}</span>
                     </div>
-                    <span class="truncate max-w-[120px] text-[#4a1c1c]">{user.username}</span>
+                    <span class="truncate max-w-[120px] text-gray-300">{user.username}</span>
                   </div>
                 </td>
-                <td class="py-3 px-4 text-[#4a1c1c]/80 text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px]">{user.email}</td>
+                <td class="py-3 px-4 text-gray-400 text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px]">{user.email}</td>
                 <td class="py-3 px-4 whitespace-nowrap">
                   {#if currentUserAdminLevel === 0 && user.adminLevel !== 0}
                     <!-- Dropdown for non-super-admin users -->

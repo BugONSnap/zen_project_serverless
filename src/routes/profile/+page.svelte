@@ -30,6 +30,7 @@
   let newUsername = user.username;
   let showEditModal = false;
   let showDeleteModal = false;
+  let fontFamily = 'poppins';
   const dispatch = createEventDispatcher();
 
   function toggleDropdown() {
@@ -99,7 +100,11 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-[#ffbdbd] via-[#ff9b9b] to-[#ff7b7b] text-[#4a1c1c] font-medium">
+<div class="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white font-medium" style="font-family: poppins;">
+  <!-- Animated gradient overlay -->
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+  <!-- Subtle dot pattern -->
+  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
     
@@ -111,7 +116,7 @@
       font-family: 'Montserrat', Arial, sans-serif;
     }
   </style>
-  <DashboardHeader title="Profile" user={user} />
+  <DashboardHeader title="Profile" user={user} pageName="Profile" />
 
   {#if showEditModal}
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">

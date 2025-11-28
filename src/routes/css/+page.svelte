@@ -39,42 +39,46 @@
     }
 </script>
 
-<div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
-    <DashboardHeader title="CSS Quizzes" user={data.user} />
-    <main class="max-w-6xl mx-auto px-4 py-10 space-y-10">
-        <section class="rounded-3xl border border-white/10 bg-black/30 p-8 shadow-2xl backdrop-blur">
+<div class="min-h-screen text-white font-medium relative dashboard-bg" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); overflow: visible; font-family: poppins;">
+    <!-- Animated gradient overlay -->
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+    <!-- Subtle dot pattern -->
+    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+    <DashboardHeader title="CSS Quizzes" user={data.user} pageName="CSS" />
+    <main class="max-w-6xl mx-auto px-4 py-10 space-y-10 relative z-10">
+        <section class="rounded-3xl backdrop-filter backdrop-blur-xl bg-gray-900/60 border border-gray-700/50 p-8 shadow-2xl">
             <div class="text-center space-y-2">
-                <p class="text-xs uppercase tracking-[0.35em] text-white/60">CSS track</p>
-                <h2 class="text-4xl font-semibold">Available quizzes</h2>
-                <p class="text-white/70">Master layout systems, selectors, and animation flows.</p>
+                <p class="text-xs uppercase tracking-[0.35em] text-[#d97706] font-semibold">CSS track</p>
+                <h2 class="text-4xl font-bold text-white">Available quizzes</h2>
+                <p class="text-gray-400 mt-2">Master layout systems, selectors, and animation flows.</p>
             </div>
         </section>
 
         <ResumeQuizNotice category="CSS" />
 
-        <section class="rounded-3xl border border-white/15 bg-black/30 p-6 shadow-xl backdrop-blur space-y-6" id="easy-area">
+        <section class="rounded-3xl backdrop-filter backdrop-blur-xl bg-gray-900/60 border border-gray-700/50 p-6 shadow-2xl space-y-6" id="easy-area">
             <div>
-                <p class="text-xs uppercase tracking-[0.35em] text-white/60">Easy Area</p>
-                <h3 class="mt-2 text-3xl font-semibold text-white">Foundational drills</h3>
-                <p class="text-white/70">Selectors, spacing, and core cascade exercises.</p>
+                <p class="text-xs uppercase tracking-[0.35em] text-[#d97706] font-semibold">Easy Area</p>
+                <h3 class="mt-2 text-3xl font-bold text-white">Foundational drills</h3>
+                <p class="text-gray-400 mt-2">Selectors, spacing, and core cascade exercises.</p>
             </div>
             <div class="grid gap-4 md:grid-cols-2">
                 {#if easyPaginated.length === 0}
-                    <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/70">No quizzes available.</div>
+                    <div class="rounded-2xl backdrop-filter backdrop-blur-lg bg-gray-800/50 border border-gray-700/50 p-4 text-gray-400">No quizzes available.</div>
                 {:else}
                     {#each easyPaginated as quiz}
                         <button
-                            class={`relative rounded-2xl border border-white/15 bg-black/40 p-4 text-left shadow-lg backdrop-blur transition hover:border-emerald-400/60 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
+                            class={`relative rounded-2xl backdrop-filter backdrop-blur-lg bg-gray-800/50 border border-gray-700/50 p-4 text-left shadow-lg hover:border-[#d97706]/60 hover:bg-gray-750/60 transition-all duration-300 ${(data.answeredQuizIds ?? []).includes(quiz.id) ? 'opacity-40 pointer-events-none' : ''}`}
                             on:click={() => !(data.answeredQuizIds ?? []).includes(quiz.id) && startQuiz('CSS', quiz.difficulty, quiz.id)}
                         >
                             <div class="flex items-center justify-between">
-                                <span class="text-sm uppercase tracking-[0.35em] text-white/60">{quiz.difficulty}</span>
+                                <span class="text-sm uppercase tracking-[0.35em] text-[#d97706] font-semibold">{quiz.difficulty}</span>
                                 {#if (data.answeredQuizIds ?? []).includes(quiz.id)}
-                                    <span class="rounded-full border border-emerald-400/70 px-3 py-1 text-xs text-emerald-200">Done</span>
+                                    <span class="rounded-full border border-[#d97706]/70 px-3 py-1 text-xs text-[#d97706] font-semibold">Done</span>
                                 {/if}
                             </div>
-                            <p class="mt-2 text-lg font-semibold text-white">{quiz.title}</p>
-                            <p class="text-sm text-white/60">Tap to launch challenge</p>
+                            <p class="mt-2 text-lg font-bold text-white">{quiz.title}</p>
+                            <p class="text-sm text-gray-400 mt-1">Tap to launch challenge</p>
                         </button>
                     {/each}
                 {/if}

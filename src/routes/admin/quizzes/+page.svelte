@@ -83,23 +83,23 @@
   }
 </script>
 
-<div class="min-h-screen text-[#4a1c1c] font-medium relative overflow-hidden" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);">
+<div class="min-h-screen text-white font-medium relative overflow-hidden" style="background: linear-gradient(to bottom, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
   <!-- Subtle pattern overlay -->
-  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#ff4d4d 1px, transparent 1px); background-size: 20px 20px;"></div>
+  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 20px 20px;"></div>
   <main class="max-w-7xl mx-auto px-4 py-10 space-y-8">
-    <section class="rounded-3xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-8 shadow-lg backdrop-blur">
+    <section class="rounded-3xl border-2 border-gray-700 bg-gradient-to-br from-gray-900/50 to-gray-900/30 p-8 shadow-lg backdrop-blur">
       <div class="space-y-2 text-center mb-8">
-        <p class="text-xs uppercase tracking-[0.35em] text-[#7a2a2a]">Quiz Management</p>
-        <h1 class="text-3xl font-semibold text-[#4a1c1c]">Quiz Administration</h1>
-        <p class="text-[#7a2a2a]">Create, edit, and manage quiz questions and categories</p>
+        <p class="text-xs uppercase tracking-[0.35em] text-gray-400">Quiz Management</p>
+        <h1 class="text-3xl font-semibold text-white">Quiz Administration</h1>
+        <p class="text-gray-300">Create, edit, and manage quiz questions and categories</p>
       </div>
 
       <!-- Create/Edit Toggle -->
       <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold text-[#4a1c1c]">Quizzes</h2>
+        <h2 class="text-xl font-semibold text-white">Quizzes</h2>
         <button
           type="button"
-          class="flex items-center gap-2 bg-[#7a2a2a] hover:bg-[#5a1a1a] text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+          class="flex items-center gap-2 bg-amber-600/90 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
           on:click={() => isCreating = !isCreating}
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -235,19 +235,19 @@
       {/if}
 
       {#if errorMessage}
-        <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">{errorMessage}</div>
+        <div class="mb-4 p-4 bg-red-900/20 border border-red-700/50 text-red-300 rounded">{errorMessage}</div>
       {/if}
 
       <!-- Filter Section -->
-      <div class="mb-8 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm max-w-6xl mx-auto">
-        <h3 class="text-lg font-medium text-[#4a1c1c] mb-6 text-center">Search & Filter</h3>
+      <div class="mb-8 bg-gray-900/30 border border-gray-700 rounded-2xl p-6 backdrop-blur-sm max-w-6xl mx-auto">
+        <h3 class="text-lg font-medium text-white mb-6 text-center">Search & Filter</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Search Title -->
           <div>
-            <label for="searchTitle" class="block text-sm font-medium text-[#4a1c1c]/70 mb-2">Search Title</label>
+            <label for="searchTitle" class="block text-sm font-medium text-gray-300 mb-2">Search Title</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-[#4a1c1c]/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                 </svg>
               </div>
@@ -256,52 +256,52 @@
                 id="searchTitle"
                 bind:value={searchTitle}
                 placeholder="Search quizzes..."
-                class="pl-10 w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] placeholder-[#4a1c1c]/70 focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="pl-10 w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
             </div>
           </div>
           
           <!-- Category Filter -->
           <div>
-            <label for="searchCategory" class="block text-sm font-medium text-white/80 mb-2">Filter by Category</label>
+            <label for="searchCategory" class="block text-sm font-medium text-gray-300 mb-2">Filter by Category</label>
             <select
               id="searchCategory"
               bind:value={searchCategory}
-              class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+              class="w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
-              <option value="" class="bg-white/30 text-[#4a1c1c]">All Categories</option>
+              <option value="" class="bg-gray-900 text-white">All Categories</option>
               {#each categories as category}
-                <option value={category} class="bg-white/30 text-[#4a1c1c]">{category}</option>
+                <option value={category} class="bg-gray-900 text-white">{category}</option>
               {/each}
             </select>
           </div>
           
           <!-- Challenge Type Filter -->
           <div>
-            <label for="searchChallengeType" class="block text-sm font-medium text-white/80 mb-2">Filter by Type</label>
+            <label for="searchChallengeType" class="block text-sm font-medium text-gray-300 mb-2">Filter by Type</label>
             <select
               id="searchChallengeType"
               bind:value={searchChallengeType}
-              class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+              class="w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
-              <option value="" class="bg-white/30 text-[#4a1c1c]">All Types</option>
+              <option value="" class="bg-gray-900 text-white">All Types</option>
               {#each challengeTypes as type}
-                <option value={type} class="bg-white/30 text-[#4a1c1c]">{type}</option>
+                <option value={type} class="bg-gray-900 text-white">{type}</option>
               {/each}
             </select>
           </div>
           
           <!-- Difficulty Filter -->
           <div>
-            <label for="searchDifficulty" class="block text-sm font-medium text-white/80 mb-2">Filter by Difficulty</label>
+            <label for="searchDifficulty" class="block text-sm font-medium text-gray-300 mb-2">Filter by Difficulty</label>
             <select
               id="searchDifficulty"
               bind:value={searchDifficulty}
-              class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+              class="w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
-              <option value="" class="bg-white/30 text-[#4a1c1c]">All Difficulties</option>
+              <option value="" class="bg-gray-900 text-white">All Difficulties</option>
               {#each difficulties as difficulty}
-                <option value={difficulty} class="bg-white/30 text-[#4a1c1c]">{difficulty}</option>
+                <option value={difficulty} class="bg-gray-900 text-white">{difficulty}</option>
               {/each}
             </select>
           </div>

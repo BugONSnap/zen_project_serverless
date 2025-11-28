@@ -41,12 +41,13 @@ function cycle(direction: number, current: number) {
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  background: linear-gradient(to right, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);
+  background: linear-gradient(to right, #1a1f2e 0%, #111827 50%, #0f172a 100%);
   color: white;
   padding: 0.5rem 2rem;
   border-radius: 0.5rem;
   margin: 0 auto 1.5rem auto;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   font-family: 'Poppins', Arial, sans-serif;
   font-size: 1.1rem;
   font-weight: 600;

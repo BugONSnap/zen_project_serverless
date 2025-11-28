@@ -239,23 +239,27 @@
   });
 </script>
 
-<div class="min-h-screen text-[#4a1c1c] font-medium relative overflow-hidden dashboard-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);">
-  <div class="w-full max-w-md flex flex-col gap-6">
-    <div class="rounded-3xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-8 shadow-2xl backdrop-blur w-full space-y-6 relative z-10 overflow-hidden flex flex-col items-center">
+<div class="min-h-screen text-white font-medium relative overflow-hidden flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
+  <!-- Animated gradient overlay -->
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+  <!-- Subtle dot pattern -->
+  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+  <div class="w-full max-w-md flex flex-col gap-6 relative z-10">
+    <div class="rounded-3xl backdrop-filter backdrop-blur-xl bg-gray-900/60 border border-gray-700/50 p-8 shadow-2xl w-full space-y-6 relative z-10 overflow-hidden flex flex-col items-center">
       <!-- Logo -->
       <img src="/server-logo.png" alt="Zen-Try Logo" class="h-24 w-24 mb-3" />
-      <h1 class="text-4xl font-bold text-center text-[#4a1c1c] mb-4">ZenTry</h1>
+      <h1 style="font-family: poppins;" class="text-4xl font-bold text-center text-white mb-4">ZenTry</h1>
       <div class="flex justify-center gap-3 mb-4">
         
         <button
-          class="px-5 py-1.5 rounded-full border transition font-semibold focus:outline-none text-sm disabled:opacity-50 {activeTab === 'login' ? 'bg-emerald-500/80 text-[#4a1c1c] border-emerald-600 shadow' : 'bg-white/80 text-[#4a1c1c] border-white/30 hover:bg-white'}"
+          class="px-5 py-1.5 rounded-full border transition font-semibold focus:outline-none text-sm disabled:opacity-50 {activeTab === 'login' ? 'bg-[#d97706] text-white border-[#d97706] shadow-lg shadow-amber-900/50' : 'bg-gray-800/50 text-gray-300 border-gray-700 hover:bg-gray-700/50 hover:border-gray-600'}"
           on:click={() => switchTab('login')}
           disabled={activeTab === 'login'}
         >
           Login
         </button>
         <button
-          class="px-5 py-1.5 rounded-full border transition font-semibold focus:outline-none text-sm disabled:opacity-50 {activeTab === 'register' ? 'bg-emerald-500/80 text-[#4a1c1c] border-emerald-600 shadow' : 'bg-white/80 text-[#4a1c1c] border-white/30 hover:bg-white'}"
+          class="px-5 py-1.5 rounded-full border transition font-semibold focus:outline-none text-sm disabled:opacity-50 {activeTab === 'register' ? 'bg-[#d97706] text-white border-[#d97706] shadow-lg shadow-amber-900/50' : 'bg-gray-800/50 text-gray-300 border-gray-700 hover:bg-gray-700/50 hover:border-gray-600'}"
           on:click={() => switchTab('register')}
           disabled={activeTab === 'register'}
         >
@@ -277,11 +281,11 @@
                 required
                 value={username}
                 on:input={handleUsernameInput}
-                class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
+                class="block w-full px-4 py-2.5 bg-gray-800/50 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] text-sm"
                 placeholder="Username"
               />
               {#if usernameError}
-                <p class="mt-1 text-sm text-[#4a1c1c]">{usernameError}</p>
+                <p class="mt-1 text-sm text-red-400">{usernameError}</p>
               {/if}
             </div>
             <div>
@@ -292,7 +296,7 @@
                 required
                 value={uniqueInfo}
                 on:input={handleUniqueInfoInput}
-                class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
+                class="block w-full px-4 py-2.5 bg-gray-800/50 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] text-sm"
                 placeholder="Unique Recovery Info (e.g., Mother's maiden name)"
               />
             </div>
@@ -305,11 +309,11 @@
               required
               value={email}
               on:input={handleEmailInput}
-              class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
+              class="block w-full px-4 py-2.5 bg-gray-800/50 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] text-sm"
               placeholder="Email address"
             />
             {#if emailError}
-              <p class="mt-1 text-sm text-[#4a1c1c]">{emailError}</p>
+              <p class="mt-1 text-sm text-red-400">{emailError}</p>
             {/if}
           </div>
           <div>
@@ -320,20 +324,20 @@
               required
               value={password}
               on:input={handlePasswordInput}
-              class="block w-full px-4 py-2.5 bg-white/90 text-[#4a1c1c] border border-white/30 rounded-lg placeholder-[#4a1c1c]/60 focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
+              class="block w-full px-4 py-2.5 bg-gray-800/50 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] text-sm"
               placeholder="Password"
             />
             {#if passwordError}
-              <p class="mt-1 text-sm text-[#4a1c1c]">{passwordError}</p>
+              <p class="mt-1 text-sm text-red-400">{passwordError}</p>
             {/if}
             {#if activeTab === 'register' && password}
               <div class="mt-2">
                 <div class="flex space-x-2">
                   {#each Array(4) as _, i}
-                    <div class="flex-1 h-2 rounded-full {i < passwordStrength ? 'bg-emerald-400' : 'bg-white/15'}"></div>
+                    <div class="flex-1 h-2 rounded-full {i < passwordStrength ? 'bg-[#d97706]' : 'bg-gray-700/50'}"></div>
                   {/each}
                 </div>
-                <p class="mt-1 text-xs text-white/70">
+                <p class="mt-1 text-xs text-gray-400">
                   Password strength: {['Weak', 'Fair', 'Good', 'Strong'][passwordStrength - 1] || 'None'}
                 </p>
               </div>
@@ -344,7 +348,7 @@
           <button
             type="submit"
             disabled={loading}
-            class="w-full flex justify-center py-2.5 px-4 border-0 text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-[#ff9b9b] via-[#ff7b7b] to-[#ff5d5d] hover:opacity-90 transition-all shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff9b9b] disabled:opacity-50"
+            class="w-full flex justify-center py-2.5 px-4 border-0 text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-[#d97706] via-[#f59e0b] to-[#fbbf24] hover:shadow-lg hover:shadow-amber-900/50 transition-all shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d97706] focus:ring-offset-gray-900 disabled:opacity-50"
           >
             {#if loading}
               <svg class="animate-spin h-5 w-5 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -359,7 +363,7 @@
           <div class="text-center">
             <a
               href="/reset-password"
-              class="text-sm text-[#4a1c1c] hover:text-[#2a0c0c] transition"
+              class="text-sm text-[#d97706] hover:text-[#f59e0b] transition font-semibold"
             >
               Forgot your password?
             </a>
@@ -369,11 +373,11 @@
     </div>
   </div>
   {#if resumeQuiz}
-    <div class="mt-10 flex flex-col items-center">
-      <div class="rounded-2xl border border-amber-300/40 bg-amber-400/10 px-6 py-5 shadow-xl backdrop-blur flex flex-col items-center w-full max-w-lg mx-auto">
+    <div class="mt-10 flex flex-col items-center relative z-10">
+      <div class="rounded-2xl border border-[#d97706]/40 bg-gray-900/60 backdrop-blur px-6 py-5 shadow-xl flex flex-col items-center w-full max-w-lg mx-auto">
         <span class="font-semibold text-lg text-white mb-2">Continue where you left off</span>
-        <span class="text-amber-100 mb-4">{resumeQuiz.title || 'Untitled Quiz'}</span>
-        <button class="px-6 py-2 bg-emerald-600/80 text-white rounded-lg hover:bg-emerald-700 transition-colors font-semibold shadow" on:click={continueQuiz}>
+        <span class="text-[#d97706] mb-4 font-semibold">{resumeQuiz.title || 'Untitled Quiz'}</span>
+        <button class="px-6 py-2 bg-[#d97706] text-white rounded-lg hover:bg-[#f59e0b] transition-all font-semibold shadow-lg shadow-amber-900/50" on:click={continueQuiz}>
           Continue Quiz
         </button>
       </div>

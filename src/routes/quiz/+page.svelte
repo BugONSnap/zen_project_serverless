@@ -18,6 +18,17 @@
     let codeFeedback = '';
     let showIntroModal = true;
     let nextQuizId: number | null = null;
+    let fontFamily = 'poppins';
+
+    // Map category IDs to category names
+    const categoryMap: { [key: string]: string } = {
+        '1': 'HTML',
+        '2': 'CSS',
+        '3': 'JAVASCRIPT',
+        '4': 'ADVANCE JAVASCRIPT'
+    };
+
+    $: categoryName = categoryMap[String(data.category)] || data.category;
 
 
 
@@ -209,8 +220,12 @@
     }
 </script>
 
-<div class="min-h-screen text-[#4a1c1c] font-medium relative dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%); overflow: visible;">
-    <DashboardHeader title={quizData.title} user={data.user} />
+<div class="min-h-screen text-white font-medium relative dashboard-bg" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); overflow: visible;">
+    <!-- Animated gradient overlay -->
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+    <!-- Subtle dot pattern -->
+    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+    <DashboardHeader title={quizData.title} user={data.user} quizCategory={categoryName} />
     {#if showIntroModal}
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
             <div class="relative w-full max-w-lg rounded-2xl border border-white/15 bg-black/70 p-8 text-white shadow-2xl">
@@ -227,6 +242,10 @@
     {#if !showIntroModal}
         <div class="max-w-3xl mx-auto px-4 py-10">
             <div class="rounded-3xl border border-white/15 bg-[#090303]/70 p-6 shadow-2xl backdrop-blur">
+                <!-- Quiz Title Section -->
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-white">{quizData.title}</h1>
+                </div>
                 {#if quizData.questions && quizData.questions.length > 0}
                     {#if !quizCompleted}
                         <div class="mb-6">

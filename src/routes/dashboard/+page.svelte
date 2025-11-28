@@ -42,21 +42,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
 
 .dashboard-bg, body, html {
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
 }
 h1, h2, h3, h4, h5, h6, .dashboard-heading {
     font-family: 'Poppins', Arial, sans-serif;
     font-weight: 700;
+    color: white;
 }
 p, span, small, .dashboard-body, .text-sm, .text-xs {
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #e5e7eb;
 }
 .dashboard-heading {
     font-size: 2.5rem;
 }
 .dashboard-subheading {
     font-size: 1.5rem;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     font-weight: 600;
 }
 .dashboard-stat {
@@ -66,33 +68,57 @@ p, span, small, .dashboard-body, .text-sm, .text-xs {
 }
 .dashboard-body {
     font-size: 1.1rem;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+.glass-card {
+    background: rgba(31, 41, 55, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.37);
+}
+.glass-card-hover {
+    transition: all 0.3s ease;
+}
+.glass-card-hover:hover {
+    background: rgba(55, 65, 81, 0.8);
+    border-color: rgba(217, 119, 6, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.15);
+    transform: translateY(-2px);
+}
+.gold-accent {
+    color: #d97706;
+}
+.gold-border {
+    border-color: rgba(217, 119, 6, 0.3);
 }
 </style>
 
-<div class="min-h-screen text-[#4a1c1c] font-medium relative overflow-hidden dashboard-bg" style="background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);">
-    <!-- Subtle pattern overlay -->
-    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#ff4d4d 1px, transparent 1px); background-size: 20px 20px;"></div>
-    <DashboardHeader title="Dashboard" user={data.user} />
+<div class="min-h-screen text-white font-medium relative overflow-hidden dashboard-bg" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
+    <!-- Animated gradient overlay -->
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+    <!-- Subtle dot pattern -->
+    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+    <DashboardHeader title="Dashboard" user={data.user} pageName="Dashboard" />
 
-    <main class="max-w-6xl mx-auto px-4 py-10 space-y-10">
+    <main class="max-w-6xl mx-auto px-4 py-10 space-y-10 relative z-10">
         {#if inProgressAttempts.length > 0}
-            <section class="rounded-3xl border-2 border-white/30 bg-gradient-to-r from-[#ff9b9b] to-[#ffb6b6] p-6 shadow-lg backdrop-blur">
-                <div class="flex items-center justify-between">
+            <section class="glass-card rounded-3xl p-6 shadow-2xl">
+                <div class="flex items-center justify-between mb-6">
                     <div>
-                        <p class="text-xs uppercase tracking-[0.3em] text-[#7a2a2a]">Resume</p>
-                        <h2 class="text-2xl font-semibold text-[#4a1c1c]">In-progress quizzes</h2>
+                        <p class="text-xs uppercase tracking-[0.3em] text-[#d97706] font-semibold">Resume</p>
+                        <h2 class="text-2xl font-bold text-white mt-2">In-progress quizzes</h2>
                     </div>
                 </div>
-                <ul class="mt-4 divide-y divide-white/10">
+                <ul class="space-y-3">
                     {#each inProgressAttempts as attempt}
-                        <li class="py-4 flex items-center justify-between text-white/90">
+                        <li class="glass-card rounded-xl p-4 flex items-center justify-between hover:bg-gray-700/40 transition-all duration-300">
                             <div>
-                                <p class="font-semibold">{attempt.title}</p>
-                                <p class="text-sm text-white/60">Step {attempt.currentStep + 1}</p>
+                                <p class="font-semibold text-white">{attempt.title}</p>
+                                <p class="text-sm text-gray-400">Step {attempt.currentStep + 1}</p>
                             </div>
                             <button
-                                class="rounded-full border border-amber-200 px-4 py-1 text-sm text-amber-100 hover:bg-amber-300/20 transition"
+                                class="rounded-full border border-[#d97706]/50 px-4 py-2 text-sm text-[#d97706] hover:bg-[#d97706]/10 hover:border-[#d97706] transition-all duration-300 font-semibold"
                                 on:click={() => goto(`/quiz?category=${attempt.categoryId}&id=${attempt.quizId}`)}
                             >
                                 Resume
@@ -103,52 +129,52 @@ p, span, small, .dashboard-body, .text-sm, .text-xs {
             </section>
         {/if}
 
-        <section class="rounded-3xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-8 shadow-lg backdrop-blur">
-            <p class="text-xs uppercase tracking-[0.35em] text-[#7a2a2a]">Launch pads</p>
-            <h2 class="mt-2 text-3xl font-semibold text-[#4a1c1c]">Quick actions</h2>
-            <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <button class="rounded-2xl border border-white/15 bg-white/5 p-4 text-left hover:border-emerald-400/60 transition" on:click={() => goto('/css')}>
-                    <div class="flex items-center gap-3">
-                        <img src="/CSS.png" alt="CSS Logo" class="h-10 w-10 object-contain" />
+        <section class="glass-card rounded-3xl p-8 shadow-2xl">
+            <p class="text-xs uppercase tracking-[0.35em] text-[#d97706] font-semibold">Launch pads</p>
+            <h2 class="mt-4 text-3xl font-bold text-white">Quick actions</h2>
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <button class="glass-card glass-card-hover rounded-2xl p-6 text-left group" on:click={() => goto('/css')}>
+                    <div class="flex items-center gap-4">
+                        <img src="/CSS.png" alt="CSS Logo" class="h-12 w-12 object-contain group-hover:scale-110 transition-transform duration-300" />
                         <div>
-                            <p class="text-lg font-semibold text-[#4a1c1c]">CSS</p>
-                            <p class="text-[#7a2a2a] text-sm">Layout drills & utilities</p>
+                            <p class="text-lg font-bold text-white">CSS</p>
+                            <p class="text-gray-400 text-sm mt-1">Layout drills & utilities</p>
                         </div>
                     </div>
                 </button>
-                <button class="rounded-2xl border border-white/15 bg-white/5 p-4 text-left hover:border-emerald-400/60 transition" on:click={() => goto('/html')}>
-                    <div class="flex items-center gap-3">
-                        <img src="/HTML.png" alt="HTML Logo" class="h-10 w-10 object-contain" />
+                <button class="glass-card glass-card-hover rounded-2xl p-6 text-left group" on:click={() => goto('/html')}>
+                    <div class="flex items-center gap-4">
+                        <img src="/HTML.png" alt="HTML Logo" class="h-12 w-12 object-contain group-hover:scale-110 transition-transform duration-300" />
                         <div>
-                            <p class="text-lg font-semibold text-[#4a1c1c]">HTML</p>
-                            <p class="text-[#7a2a2a] text-sm">Semantic structures</p>
+                            <p class="text-lg font-bold text-white">HTML</p>
+                            <p class="text-gray-400 text-sm mt-1">Semantic structures</p>
                         </div>
                     </div>
                 </button>
-                <button class="rounded-2xl border border-white/15 bg-white/5 p-4 text-left hover:border-emerald-400/60 transition" on:click={() => goto('/javascript')}>
-                    <div class="flex items-center gap-3">
-                        <img src="/JS.webp" alt="JS Logo" class="h-10 w-10 object-contain" />
+                <button class="glass-card glass-card-hover rounded-2xl p-6 text-left group" on:click={() => goto('/javascript')}>
+                    <div class="flex items-center gap-4">
+                        <img src="/JS.webp" alt="JS Logo" class="h-12 w-12 object-contain group-hover:scale-110 transition-transform duration-300" />
                         <div>
-                            <p class="text-lg font-semibold text-[#4a1c1c]">JavaScript</p>
-                            <p class="text-[#7a2a2a] text-sm">Core logic workouts</p>
+                            <p class="text-lg font-bold text-white">JavaScript</p>
+                            <p class="text-gray-400 text-sm mt-1">Core logic workouts</p>
                         </div>
                     </div>
                 </button>
-                <button class="rounded-2xl border border-white/15 bg-white/5 p-4 text-left hover:border-emerald-400/60 transition" on:click={() => goto('/advancejs')}>
-                    <div class="flex items-center gap-3">
-                        <img src="/JS.webp" alt="Advanced JS Logo" class="h-10 w-10 object-contain" />
+                <button class="glass-card glass-card-hover rounded-2xl p-6 text-left group" on:click={() => goto('/advancejs')}>
+                    <div class="flex items-center gap-4">
+                        <img src="/JS.webp" alt="Advanced JS Logo" class="h-12 w-12 object-contain group-hover:scale-110 transition-transform duration-300" />
                         <div>
-                            <p class="text-lg font-semibold text-[#4a1c1c]">Advanced JS</p>
-                            <p class="text-[#7a2a2a] text-sm">Patterns & async mastery</p>
+                            <p class="text-lg font-bold text-white">Advanced JS</p>
+                            <p class="text-gray-400 text-sm mt-1">Patterns & async mastery</p>
                         </div>
                     </div>
                 </button>
-                <button class="rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-4 text-left hover:border-emerald-300/70 transition" on:click={() => goto('/playground')}>
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">🚀</span>
+                <button class="glass-card glass-card-hover rounded-2xl p-6 text-left group border-[#d97706]/30 hover:border-[#d97706]/60" on:click={() => goto('/playground')}>
+                    <div class="flex items-center gap-4">
+                        <span class="text-4xl group-hover:scale-110 transition-transform duration-300">🚀</span>
                         <div>
-                            <p class="text-lg font-semibold text-[#4a1c1c]">Code Playground</p>
-                            <p class="text-[#7a2a2a] text-sm">Experiment in real-time</p>
+                            <p class="text-lg font-bold text-white">Code Playground</p>
+                            <p class="text-gray-400 text-sm mt-1">Experiment in real-time</p>
                         </div>
                     </div>
                 </button>
@@ -157,34 +183,34 @@ p, span, small, .dashboard-body, .text-sm, .text-xs {
 
         <section class="grid gap-6 md:grid-cols-2">
             {#each stats as stat}
-                <article class="rounded-3xl border-2 border-white/30 bg-gradient-to-r from-[#ffb0b0] to-[#ffd4d4] p-6 shadow-lg backdrop-blur flex items-center gap-4 hover:scale-[1.02] transition-transform duration-300">
-                    <div class="text-4xl">{stat.icon}</div>
+                <article class="glass-card glass-card-hover rounded-3xl p-6 shadow-lg flex items-center gap-6">
+                    <div class="text-5xl filter drop-shadow-lg">{stat.icon}</div>
                     <div>
-                        <p class="text-sm uppercase tracking-[0.3em] text-[#7a2a2a]">{stat.title}</p>
-                        <p class="mt-2 text-2xl font-semibold text-[#4a1c1c]">{stat.value}</p>
+                        <p class="text-xs uppercase tracking-[0.3em] text-[#d97706] font-semibold">{stat.title}</p>
+                        <p class="mt-2 text-3xl font-bold text-white">{stat.value}</p>
                     </div>
                 </article>
             {/each}
         </section>
 
-        <section class="rounded-3xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-8 shadow-lg backdrop-blur">
-            <div class="flex flex-col gap-2">
-                <p class="text-xs uppercase tracking-[0.35em] text-[#7a2a2a]">Your journey</p>
-                <h2 class="text-3xl font-semibold text-[#4a1c1c]">Category progress</h2>
-                <p class="text-[#7a2a2a]">Track how far you've gone in each track. Finish a module to unlock deeper drills.</p>
+        <section class="glass-card rounded-3xl p-8 shadow-2xl">
+            <div class="flex flex-col gap-2 mb-8">
+                <p class="text-xs uppercase tracking-[0.35em] text-[#d97706] font-semibold">Your journey</p>
+                <h2 class="text-3xl font-bold text-white">Category progress</h2>
+                <p class="text-gray-400 mt-2">Track how far you've gone in each track. Finish a module to unlock deeper drills.</p>
             </div>
-            <ul class="mt-6 space-y-6">
+            <ul class="space-y-4">
                 {#each categories as category}
-                    <li class="rounded-2xl border-2 border-white/30 bg-gradient-to-r from-[#ffb0b0] to-[#ffd4d4] p-5 shadow-md hover:shadow-lg transition-all duration-300">
-                        <div class="flex items-center justify-between">
+                    <li class="glass-card rounded-2xl p-6 hover:bg-gray-700/40 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-3">
                             <div>
-                                <p class="text-lg font-semibold text-[#4a1c1c]">{category.name}</p>
-                                <p class="text-sm text-[#7a2a2a]">{category.completed} of {category.total} quizzes completed</p>
+                                <p class="text-lg font-bold text-white">{category.name}</p>
+                                <p class="text-sm text-gray-400 mt-1">{category.completed} of {category.total} quizzes completed</p>
                             </div>
-                            <span class="text-sm font-bold text-[#ff6b6b]">{category.progress}%</span>
+                            <span class="text-lg font-bold text-[#d97706]">{category.progress}%</span>
                         </div>
-                        <div class="mt-3 h-3 w-full rounded-full bg-white/30">
-                            <div class="h-3 rounded-full bg-gradient-to-r from-[#ff9b9b] to-[#ff6b6b]" style={`width: ${category.progress}%`}></div>
+                        <div class="h-2 w-full rounded-full bg-gray-700/50 overflow-hidden">
+                            <div class="h-2 rounded-full bg-gradient-to-r from-[#d97706] via-[#f59e0b] to-[#fbbf24] shadow-lg" style={`width: ${category.progress}%; transition: width 0.5s ease;`}></div>
                         </div>
                     </li>
                 {/each}

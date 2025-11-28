@@ -12,6 +12,7 @@
 
     // Dynamically import Preview component
     let Preview: any;
+    let fontFamily = 'poppins';
     useOnMount(async () => {
         if (browser) {
             const module = await import('$lib/components/Preview.svelte');
@@ -136,9 +137,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <meta name="description" content="Interactive code playground for HTML, CSS, and JavaScript" />
 </svelte:head>
 
-<div class="h-screen flex flex-col bg-gray-900 text-white" class:fixed={isFullscreen} class:inset-0={isFullscreen} class:z-50={isFullscreen}>
+<div class="h-screen flex flex-col bg-gray-900 text-white" style="font-family: poppins;" class:fixed={isFullscreen} class:inset-0={isFullscreen} class:z-50={isFullscreen}>
     <!-- Header -->
-    <DashboardHeader user={data.user || undefined} />
+    <DashboardHeader user={data.user || undefined} pageName="Playground" />
 
     <!-- Main Content -->
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">

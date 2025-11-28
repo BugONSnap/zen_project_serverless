@@ -19,16 +19,16 @@
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
 
   body, html {
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', Arial, sans-serif;
     font-weight: 700;
-    color: #4a1c1c;
+    color: white;
   }
   p, span, small, .text-sm, .text-xs {
     font-family: 'Montserrat', Arial, sans-serif;
-    color: #4a1c1c;
+    color: #e5e7eb;
   }
   .dashboard-heading {
     font-size: 2.5rem;
@@ -41,12 +41,12 @@
   
   .admin-layout {
     min-height: 100vh;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     font-weight: 500;
     position: relative;
     overflow: hidden;
-    color: #4a1c1c;
-    background: linear-gradient(to bottom, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);
+    color: #e5e7eb;
+    background: linear-gradient(to bottom, #0f172a 0%, #1a1f2e 50%, #111827 100%);
   }
   .admin-layout::before {
     content: '';
@@ -56,7 +56,7 @@
     right: 0;
     bottom: 0;
     opacity: 0.05;
-    background-image: radial-gradient(#ff4d4d 1px, transparent 1px);
+    background-image: radial-gradient(#d97706 1px, transparent 1px);
     background-size: 20px 20px;
     pointer-events: none;
   }
@@ -68,26 +68,26 @@
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
-    background: linear-gradient(to right, #ff9b9b, #ff7b7b);
-    color: #4a1c1c;
+    background: linear-gradient(to right, #1a1f2e 0%, #111827 50%, #0f172a 100%);
+    color: white;
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(217, 119, 6, 0.2);
     width: 100%;
   }
   .admin-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(217, 119, 6, 0.2);
+    background-color: rgba(15, 23, 42, 0.6);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     backdrop-filter: blur(20px);
     padding: 1rem 0;
     margin-top: 2rem;
     text-align: center;
-    color: #4a1c1c;
+    color: #e5e7eb;
     border-bottom-left-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
   }
   .btn-primary {
-    background-color: #7a2a2a;
+    background-color: #d97706;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -95,16 +95,16 @@
     transition: background-color 0.2s;
   }
   .btn-primary:hover {
-    background-color: #5a1a1a;
+    background-color: #f59e0b;
   }
   .nav-link {
-    color: #4a1c1c;
+    color: white;
     font-size: 1rem;
     font-weight: 600;
     transition: color 0.2s;
   }
   .nav-link:hover {
-    color: #7a2a2a;
+    color: #d97706;
     text-decoration: underline;
   }
 </style>
@@ -115,7 +115,7 @@
     <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
       <button 
         type="button" 
-        class="text-3xl font-bold text-[#4a1c1c] bg-transparent border-none cursor-pointer focus:outline-none hover:underline font-['Poppins']" 
+        class="text-3xl font-bold text-white bg-transparent border-none cursor-pointer focus:outline-none hover:text-amber-400 transition font-['Poppins']" 
         on:click={() => goto('/admin')} 
         aria-label="Go to Admin Home"
       >
@@ -132,21 +132,21 @@
       <!-- Mobile/Tablet nav -->
       <div class="md:hidden relative">
         <button
-          class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7a2a2a]"
+          class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#d97706]"
           on:click={() => { showMenu = !showMenu; }}
           aria-label="Open menu"
         >
-          <svg class="h-6 w-6 text-[#4a1c1c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
         {#if showMenu}
-          <div class="absolute right-0 mt-2 w-56 bg-white/95 rounded-xl shadow-2xl z-50 py-2 border border-white/30 backdrop-blur-xl">
-            <a href="/admin" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Home</a>
-            <a href="/admin/users" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Users</a>
-            <a href="/admin/quizzes" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Quizzes</a>
-            <a href="/admin/analytics" class="block px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => showMenu = false}>Analytics</a>
-            <button class="block w-full text-left px-6 py-3 text-base text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors" on:click={() => { handleLogout(); showMenu = false; }}>Logout</button>
+          <div class="absolute right-0 mt-2 w-56 bg-gray-900/95 rounded-xl shadow-2xl z-50 py-2 border border-gray-700 backdrop-blur-xl">
+            <a href="/admin" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Home</a>
+            <a href="/admin/users" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Users</a>
+            <a href="/admin/quizzes" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Quizzes</a>
+            <a href="/admin/analytics" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Analytics</a>
+            <button class="block w-full text-left px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => { handleLogout(); showMenu = false; }}>Logout</button>
           </div>
         {/if}
       </div>
