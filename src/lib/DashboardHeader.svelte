@@ -167,6 +167,11 @@
         </div>
         <!-- Desktop nav -->
         <div class="hidden md:flex items-center space-x-6">
+            {#if !user}
+                <a href="/landing" class="nav-link text-sm font-semibold focus:outline-none" title="Home">
+                    Home
+                </a>
+            {/if}
             {#if user}
                 {#if $page.url.pathname !== '/dashboard'}
                     <button
@@ -225,6 +230,11 @@
             </button>
             {#if menuOpen}
                 <div class="absolute right-0 mt-2 w-56 mobile-menu z-50 py-2">
+                    {#if !user}
+                        <a href="/landing" title="Home" class="mobile-menu-item block px-4 py-3 text-sm font-semibold" on:click={() => { menuOpen = false; }}>
+                            Home
+                        </a>
+                    {/if}
                     {#if user}
                         {#if $page.url.pathname !== '/dashboard'}
                             <button

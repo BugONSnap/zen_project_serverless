@@ -1,6 +1,7 @@
 <script lang="ts">
 import DashboardHeader from '$lib/DashboardHeader.svelte';
 import MiniHeader from '../MiniHeader.svelte';
+import SearchComponent from '../SearchComponent.svelte';
 
 export let data: { user: { id: number; username: string; email: string } | null };
 
@@ -198,6 +199,84 @@ function goToPage(page: number) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
+
+// Handle hash navigation to scroll to specific lesson
+import { onMount } from 'svelte';
+
+// Function to scroll to a lesson by ID
+function scrollToLesson(lessonId: string) {
+  if (typeof window === 'undefined') return;
+  const match = lessonId.match(/^lesson-(\d+)$/);
+  if (match) {
+    const lessonIndex = parseInt(match[1]);
+    // Calculate which page this lesson is on
+    const targetPage = Math.floor(lessonIndex / LESSONS_PER_PAGE) + 1;
+    if (targetPage !== currentPage) {
+      goToPage(targetPage);
+      // Wait for page change, then scroll
+      setTimeout(() => {
+        scrollToLessonElement(lessonId);
+      }, 500);
+    } else {
+      // Same page, scroll immediately
+      scrollToLessonElement(lessonId);
+    }
+  }
+}
+
+function scrollToLessonElement(lessonId: string) {
+  setTimeout(() => {
+    const element = document.getElementById(lessonId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.classList.add('search-highlight');
+      setTimeout(() => {
+        element.classList.remove('search-highlight');
+      }, 2000);
+    } else {
+      // If element not found, try again after a longer delay (might still be rendering)
+      setTimeout(() => {
+        const retryElement = document.getElementById(lessonId);
+        if (retryElement) {
+          retryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          retryElement.classList.add('search-highlight');
+          setTimeout(() => {
+            retryElement.classList.remove('search-highlight');
+          }, 2000);
+        }
+      }, 500);
+    }
+  }, 100);
+}
+
+onMount(() => {
+  if (typeof window === 'undefined') return;
+  
+  // Check initial hash
+  const initialHash = window.location.hash;
+  if (initialHash) {
+    scrollToLesson(initialHash.substring(1));
+  }
+  
+  // Listen for hash changes (when navigating within the same page)
+  function handleHashChange() {
+    const hash = window.location.hash;
+    if (hash) {
+      scrollToLesson(hash.substring(1));
+    }
+  }
+  
+  window.addEventListener('hashchange', handleHashChange);
+  
+  return () => {
+    window.removeEventListener('hashchange', handleHashChange);
+  };
+});
+
+// Aggregate all lessons for search
+const allLessonsForSearch = [
+  { category: 'CSS', path: '/learn/css', lessons: cssLessons }
+];
 </script>
 
 <div class="min-h-screen text-white font-medium relative dashboard-bg" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); overflow: visible; font-family: poppins;">
@@ -207,6 +286,10 @@ function goToPage(page: number) {
     <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
   <DashboardHeader title="Learn CSS" user={data.user || undefined} pageName="Learn" />
   <MiniHeader />
+  
+  <div class="max-w-6xl mx-auto px-4 pt-6">
+    <SearchComponent allLessons={allLessonsForSearch} />
+  </div>
 
   <section class="max-w-6xl mx-auto px-4 py-10 space-y-10">
     <div class="rounded-3xl border border-white/15 bg-[#090303]/70 p-8 shadow-2xl backdrop-blur">
@@ -278,7 +361,7 @@ function goToPage(page: number) {
         <div class="relative space-y-8">
           <span class="pointer-events-none absolute left-8 top-0 hidden h-full w-px bg-gradient-to-b from-emerald-400/70 via-white/20 to-transparent lg:block"></span>
           {#each paginatedLessons as block, index}
-            <article class="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-6 shadow-lg backdrop-blur">
+            <article id="lesson-{pageOffset + index}" class="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-6 shadow-lg backdrop-blur">
               <div class="flex items-start gap-5">
                 <div class="relative flex-none">
                   <span class="text-4xl font-extrabold text-white/20">{String(pageOffset + index + 1).padStart(2, '0')}</span>
@@ -419,5 +502,22 @@ p, span, small, .dashboard-body, .text-sm, .text-xs {
     border-radius: 1.5rem;
     box-shadow: 0 8px 32px 0 rgba(255, 155, 155, 0.15);
     border: 2px solid #ffbdbd;
+}
+
+.search-highlight {
+    animation: highlightPulse 2s ease-in-out;
+    border-color: rgba(251, 191, 36, 0.6) !important;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3) !important;
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        border-color: rgba(251, 191, 36, 0.6);
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    }
+    50% {
+        border-color: rgba(251, 191, 36, 0.9);
+        box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+    }
 }
 </style>
