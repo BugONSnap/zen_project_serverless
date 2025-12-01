@@ -199,6 +199,9 @@
             <a href="/leaderboard" class="nav-link text-sm font-semibold focus:outline-none" title="Leaderboard">
                 Leaderboard
             </a>
+            <a href="/community" class="nav-link text-sm font-semibold focus:outline-none" title="Community">
+                Community
+            </a>
             {#if user}
                 <button
                     class="nav-link text-sm font-semibold focus:outline-none"
@@ -264,6 +267,9 @@
                             Leaderboard
                         </a>
                     {/if}
+                    <a href="/community" title="Community" class="mobile-menu-item block px-4 py-3 text-sm font-semibold" on:click={() => { menuOpen = false; }}>
+                        Community
+                    </a>
                     {#if user}
                         {#if $page.url.pathname !== '/profile'}
                             <a href="/profile" title="Profile" class="mobile-menu-item block px-4 py-3 text-sm font-semibold" on:click={() => { menuOpen = false; }}>
@@ -285,4 +291,4 @@
             {/if}
         </div>
     </div>
-</header> 
+</header>

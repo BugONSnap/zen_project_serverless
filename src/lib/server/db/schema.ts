@@ -19,6 +19,12 @@ export const userRankings = pgTable("user_rankings", {
   maxPoints: integer("max_points"),
 });
 
+// user types table
+export const userTypes = pgTable("user_types", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(), // STUDENT | PROFESSIONAL | HOBBYIST
+});
+
 // quiz categories table
 export const quizCategories = pgTable("quiz_categories", {
   id: serial("id").primaryKey(),
@@ -32,6 +38,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   uniqueInfo: text("unique_info").notNull(),
+  userTypeId: integer("user_type_id").references(() => userTypes.id).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   totalPoints: integer("total_points").default(0),
   rankId: integer("rank_id").references(() => userRankings.id),
@@ -130,8 +137,43 @@ export const codeSnippets = pgTable("code_snippets", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// community posts table
+export const community = pgTable("community", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  content: text("content").notNull(),
+  rating: integer("rating").notNull(), // 1-5
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// community likes/dislikes table
+export const communityLikes = pgTable("community_likes", {
+  id: serial("id").primaryKey(),
+  postId: integer("post_id").references(() => community.id).notNull(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  isLike: boolean("is_like").notNull(), // true = like, false = dislike
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// community replies table
+export const communityReplies = pgTable("community_replies", {
+  id: serial("id").primaryKey(),
+  postId: integer("post_id").references(() => community.id).notNull(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Relations
+export const userTypesRelations = relations(userTypes, ({ many }) => ({
+  users: many(users),
+}));
+
 export const usersRelations = relations(users, ({ one, many }) => ({
+  userType: one(userTypes, {
+    fields: [users.userTypeId],
+    references: [userTypes.id],
+  }),
   rank: one(userRankings, {
     fields: [users.rankId],
     references: [userRankings.id],
@@ -140,6 +182,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   quizResults: many(quizResults),
   quizAttempts: many(quizAttempts),
   codeSnippets: many(codeSnippets),
+  communityPosts: many(community),
 }));
 
 export const quizCategoriesRelations = relations(
@@ -221,6 +264,25 @@ export const codeSnippetsRelations = relations(codeSnippets, ({ one }) => ({
     fields: [codeSnippets.userId],
     references: [users.id],
   }),
+}));
+
+export const communityRelations = relations(community, ({ one, many }) => ({
+  user: one(users, {
+    fields: [community.userId],
+    references: [users.id],
+  }),
+  likes: many(communityLikes),
+  replies: many(communityReplies),
+}));
+
+export const communityLikesRelations = relations(communityLikes, ({ one }) => ({
+  post: one(community, { fields: [communityLikes.postId], references: [community.id] }),
+  user: one(users, { fields: [communityLikes.userId], references: [users.id] }),
+}));
+
+export const communityRepliesRelations = relations(communityReplies, ({ one }) => ({
+  post: one(community, { fields: [communityReplies.postId], references: [community.id] }),
+  user: one(users, { fields: [communityReplies.userId], references: [users.id] }),
 }));
 
 export type User = InferSelectModel<typeof users>;

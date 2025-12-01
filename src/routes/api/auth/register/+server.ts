@@ -1,15 +1,38 @@
 import { json } from "@sveltejs/kit";
-import { users } from "$lib/server/db/schema";
+import { users, userTypes } from "$lib/server/db/schema";
 import bcrypt from "bcryptjs";
 import { db } from "$lib/server";
+import { eq } from "drizzle-orm";
 
 export async function POST({ request }) {
   try {
-    const { username, email, password, uniqueInfo } = await request.json();
+    const { username, email, password, uniqueInfo, userType } = await request.json();
 
     // Validate input
-    if (!username || !email || !password || !uniqueInfo) {
+    if (!username || !email || !password || !uniqueInfo || !userType) {
       return json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    // Validate userType and get userTypeId
+    const validUserTypes = ["STUDENT", "PROFESSIONAL", "HOBBYIST"];
+    const userTypeUpper = userType.toUpperCase();
+    if (!validUserTypes.includes(userTypeUpper)) {
+      return json(
+        { error: "Invalid user type. Must be STUDENT, PROFESSIONAL, or HOBBYIST" },
+        { status: 400 }
+      );
+    }
+
+    // Find the userTypeId from the userTypes table
+    const userTypeRecord = await db.query.userTypes.findFirst({
+      where: eq(userTypes.name, userTypeUpper),
+    });
+
+    if (!userTypeRecord) {
+      return json(
+        { error: "User type not found in database" },
+        { status: 500 }
+      );
     }
 
     // Check if user already exists
@@ -36,6 +59,7 @@ export async function POST({ request }) {
         email,
         passwordHash,
         uniqueInfo,
+        userTypeId: userTypeRecord.id,
         totalPoints: 0,
         rankId: 1, // Set to Beginner rank
       })

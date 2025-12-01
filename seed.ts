@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import bcrypt from "bcrypt";
-import { users, userProgress } from "./src/lib/server/db/schema"; // Adjust path to your schema file
+import { users, userProgress, userTypes } from "./src/lib/server/db/schema"; // Adjust path to your schema file
 
 // Database connection configuration
 const pool = new Pool({
@@ -13,6 +13,20 @@ const db = drizzle(pool);
 // Seed function
 async function seed() {
   try {
+    // Seed user types first
+    const insertedUserTypes = await db.insert(userTypes).values([
+      { name: "STUDENT" },
+      { name: "PROFESSIONAL" },
+      { name: "HOBBYIST" },
+    ]).returning();
+
+    // Find the PROFESSIONAL user type ID
+    const professionalType = insertedUserTypes.find(ut => ut.name === "PROFESSIONAL");
+    if (!professionalType) {
+      throw new Error("PROFESSIONAL user type not found after seeding");
+    }
+    const professionalTypeId = professionalType.id;
+
     // Hash passwords (using bcrypt with 10 salt rounds)
     const superAdminPassword = await bcrypt.hash("superAdmin123!", 10);
     const adminPassword = await bcrypt.hash("admin456!", 10);
@@ -24,6 +38,7 @@ async function seed() {
         email: "superadmin@gmail.com",
         passwordHash: superAdminPassword,
         uniqueInfo: "Super Admin Account",
+        userTypeId: professionalTypeId,
         createdAt: new Date(),
         totalPoints: 0,
         rankId: null, // Set to 1 if a rank exists in userRankings
@@ -34,6 +49,7 @@ async function seed() {
         email: "admin@gmail.com",
         passwordHash: adminPassword,
         uniqueInfo: "Admin Account",
+        userTypeId: professionalTypeId,
         createdAt: new Date(),
         totalPoints: 0,
         rankId: null, // Set to 1 if a rank exists in userRankings
@@ -62,9 +78,24 @@ async function seed() {
         lastQuestionIndex: 1,
       },
     ]);
-    console.log("Successfully seeded super admin, admin users, and user progress!");
 
-    console.log("Successfully seeded super admin and admin users!");
+    // Seed community posts
+    const { community } = await import("./src/lib/server/db/schema");
+    await db.insert(community).values([
+      {
+        userId: insertedUsers[0].id,
+        content: "Zentry is an amazing platform!",
+        rating: 5,
+        createdAt: new Date(),
+      },
+      {
+        userId: insertedUsers[1].id,
+        content: "Great for learning, but could use more quizzes.",
+        rating: 4,
+        createdAt: new Date(),
+      },
+    ]);
+    console.log("Successfully seeded super admin, admin users, user progress, and community posts!");
   } catch (error) {
     console.error("Error seeding database:", error);
   } finally {

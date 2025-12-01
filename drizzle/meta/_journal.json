@@ -29,6 +29,34 @@
       "when": 1758519219022,
       "tag": "0003_salty_human_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1764551796955,
+      "tag": "0004_lovely_sentinel",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1764552065289,
+      "tag": "0005_robust_puma",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1764556114732,
+      "tag": "0006_red_corsair",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1764557750922,
+      "tag": "0007_past_dazzler",
+      "breakpoints": true
     }
   ]
 }

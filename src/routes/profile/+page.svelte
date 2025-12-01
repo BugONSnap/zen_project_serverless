@@ -100,27 +100,63 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white font-medium" style="font-family: poppins;">
+
+<div class="min-h-screen text-white font-medium relative dashboard-bg" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); overflow: visible; font-family: poppins;">
   <!-- Animated gradient overlay -->
   <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
   <!-- Subtle dot pattern -->
   <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@700&display=swap');
-    
-    h1, h2, h3, h4, h5, h6 {
+    .dashboard-bg, body, html {
+      font-family: 'Poppins', Arial, sans-serif;
+      overflow: visible;
+    }
+    h1, h2, h3, h4, h5, h6, .dashboard-heading {
+      font-family: 'Poppins', Arial, sans-serif;
+      font-weight: 700;
+      color: white;
+    }
+    p, span, small, .dashboard-body, .text-sm, .text-xs {
+      font-family: 'Poppins', Arial, sans-serif;
+      color: #e5e7eb;
+    }
+    .dashboard-heading {
+      font-size: 2.5rem;
+    }
+    .dashboard-subheading {
+      font-size: 1.5rem;
+      font-family: 'Poppins', Arial, sans-serif;
+      font-weight: 600;
+    }
+    .dashboard-stat {
+      font-size: 2rem;
+      font-family: 'Poppins', Arial, sans-serif;
+      font-weight: 700;
+    }
+    .dashboard-body {
+      font-size: 1.1rem;
       font-family: 'Poppins', Arial, sans-serif;
     }
-    
-    body {
-      font-family: 'Montserrat', Arial, sans-serif;
+    .glass-card {
+      background: rgba(31, 41, 55, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(31, 41, 55, 0.37);
+    }
+    .gold-accent {
+      color: #d97706;
+    }
+    .gold-border {
+      border-color: rgba(217, 119, 6, 0.3);
     }
   </style>
   <DashboardHeader title="Profile" user={user} pageName="Profile" />
 
   {#if showEditModal}
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-      <div class="w-full max-w-md rounded-2xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-6 shadow-2xl text-[#4a1c1c]">
+      <div class="w-full max-w-md rounded-2xl border-2 border-amber-600 bg-black-100 p-6 shadow-2xl text-[#4a1c1c]">
         <h3 class="text-2xl font-semibold mb-4">Edit Username</h3>
         <div class="mb-4">
           <label for="username" class="block text-sm uppercase tracking-[0.3em] text-[#4a1c1c]/80 mb-2">New Username</label>
@@ -147,13 +183,13 @@
 
   {#if showDeleteModal}
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
-      <div class="w-full max-w-md rounded-2xl border-2 border-red-300 bg-white p-6 shadow-2xl text-[#4a1c1c]">
+      <div class="w-full max-w-md rounded-2xl border-2 border-amber-600 bg-black/100 p-6 shadow-2xl text-[#4a1c1c]">
         <h3 class="text-2xl font-semibold text-red-600 mb-4">Delete Profile</h3>
-        <p class="text-[#4a1c1c]/80 mb-6">
+        <p class="text-amber-600 mb-6">
           Are you sure you want to delete your profile? This action cannot be undone and all your data will be permanently deleted.
         </p>
         <div class="flex justify-end gap-2">
-          <button class="rounded-full border-2 border-white/30 px-4 py-2 text-sm text-[#4a1c1c] hover:bg-gray-100 transition-colors" on:click={() => showDeleteModal = false}>
+          <button class="rounded-full border-2 border-white/30 px-4 py-2 text-sm text-[#4a1c1c] hover:bg-black-100 transition-colors" on:click={() => showDeleteModal = false}>
             Cancel
           </button>
           <button class="rounded-full border-2 border-red-500 bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600 transition-colors" on:click={handleDeleteProfile}>
@@ -165,10 +201,10 @@
   {/if}
 
   <div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
-    <section class="rounded-3xl border-2 border-white/30 bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] p-8 shadow-2xl relative">
+    <section class="glass-card rounded-3xl p-8 shadow-2xl relative">
     <!-- Settings Button -->
     <button
-      class="absolute top-4 right-4 text-[#4a1c1c]/70 hover:text-[#4a1c1c] focus:outline-none transition-colors"
+      class="absolute top-4 right-4 text-amber-600 hover:text-amber-600 focus:outline-none transition-colors"
       on:click={toggleDropdown}
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -178,15 +214,15 @@
     </button>
 
     {#if showDropdown}
-      <div class="absolute top-12 right-4 w-48 rounded-2xl border-2 border-white/30 bg-white/90 py-2 shadow-xl z-50">
+      <div class="absolute top-12 right-4 w-48 rounded-2xl border-2 border-white/30 bg-transparent py-2 shadow-xl z-50">
         <button
-          class="w-full text-left px-4 py-2 text-sm text-[#4a1c1c] hover:bg-[#ffd4d4] transition-colors"
+          class="w-full text-left px-4 py-2 text-sm text-[#4a1c1c] hover:bg-transparent transition-colors"
           on:click={handleEditClick}
         >
           Edit Profile
         </button>
         <button
-          class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 transition-colors"
+          class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-transparent transition-colors"
           on:click={handleDeleteClick}
         >
           Delete Profile
@@ -195,11 +231,17 @@
     {/if}
 
     <div class="flex flex-col items-center mb-6">
-      <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[#ff7b7b] to-[#ff5e5e] text-3xl font-bold text-white shadow-md">
+      <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[#d97706] to-[#1e40af] text-3xl font-bold text-white shadow-md">
         {user.username.charAt(0).toUpperCase()}
       </div>
       <h2 class="text-3xl font-semibold text-white">{user.username}</h2>
       <p class="text-white/60">{user.email}</p>
+      <!-- User type display -->
+      {#if user.userType}
+        <span class="mt-1 inline-block rounded-full bg-amber-500/20 border border-amber-500/40 px-3 py-1 text-xs font-semibold text-amber-300 tracking-wider uppercase">
+          {user.userType}
+        </span>
+      {/if}
     </div>
     <p class="text-center text-[#4a1c1c]/80">Track your journey, manage your identity, and jump back into unfinished work.</p>
 

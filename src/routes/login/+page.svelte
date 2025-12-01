@@ -12,6 +12,7 @@
   let formElement: HTMLFormElement;
   let successMessage = '';
   let uniqueInfo = '';
+  let userType = 'STUDENT';
 
   // Validation states
   let emailError = '';
@@ -44,6 +45,7 @@
     passwordStrength = 0;
     successMessage = '';
     uniqueInfo = '';
+    userType = 'STUDENT';
     if (formElement) {
       formElement.reset();
     }
@@ -164,7 +166,7 @@
 
     try {
       const endpoint = activeTab === 'login' ? '/api/auth/login' : '/api/auth/register';
-      let body = activeTab === 'login' ? { email, password } : { email, password, username, uniqueInfo };
+      let body = activeTab === 'login' ? { email, password } : { email, password, username, uniqueInfo, userType };
 
       // Encrypt payload if it's a login request
       if (activeTab === 'login') {
@@ -299,6 +301,19 @@
                 class="block w-full px-4 py-2.5 bg-gray-800/50 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] text-sm"
                 placeholder="Unique Recovery Info (e.g., Mother's maiden name)"
               />
+            </div>
+            <div>
+              <select
+                id="userType"
+                name="userType"
+                required
+                bind:value={userType}
+                class="block w-full px-4 py-2.5 bg-gray-800/50 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d97706] focus:border-[#d97706] text-sm"
+              >
+                <option value="STUDENT">Student</option>
+                <option value="PROFESSIONAL">Professional</option>
+                <option value="HOBBYIST">Hobbyist</option>
+              </select>
             </div>
           {/if}
           <div>

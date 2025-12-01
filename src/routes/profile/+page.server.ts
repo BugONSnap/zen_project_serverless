@@ -14,6 +14,9 @@ export const load: PageServerLoad = async ({ locals }: { locals: Locals }) => {
   // Get user data
   const user = await db.query.users.findFirst({
     where: eq(users.id, userId),
+    with: {
+      userType: true,
+    },
   });
   if (!user) {
     throw svelteError(404, "User not found");
@@ -37,6 +40,7 @@ export const load: PageServerLoad = async ({ locals }: { locals: Locals }) => {
       email: user.email,
       totalPoints: user.totalPoints,
       createdAt: user.createdAt,
+      userType: user.userType?.name || null,
     },
     categories: categories.map((category) => {
       const categoryProgress = progress.find(
