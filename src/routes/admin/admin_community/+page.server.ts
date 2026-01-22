@@ -1,10 +1,9 @@
 import { db } from "$lib/server";
-import { community, users, userTypes, communityLikes, communityReplies, communityReplyLikes } from "$lib/server/db/schema";
-import { desc, eq, and, sql, isNull } from "drizzle-orm";
+import { community } from "$lib/server/db/schema";
+import { desc, eq, and, sql } from "drizzle-orm";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals }) => {
-  // Fetch all visible community posts (not hidden, not deleted) with user, userType, likes, and replies
+export const load: PageServerLoad = async () => {
   const posts = await db.query.community.findMany({
     where: and(
       eq(community.isHidden, false),
@@ -34,12 +33,5 @@ export const load: PageServerLoad = async ({ locals }) => {
       },
     },
   });
-  let user = null;
-  if (locals.user?.id) {
-    user = await db.query.users.findFirst({
-      where: eq(users.id, locals.user.id),
-      with: { userType: true },
-    });
-  }
-  return { posts, user };
+  return { posts };
 };

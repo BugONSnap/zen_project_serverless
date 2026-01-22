@@ -12,6 +12,29 @@
         totalUsers: number;
         usersWithProgress: number;
         sectionCounts: Record<string, number>;
+        communityStats: {
+            totalPosts: number;
+            totalLikes: number;
+            totalReplies: number;
+            totalReplyLikes: number;
+            uniquePosters: number;
+            totalEngagement: number;
+        };
+        userTypeStats: {
+            STUDENT: { total: number; withProgress: number; withCommunity: number };
+            PROFESSIONAL: { total: number; withProgress: number; withCommunity: number };
+            HOBBYIST: { total: number; withProgress: number; withCommunity: number };
+        };
+        engagementByType: {
+            STUDENT: { posts: number; likes: number; replies: number };
+            PROFESSIONAL: { posts: number; likes: number; replies: number };
+            HOBBYIST: { posts: number; likes: number; replies: number };
+        };
+        quizStats: {
+            totalAttempts: number;
+            totalQuizzes: number;
+            averageScore: number;
+        };
         error?: string;
     };
 
@@ -73,7 +96,7 @@
                     legend: { display: false },
                     tooltip: {
                         backgroundColor: 'rgba(30, 41, 59, 0.95)',
-                        titleFont: { size: 14, weight: '600' },
+                        titleFont: { size: 14, weight: 'bold' as const },
                         bodyFont: { size: 13 },
                         padding: 12,
                         displayColors: false,
@@ -101,7 +124,7 @@
                         },
                         ticks: {
                             color: 'rgba(255, 255, 255, 0.8)',
-                            font: { size: 12, weight: '500' }
+                            font: { size: 12 }
                         }
                     }
                 }
@@ -178,12 +201,17 @@
     });
 </script>
 
-<div class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 py-10 px-4 sm:px-6 lg:px-8 rounded-[20px]" style="font-family: poppins;">
-    <div class="max-w-7xl mx-auto">
+<div class="min-h-screen text-white relative" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
+  <!-- Animated gradient overlay -->
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+  <!-- Subtle dot pattern -->
+  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+  
+    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 relative z-10">
         <!-- Header -->
         <div class="text-center mb-12" in:fly={{ y: -20, duration: 400 }}>
-            <h1 class="text-4xl font-bold text-white mb-2">Analytics Dashboard</h1>
-            <p class="text-gray-400">Track and analyze user progress and engagement</p>
+            <h1 class="text-4xl font-bold text-amber-400 mb-2">Analytics Dashboard</h1>
+            <p class="text-gray-300">Track and analyze user progress, community engagement, and platform activity</p>
         </div>
 
         <!-- Error Message -->
@@ -193,8 +221,219 @@
             </div>
         {/if}
 
+        <!-- Community Engagement Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 border-2 border-amber-400/30 shadow-2xl mb-10">
+            <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                Community Engagement
+            </h2>
+            
+            <!-- Community Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl p-4">
+                    <p class="text-xs text-amber-300/70 mb-1">Total Posts</p>
+                    <p class="text-2xl font-bold text-white">{data.communityStats.totalPosts}</p>
+                </div>
+                <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl p-4">
+                    <p class="text-xs text-amber-300/70 mb-1">Total Likes</p>
+                    <p class="text-2xl font-bold text-white">{data.communityStats.totalLikes}</p>
+                </div>
+                <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl p-4">
+                    <p class="text-xs text-amber-300/70 mb-1">Total Replies</p>
+                    <p class="text-2xl font-bold text-white">{data.communityStats.totalReplies}</p>
+                </div>
+                <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl p-4">
+                    <p class="text-xs text-amber-300/70 mb-1">Reply Likes</p>
+                    <p class="text-2xl font-bold text-white">{data.communityStats.totalReplyLikes}</p>
+                </div>
+                <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl p-4">
+                    <p class="text-xs text-amber-300/70 mb-1">Unique Posters</p>
+                    <p class="text-2xl font-bold text-white">{data.communityStats.uniquePosters}</p>
+                </div>
+                <div class="bg-amber-500/20 border border-amber-400/40 rounded-xl p-4">
+                    <p class="text-xs text-amber-300/70 mb-1">Total Engagement</p>
+                    <p class="text-2xl font-bold text-amber-400">{data.communityStats.totalEngagement}</p>
+                </div>
+            </div>
+
+            <!-- Engagement Table -->
+            <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-900/70 border-b border-amber-400/30">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Metric</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Count</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-amber-400/10">
+                        <tr class="hover:bg-gray-800/50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Posts</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{data.communityStats.totalPosts}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-amber-400">
+                                {data.communityStats.totalEngagement > 0 ? Math.round((data.communityStats.totalPosts / data.communityStats.totalEngagement) * 100) : 0}%
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Likes</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{data.communityStats.totalLikes}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-amber-400">
+                                {data.communityStats.totalEngagement > 0 ? Math.round((data.communityStats.totalLikes / data.communityStats.totalEngagement) * 100) : 0}%
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Replies</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{data.communityStats.totalReplies}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-amber-400">
+                                {data.communityStats.totalEngagement > 0 ? Math.round((data.communityStats.totalReplies / data.communityStats.totalEngagement) * 100) : 0}%
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Reply Likes</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{data.communityStats.totalReplyLikes}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-amber-400">
+                                {data.communityStats.totalEngagement > 0 ? Math.round((data.communityStats.totalReplyLikes / data.communityStats.totalEngagement) * 100) : 0}%
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- User Type Statistics Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 border-2 border-amber-400/30 shadow-2xl mb-10">
+            <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                User Type Breakdown
+            </h2>
+
+            <!-- User Type Stats Table -->
+            <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl overflow-hidden mb-6">
+                <table class="w-full">
+                    <thead class="bg-gray-900/70 border-b border-amber-400/30">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">User Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Total Users</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">With Progress</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">With Community Activity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Progress Rate</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Community Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-amber-400/10">
+                        {#each ['STUDENT', 'PROFESSIONAL', 'HOBBYIST'] as type}
+                            {@const typeKey = type as keyof typeof data.userTypeStats}
+                            {@const stats = data.userTypeStats[typeKey]}
+                            {@const progressRate = stats.total > 0 ? Math.round((stats.withProgress / stats.total) * 100) : 0}
+                            {@const communityRate = stats.total > 0 ? Math.round((stats.withCommunity / stats.total) * 100) : 0}
+                            <tr class="hover:bg-gray-800/50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                        {type}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{stats.total}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{stats.withProgress}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{stats.withCommunity}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-24 bg-gray-700 rounded-full h-2 mr-2">
+                                            <div class="bg-amber-500 h-2 rounded-full" style="width: {progressRate}%"></div>
+                                        </div>
+                                        <span class="text-sm text-amber-400">{progressRate}%</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-24 bg-gray-700 rounded-full h-2 mr-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: {communityRate}%"></div>
+                                        </div>
+                                        <span class="text-sm text-blue-400">{communityRate}%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Engagement by User Type Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 border-2 border-amber-400/30 shadow-2xl mb-10">
+            <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+                Engagement by User Type
+            </h2>
+
+            <!-- Engagement Table -->
+            <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-900/70 border-b border-amber-400/30">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">User Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Posts</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Likes</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Replies</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-amber-400 uppercase tracking-wider">Total Engagement</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-amber-400/10">
+                        {#each ['STUDENT', 'PROFESSIONAL', 'HOBBYIST'] as type}
+                            {@const typeKey = type as keyof typeof data.engagementByType}
+                            {@const engagement = data.engagementByType[typeKey]}
+                            {@const total = engagement.posts + engagement.likes + engagement.replies}
+                            <tr class="hover:bg-gray-800/50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                        {type}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{engagement.posts}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{engagement.likes}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{engagement.replies}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-bold text-amber-400">{total}</span>
+                                </td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quiz Statistics Section -->
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 border-2 border-amber-400/30 shadow-2xl mb-10">
+            <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                Quiz Activity
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl p-6">
+                    <p class="text-sm text-amber-300/70 mb-2">Total Quiz Attempts</p>
+                    <p class="text-3xl font-bold text-white">{data.quizStats.totalAttempts}</p>
+                </div>
+                <div class="bg-gray-800/40 border border-amber-400/20 rounded-xl p-6">
+                    <p class="text-sm text-amber-300/70 mb-2">Total Quizzes</p>
+                    <p class="text-3xl font-bold text-white">{data.quizStats.totalQuizzes}</p>
+                </div>
+                <div class="bg-amber-500/20 border border-amber-400/40 rounded-xl p-6">
+                    <p class="text-sm text-amber-300/70 mb-2">Average Score</p>
+                    <p class="text-3xl font-bold text-amber-400">{Math.round(data.quizStats.averageScore)}</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Metrics Explanation -->
-        <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-10">
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-6 border-2 border-amber-400/30 mb-10">
             <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
                 <svg class="w-6 h-6 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -263,7 +502,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             <!-- Total Users -->
             <div 
-                class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-blue-400/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-blue-500/10"
+                class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-amber-500/20"
                 in:fly={{ y: 20, delay: 100, duration: 400 }}
             >
                 <div class="flex items-center justify-between">
@@ -274,8 +513,8 @@
                         </p>
                         <p class="mt-2 text-xs text-gray-400">Registered on platform</p>
                     </div>
-                    <div class="p-3 rounded-full bg-blue-500/10">
-                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 rounded-full bg-amber-500/20 border border-amber-500/30">
+                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                     </div>
@@ -284,19 +523,19 @@
 
             <!-- Active Users -->
             <div 
-                class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-green-400/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-green-500/10"
+                class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-amber-500/20"
                 in:fly={{ y: 20, delay: 200, duration: 400 }}
             >
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-400">Active Users</p>
+                        <p class="text-sm font-medium text-amber-300/70">Active Users</p>
                         <p class="mt-1 text-3xl font-bold text-white">
                             <span use:animateNumber={{ to: data.usersWithProgress, duration: 1500 }}>0</span>
                         </p>
                         <p class="mt-2 text-xs text-gray-400">Started making progress</p>
                     </div>
-                    <div class="p-3 rounded-full bg-green-500/10">
-                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 rounded-full bg-amber-500/20 border border-amber-500/30">
+                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                     </div>
@@ -305,19 +544,19 @@
 
             <!-- Completion Rate -->
             <div 
-                class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-yellow-400/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-yellow-500/10"
+                class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-amber-500/20"
                 in:fly={{ y: 20, delay: 300, duration: 400 }}
             >
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-400">Engagement</p>
+                        <p class="text-sm font-medium text-amber-300/70">Engagement</p>
                         <p class="mt-1 text-3xl font-bold text-white">
                             {data.totalUsers > 0 ? Math.round((data.usersWithProgress / data.totalUsers) * 100) : 0}%
                         </p>
                         <p class="mt-2 text-xs text-gray-400">Of users are active</p>
                     </div>
-                    <div class="p-3 rounded-full bg-yellow-500/10">
-                        <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 rounded-full bg-amber-500/20 border border-amber-500/30">
+                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </div>
@@ -326,17 +565,17 @@
 
             <!-- Average Progress -->
             <div 
-                class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-purple-400/30 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-purple-500/10"
+                class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-amber-500/20"
                 in:fly={{ y: 20, delay: 400, duration: 400 }}
             >
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-400">Sections</p>
+                        <p class="text-sm font-medium text-amber-300/70">Sections</p>
                         <p class="mt-1 text-3xl font-bold text-white">4</p>
                         <p class="mt-2 text-xs text-gray-400">Learning paths available</p>
                     </div>
-                    <div class="p-3 rounded-full bg-purple-500/10">
-                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 rounded-full bg-amber-500/20 border border-amber-500/30">
+                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
@@ -354,10 +593,10 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- HTML Section -->
-                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-red-400/30 transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-red-400">HTML</h3>
-                        <span class="px-3 py-1 bg-red-500/10 text-red-400 text-xs font-medium rounded-full">
+                        <h3 class="text-lg font-semibold text-amber-400">HTML</h3>
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-medium rounded-full">
                             {data.sectionCounts['HTML'] ?? 0} users
                         </span>
                     </div>
@@ -370,10 +609,10 @@
                 </div>
 
                 <!-- CSS Section -->
-                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-blue-400/30 transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-blue-400">CSS</h3>
-                        <span class="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-medium rounded-full">
+                        <h3 class="text-lg font-semibold text-amber-400">CSS</h3>
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-medium rounded-full">
                             {data.sectionCounts['CSS'] ?? 0} users
                         </span>
                     </div>
@@ -386,10 +625,10 @@
                 </div>
 
                 <!-- JavaScript Section -->
-                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-yellow-400/30 transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-yellow-400">JavaScript</h3>
-                        <span class="px-3 py-1 bg-yellow-500/10 text-yellow-400 text-xs font-medium rounded-full">
+                        <h3 class="text-lg font-semibold text-amber-400">JavaScript</h3>
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-medium rounded-full">
                             {data.sectionCounts['JS'] ?? 0} users
                         </span>
                     </div>
@@ -402,10 +641,10 @@
                 </div>
 
                 <!-- Advanced JS Section -->
-                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-green-400/30 transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-amber-400/30 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-green-400">Advanced JS</h3>
-                        <span class="px-3 py-1 bg-green-500/10 text-green-400 text-xs font-medium rounded-full">
+                        <h3 class="text-lg font-semibold text-amber-400">Advanced JS</h3>
+                        <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-medium rounded-full">
                             {data.sectionCounts['Advanced JS'] ?? 0} users
                         </span>
                     </div>
@@ -420,9 +659,9 @@
         </div>
 
         <!-- User Distribution -->
-        <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-10">
-            <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
-                <svg class="w-6 h-6 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-6 border-2 border-amber-400/30 mb-10">
+            <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 User Distribution
@@ -433,28 +672,28 @@
                     <ul class="space-y-3">
                         <li class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500 mr-2"></div>
                                 <span class="text-sm text-gray-300">HTML Section</span>
                             </div>
                             <span class="text-sm font-medium text-white">{data.sectionCounts['HTML'] ?? 0}</span>
                         </li>
                         <li class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500 mr-2"></div>
                                 <span class="text-sm text-gray-300">CSS Section</span>
                             </div>
                             <span class="text-sm font-medium text-white">{data.sectionCounts['CSS'] ?? 0}</span>
                         </li>
                         <li class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500 mr-2"></div>
                                 <span class="text-sm text-gray-300">JavaScript Section</span>
                             </div>
                             <span class="text-sm font-medium text-white">{data.sectionCounts['JS'] ?? 0}</span>
                         </li>
                         <li class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500 mr-2"></div>
                                 <span class="text-sm text-gray-300">Advanced JS Section</span>
                             </div>
                             <span class="text-sm font-medium text-white">{data.sectionCounts['Advanced JS'] ?? 0}</span>
@@ -471,19 +710,19 @@
                             </div>
                             <div class="w-full bg-gray-700 rounded-full h-2">
                                 <div 
-                                    class="bg-blue-500 h-2 rounded-full" 
+                                    class="bg-amber-500 h-2 rounded-full" 
                                     style={`width: ${data.totalUsers > 0 ? (data.usersWithProgress / data.totalUsers) * 100 : 0}%`}>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <div class="flex justify-between text-sm text-amber-300/70 mb-1">
                                 <span>Engagement Rate</span>
                                 <span>{data.totalUsers > 0 ? Math.round((data.usersWithProgress / data.totalUsers) * 100) : 0}%</span>
                             </div>
                             <div class="w-full bg-gray-700 rounded-full h-2">
                                 <div 
-                                    class="bg-green-500 h-2 rounded-full" 
+                                    class="bg-amber-500 h-2 rounded-full" 
                                     style={`width: ${data.totalUsers > 0 ? (data.usersWithProgress / data.totalUsers) * 100 : 0}%`}>
                                 </div>
                             </div>

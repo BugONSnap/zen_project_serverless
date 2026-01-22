@@ -61,24 +61,24 @@
   .progress-bar {
     height: 8px;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     overflow: hidden;
   }
   
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #ff7b7b 0%, #ff4d4d 100%);
+    background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%);
     border-radius: 4px;
   }
   
   /* Tablet and mobile styles */
   @media (max-width: 1024px) {
     .user-card {
-      background: rgba(74, 28, 28, 0.2);
+      background: rgba(31, 41, 55, 0.6);
       border-radius: 12px;
       padding: 1rem;
       margin-bottom: 1rem;
-      border: 1px solid rgba(74, 28, 28, 0.1);
+      border: 1px solid rgba(217, 119, 6, 0.3);
       max-width: 100%;
       overflow: hidden;
     }
@@ -93,30 +93,36 @@
     
     .card-label {
       font-weight: 600;
-      color: rgba(74, 28, 28, 0.8);
+      color: rgba(217, 119, 6, 0.7);
     }
     
     .card-value {
-      color: #4a1c1c;
+      color: #e5e7eb;
     }
   }
 </style>
 
+<div class="min-h-screen text-white relative" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
+  <!-- Animated gradient overlay -->
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+  <!-- Subtle dot pattern -->
+  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+
 {#if loading}
-  <div class="text-center py-12">
-    <p class="text-lg font-semibold text-[#4a1c1c]">Loading...</p>
+  <div class="text-center py-12 relative z-10">
+    <p class="text-lg font-semibold text-amber-400">Loading...</p>
   </div>
 {:else if error}
-  <div class="text-center py-12">
-    <p class="text-red-500 font-semibold">{error}</p>
+  <div class="text-center py-12 relative z-10">
+    <p class="text-red-400 font-semibold">{error}</p>
   </div>
 {:else}
-  <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
-    <section class="rounded-3xl border-2 border-[#4a1c1c]/30 p-8 shadow-lg backdrop-blur" style="background:linear-gradient(to right, #ffbdbd 0%, #ff9b9b 50%, #ff7b7b 100%);">
+  <main class="max-w-6xl mx-auto px-4 py-6 space-y-6 relative z-10">
+    <section class="rounded-3xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-8">
       <div class="text-center space-y-2 mb-8">
-        <p class="text-xs uppercase tracking-[0.35em] text-[#7a2a2a]">Administration</p>
-        <h1 class="text-3xl font-bold text-[#4a1c1c] dashboard-heading">User Management</h1>
-        <p class="text-[#7a2a2a]">View and manage all users, their roles, and progress across categories.</p>
+        <p class="text-xs uppercase tracking-[0.35em] text-amber-400/70">Administration</p>
+        <h1 class="text-3xl font-bold text-amber-400 dashboard-heading">User Management</h1>
+        <p class="text-gray-300">View and manage all users, their roles, and progress across categories.</p>
       </div>
     {#if successMessage}
       <div class="bg-green-500/20 border border-green-600/30 text-green-300 px-6 py-3 rounded-xl mb-6 backdrop-blur flex items-center justify-center" role="alert">
@@ -142,33 +148,33 @@
       <p class="text-gray-500">No users found.</p>
     {:else}
       <!-- Desktop Table (hidden on tablets and mobile) -->
-      <div class="hidden lg:block bg-gray-900/30 backdrop-blur-sm rounded-2xl p-1 w-full">
+      <div class="hidden lg:block bg-gray-800/40 backdrop-blur-sm rounded-2xl p-1 w-full border border-amber-400/20">
         <div class="overflow-x-auto">
           <table class="w-full min-w-[900px] lg:min-w-0">
             <thead>
-            <tr class="bg-gray-900/50">
-              <th class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider whitespace-nowrap">Username</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Email</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Role</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Rank</th>
-              <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Progress</th>
+            <tr class="bg-gray-900/70 border-b border-amber-400/30">
+              <th class="py-3 px-4 text-left text-xs font-medium text-amber-400 uppercase tracking-wider whitespace-nowrap">Username</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-amber-300/80 whitespace-nowrap">Email</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-amber-300/80 whitespace-nowrap">Role</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-amber-300/80 whitespace-nowrap">Rank</th>
+              <th class="py-3 px-4 text-left text-xs font-medium text-amber-300/80 whitespace-nowrap">Progress</th>
               {#if currentUserAdminLevel === 0}
-                <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 whitespace-nowrap">Actions</th>
+                <th class="py-3 px-4 text-left text-xs font-medium text-amber-300/80 whitespace-nowrap">Actions</th>
               {/if}
             </tr>
           </thead>
           <tbody>
             {#each users as user, index}
-              <tr class="border-b border-gray-800 hover:bg-gray-900/30 transition-colors">
-                <td class="py-3 px-4 text-gray-300 whitespace-nowrap">
+              <tr class="border-b border-gray-700/50 hover:bg-gray-800/40 transition-colors">
+                <td class="py-3 px-4 text-white whitespace-nowrap">
                   <div class="flex items-center gap-2 min-w-0">
-                    <div class="w-7 h-7 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
-                      <span class="text-xs text-gray-300">{user.username[0].toUpperCase()}</span>
+                    <div class="w-7 h-7 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 flex-shrink-0 flex items-center justify-center">
+                      <span class="text-xs text-white font-semibold">{user.username[0].toUpperCase()}</span>
                     </div>
-                    <span class="truncate max-w-[120px] text-gray-300">{user.username}</span>
+                    <span class="truncate max-w-[120px] text-white">{user.username}</span>
                   </div>
                 </td>
-                <td class="py-3 px-4 text-gray-400 text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px]">{user.email}</td>
+                <td class="py-3 px-4 text-gray-300 text-sm whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px]">{user.email}</td>
                 <td class="py-3 px-4 whitespace-nowrap">
                   {#if currentUserAdminLevel === 0 && user.adminLevel !== 0}
                     <!-- Dropdown for non-super-admin users -->
@@ -209,28 +215,28 @@
                   {/if}
                 </td>
                 <td class="py-3 px-4">
-                  <span class="inline-block bg-[#4a1c1c]/10 text-[#4a1c1c]/90 px-2 py-0.5 rounded-full text-xs">
+                  <span class="inline-block bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full text-xs font-semibold">
                     {user.rankName || "No Rank"}
                   </span>
                 </td>
                 <td class="py-3 px-4 w-[200px]">
                   <div class="space-y-1.5">
                     {#each parseProgress(user.progress) as progressItem, i}
-                      <div class="space-y-0.5" key="{user.id}-{i}">
-                        <div class="flex justify-between text-xs text-[#4a1c1c]/80">
+                      <div class="space-y-0.5">
+                        <div class="flex justify-between text-xs text-gray-300">
                           <span class="truncate max-w-[100px]">{progressItem.category}</span>
-                          <span class="font-medium">{progressItem.percentage}%</span>
+                          <span class="font-medium text-amber-400">{progressItem.percentage}%</span>
                         </div>
-                        <div class="w-full bg-[#4a1c1c]/10 rounded-full h-1.5 overflow-hidden">
+                        <div class="w-full bg-gray-700/50 rounded-full h-1.5 overflow-hidden">
                           <div
-                            class="bg-gradient-to-r from-emerald-400 to-emerald-600 h-full rounded-full transition-all duration-300 ease-out"
+                            class="bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full transition-all duration-300 ease-out"
                             style="width: {progressItem.percentage}%"
                           ></div>
                         </div>
                       </div>
                     {/each}
                     {#if parseProgress(user.progress).length === 0}
-                      <span class="text-[#4a1c1c]/50 italic text-xs">No progress</span>
+                      <span class="text-gray-500 italic text-xs">No progress</span>
                     {/if}
                   </div>
                 </td>
@@ -254,7 +260,7 @@
                       <input type="hidden" name="userId" value={user.id} />
                       <button
                         type="submit"
-                        class="flex items-center justify-center gap-1.5 bg-red-500/20 border border-red-400/30 text-[#4a1c1c] px-3 py-1 rounded-lg hover:bg-red-500/30 transition-colors text-sm whitespace-nowrap w-full"
+                        class="flex items-center justify-center gap-1.5 bg-red-600/20 border border-red-500/30 text-red-300 px-3 py-1 rounded-lg hover:bg-red-600/30 hover:border-red-500/50 transition-colors text-sm whitespace-nowrap w-full"
                         on:click={(e) => {
                           if (!confirm('Are you sure you want to delete this user?')) {
                             e.preventDefault();
@@ -281,12 +287,12 @@
         <div class="user-card">
           <div class="flex flex-col gap-3">
             <div class="flex items-center gap-3 mb-2">
-              <div class="flex-shrink-0 w-12 h-12 rounded-full bg-[#4a1c1c]/20 flex items-center justify-center text-[#4a1c1c]/90 font-bold text-lg">
+              <div class="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center text-white font-bold text-lg">
                 {user.username[0].toUpperCase()}
               </div>
               <div class="flex-1">
-                <h3 class="font-semibold text-[#4a1c1c]">{user.username}</h3>
-                <p class="text-sm text-[#7a2a2a]">{user.email}</p>
+                <h3 class="font-semibold text-white">{user.username}</h3>
+                <p class="text-sm text-gray-300">{user.email}</p>
               </div>
             </div>
             
@@ -297,12 +303,12 @@
               </div>
               <div class="card-row">
                 <span class="card-label">Rank:</span>
-                <span class="card-value">{user.rank || 'Beginner'}</span>
+                <span class="card-value">{user.rankName || 'No Rank'}</span>
               </div>
             </div>
-            <div class="space-y-3 pt-3 border-t border-[#4a1c1c]/10">
+            <div class="space-y-3 pt-3 border-t border-amber-400/20">
               <div class="flex justify-between items-center">
-                <span class="text-sm font-medium text-[#4a1c1c]/70">Role:</span>
+                <span class="text-sm font-medium text-amber-300/70">Role:</span>
                 <span>
                   {#if currentUserAdminLevel === 0 && user.adminLevel !== 0}
                     <form
@@ -324,7 +330,7 @@
                       <select
                         name="adminLevel"
                         value={user.adminLevel.toString()}
-                        class="border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        class="border border-amber-400/30 bg-gray-800/50 text-white rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                         on:change={(e) => {
                           const target = e.target as HTMLSelectElement | null;
                           if (target && target.form) {
@@ -342,31 +348,31 @@
                 </span>
               </div>
               <div class="flex justify-between items-center">
-                <span class="text-sm font-medium text-[#4a1c1c]/70">Rank:</span>
-                <span class="bg-[#4a1c1c]/10 text-[#4a1c1c]/90 px-2.5 py-1 rounded-full text-xs">
+                <span class="text-sm font-medium text-amber-300/70">Rank:</span>
+                <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full text-xs font-semibold">
                   {user.rankName || "No Rank"}
                 </span>
               </div>
             </div>
             <div class="pt-2">
-              <p class="text-sm font-medium text-[#4a1c1c]/70 mb-2">Progress:</p>
+              <p class="text-sm font-medium text-amber-300/70 mb-2">Progress:</p>
               <div>
                 {#each parseProgress(user.progress) as progressItem, i}
-                  <div class="mb-2 last:mb-0" key="{user.id}-mobile-{i}">
-                    <div class="flex justify-between text-sm text-gray-600 mb-1">
+                  <div class="mb-2 last:mb-0">
+                    <div class="flex justify-between text-sm text-gray-300 mb-1">
                       <span>{progressItem.category}</span>
-                      <span class="font-medium">{progressItem.percentage}%</span>
+                      <span class="font-medium text-amber-400">{progressItem.percentage}%</span>
                     </div>
-                    <div class="w-full bg-[#4a1c1c]/10 rounded-full h-2 overflow-hidden">
+                    <div class="w-full bg-gray-700/50 rounded-full h-2 overflow-hidden">
                       <div
-                        class="bg-gradient-to-r from-emerald-400 to-emerald-600 h-2 rounded-full transition-all duration-500 ease-out"
+                        class="bg-gradient-to-r from-amber-500 to-amber-600 h-2 rounded-full transition-all duration-500 ease-out"
                         style="width: {progressItem.percentage}%"
                       ></div>
                     </div>
                   </div>
                 {/each}
                 {#if parseProgress(user.progress).length === 0}
-                  <span class="text-[#4a1c1c]/50 italic text-sm">No progress</span>
+                  <span class="text-gray-500 italic text-sm">No progress</span>
                 {/if}
               </div>
             </div>
@@ -391,7 +397,7 @@
                 <input type="hidden" name="userId" value={user.id} />
                 <button
                   type="submit"
-                  class="flex items-center justify-center gap-1.5 bg-red-500/20 border border-red-400/30 text-[#4a1c1c] px-4 py-1.5 rounded-lg hover:bg-red-500/30 transition-colors w-full mt-2"
+                  class="flex items-center justify-center gap-1.5 bg-red-600/20 border border-red-500/30 text-red-300 px-4 py-1.5 rounded-lg hover:bg-red-600/30 hover:border-red-500/50 transition-colors w-full mt-2"
                   on:click={(e) => {
                     if (!confirm('Are you sure you want to delete this user?')) {
                       e.preventDefault();
@@ -410,3 +416,4 @@
   </section>
 </main>
 {/if}
+</div>

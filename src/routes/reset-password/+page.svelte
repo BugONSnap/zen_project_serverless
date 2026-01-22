@@ -144,10 +144,10 @@
     }
 </script>
 
-<div style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
   <!-- Animated gradient overlay -->
-  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
-    <div class="max-w-md w-full space-y-5 bg-white/95 p-8 rounded-lg shadow-2xl border border-gray-200">
+  <div class="absolute inset-0 opacity-20 z-0" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+    <div class="max-w-md w-full space-y-5 bg-white/95 p-8 rounded-lg shadow-2xl border border-gray-200 relative z-10">
         <h1 class="text-center text-3xl font-extrabold text-gray-900">
             Reset Password
         </h1>
@@ -297,8 +297,8 @@
         {/if}
 
         <div class="text-center mt-4">
-            <a href="/" class="text-sm text-indigo-600 hover:text-indigo-500">
-                Back to Login
+            <a href="/login" class="text-sm text-indigo-600 hover:text-indigo-500 cursor-pointer inline-block py-2 px-4 rounded-md hover:bg-indigo-50 transition-colors relative z-20">
+                ← Back to Login
             </a>
         </div>
     </div>

@@ -126,6 +126,7 @@
         <a href="/admin" class="nav-link">Home</a>
         <a href="/admin/users" class="nav-link">Users</a>
         <a href="/admin/quizzes" class="nav-link">Quizzes</a>
+        <a href="/admin/admin_community" class="nav-link">Community</a>
         <a href="/admin/analytics" class="nav-link">Analytics</a>
         <button class="btn-primary" on:click={handleLogout}>Logout</button>
       </div>
@@ -145,6 +146,7 @@
             <a href="/admin" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Home</a>
             <a href="/admin/users" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Users</a>
             <a href="/admin/quizzes" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Quizzes</a>
+            <a href="/admin/community" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Community</a>
             <a href="/admin/analytics" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Analytics</a>
             <button class="block w-full text-left px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => { handleLogout(); showMenu = false; }}>Logout</button>
           </div>

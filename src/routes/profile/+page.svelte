@@ -4,8 +4,9 @@
   import { goto } from '$app/navigation';
   
   export let data: {
-    user: { id: number; username: string; email: string; totalPoints: number; createdAt: string };
+    user: { id: number; username: string; email: string; totalPoints: number; createdAt: string; userType: string | null };
     categories: { id: number; name: string; completed: number; total: number; progress: number }[];
+    posts: any[];
   };
 
   // In-progress quiz attempts
@@ -23,7 +24,7 @@
     } catch (e) { /* ignore */ }
   });
   
-  let user = data.user;
+  let user: { id: number; username: string; email: string; totalPoints: number; createdAt: string; userType: string | null } = data.user;
   let categories = data.categories;
   let showDropdown = false;
   let isEditing = false;
@@ -97,6 +98,32 @@
     newUsername = user.username;
     showEditModal = false;
     isEditing = false;
+  }
+
+  // Helper functions for posts
+  function getScore(post: any) {
+    const likes = post.likes?.filter((l: any) => l.isLike).length || 0;
+    const dislikes = post.likes?.filter((l: any) => !l.isLike).length || 0;
+    return likes - dislikes;
+  }
+
+  function timeAgo(date: Date | string) {
+    const now = new Date();
+    const then = new Date(date);
+    const seconds = Math.floor((now.getTime() - then.getTime()) / 1000);
+    
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days}d ago`;
+    const weeks = Math.floor(days / 7);
+    if (weeks < 4) return `${weeks}w ago`;
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months}mo ago`;
+    return `${Math.floor(days / 365)}y ago`;
   }
 </script>
 
@@ -206,6 +233,7 @@
     <button
       class="absolute top-4 right-4 text-amber-600 hover:text-amber-600 focus:outline-none transition-colors"
       on:click={toggleDropdown}
+      aria-label="Settings menu"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -234,7 +262,7 @@
       <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-[#d97706] to-[#1e40af] text-3xl font-bold text-white shadow-md">
         {user.username.charAt(0).toUpperCase()}
       </div>
-      <h2 class="text-3xl font-semibold text-white">{user.username}</h2>
+      <h2 class="text-3xl font-semibold text-amber-400">{user.username}</h2>
       <p class="text-white/60">{user.email}</p>
       <!-- User type display -->
       {#if user.userType}
@@ -243,21 +271,21 @@
         </span>
       {/if}
     </div>
-    <p class="text-center text-[#4a1c1c]/80">Track your journey, manage your identity, and jump back into unfinished work.</p>
+    <p class="text-center text-amber-300/80">Track your journey, manage your identity, and jump back into unfinished work.</p>
 
     <div class="mt-8 text-left space-y-6">
       <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-[#4a1c1c]/70">In-progress</p>
-        <h3 class="mt-1 text-2xl font-semibold text-[#4a1c1c]">Current Quizzes</h3>
+        <p class="text-xs uppercase tracking-[0.35em] text-amber-400/70">In-progress</p>
+        <h3 class="mt-1 text-2xl font-semibold text-amber-400">Current Quizzes</h3>
       </div>
       {#if inProgressAttempts.length === 0}
         <p class="rounded-2xl border-2 border-white/30 bg-white/50 p-4 text-[#4a1c1c]/80">No in-progress quizzes found.</p>
       {:else}
         <ul class="space-y-4">
           {#each inProgressAttempts as attempt}
-            <li class="flex items-center justify-between rounded-2xl border-2 border-white/30 bg-white/50 p-4 shadow-md">
-              <span class="font-semibold text-[#4a1c1c] truncate">{attempt.title || 'Untitled Quiz'}</span>
-              <span class="ml-4 rounded-full border-2 border-[#ff7b7b] bg-white/80 px-3 py-1 text-xs text-[#4a1c1c]">In Progress</span>
+            <li class="flex items-center justify-between rounded-2xl border-2 border-amber-400/30 bg-white/50 p-4 shadow-md">
+              <span class="font-semibold text-amber-300 truncate">{attempt.title || 'Untitled Quiz'}</span>
+              <span class="ml-4 rounded-full border-2 border-amber-400 bg-amber-400/20 px-3 py-1 text-xs text-amber-300 font-semibold">In Progress</span>
             </li>
           {/each}
         </ul>
@@ -265,27 +293,76 @@
     </div>
     <div class="text-left space-y-4 mt-10">
       <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-[#4a1c1c]/70">Progress</p>
-        <h3 class="mt-1 text-2xl font-semibold text-[#4a1c1c]">Category mastery</h3>
+        <p class="text-xs uppercase tracking-[0.35em] text-amber-400/70">Progress</p>
+        <h3 class="mt-1 text-2xl font-semibold text-amber-400">Category mastery</h3>
       </div>
       {#if categories.length === 0}
         <p class="rounded-2xl border-2 border-white/30 bg-white/50 p-4 text-[#4a1c1c]/80">No categories found.</p>
       {:else}
         <ul class="space-y-4">
           {#each categories as category}
-            <li class="rounded-2xl border-2 border-white/30 bg-white/50 p-4 shadow-md">
+            <li class="rounded-2xl border-2 border-amber-400/30 bg-white/50 p-4 shadow-md hover:border-amber-400/50 transition-all">
               <div class="flex justify-between items-center mb-2">
-                <span class="font-semibold text-[#4a1c1c]">{category.name}</span>
-                <span class="text-sm text-[#4a1c1c]/80">{category.completed} / {category.total} quizzes</span>
+                <span class="font-semibold text-amber-300">{category.name}</span>
+                <span class="text-sm text-amber-400/80">{category.completed} / {category.total} quizzes</span>
               </div>
               <div class="w-full bg-white/70 rounded-full h-2.5">
-                <div class="bg-gradient-to-r from-[#ff7b7b] to-[#ff5e5e] h-2.5 rounded-full" style="width: {category.progress}%"></div>
+                <div class="bg-gradient-to-r from-amber-400 to-amber-600 h-2.5 rounded-full" style="width: {category.progress}%"></div>
               </div>
-              <div class="text-right text-xs text-[#4a1c1c]/80 mt-1">{category.progress}%</div>
+              <div class="text-right text-xs text-amber-400/90 mt-1 font-semibold">{category.progress}%</div>
             </li>
           {/each}
         </ul>
       {/if}
     </div>
+    
+    <!-- Community Posts Section -->
+    <div class="text-left space-y-4 mt-10">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-amber-600/70">Community</p>
+        <h3 class="mt-1 text-2xl font-semibold text-amber-600">My Posts</h3>
+      </div>
+      {#if !data.posts || data.posts.length === 0}
+        <p class="rounded-2xl border-2 border-white/30 bg-white/50 p-4 text-[#4a1c1c]/80">No posts yet. <a href="/community" class="text-amber-600 hover:underline">Create your first post!</a></p>
+      {:else}
+        <ul class="space-y-3">
+          {#each data.posts as post}
+            <li class="rounded-2xl border-2 border-amber-400/30 bg-white/50 p-4 shadow-md hover:shadow-lg hover:border-amber-400/50 transition-all">
+              <div class="flex gap-3">
+                <!-- Voting Score -->
+                <div class="flex flex-col items-center gap-1 pt-1 min-w-[40px]">
+                  <span class="text-sm font-bold {getScore(post) > 0 ? 'text-amber-400' : getScore(post) < 0 ? 'text-blue-400' : 'text-gray-400'}">
+                    {getScore(post)}
+                  </span>
+                </div>
+                
+                <!-- Post Content -->
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-2 text-xs text-amber-300/80">
+                    <span class="font-semibold text-amber-400">r/community</span>
+                    <span class="text-amber-400/60">•</span>
+                    <span class="text-amber-300/70">{timeAgo(post.createdAt)}</span>
+                    <span class="ml-auto flex items-center gap-1 text-amber-400">
+                      {'★'.repeat(post.rating)}
+                    </span>
+                  </div>
+                  <p class="text-amber-200 font-medium mb-2 line-clamp-2">{post.content}</p>
+                  <div class="flex items-center gap-4 text-xs text-amber-300/70">
+                    <span class="flex items-center gap-1">
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M13.5 2.5a1 1 0 0 0-1-1h-11a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h2.5l2 2 2-2H12.5a1 1 0 0 0 1-1v-9Z"/>
+                      </svg>
+                      {post.replies?.length || 0} {post.replies?.length === 1 ? 'comment' : 'comments'}
+                    </span>
+                    <a href="/community" class="text-amber-600 hover:underline">View post →</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+    </div>
+  </section>
   </div>
 </div>

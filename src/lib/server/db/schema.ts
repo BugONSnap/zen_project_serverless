@@ -43,6 +43,7 @@ export const users = pgTable("users", {
   totalPoints: integer("total_points").default(0),
   rankId: integer("rank_id").references(() => userRankings.id),
   adminLevel: integer("admin_level").notNull().default(2), // 0 for super admin, 1 for admin, 2 for user
+  isBlockedFromPosting: boolean("is_blocked_from_posting").default(false).notNull(), // Admin can block users from posting
 });
 
 // challenge types table
@@ -144,6 +145,8 @@ export const community = pgTable("community", {
   content: text("content").notNull(),
   rating: integer("rating").notNull(), // 1-5
   createdAt: timestamp("created_at").defaultNow(),
+  isHidden: boolean("is_hidden").default(false).notNull(), // Admin can hide posts
+  deletedAt: timestamp("deleted_at"), // Soft delete timestamp
 });
 
 // community likes/dislikes table
@@ -161,6 +164,15 @@ export const communityReplies = pgTable("community_replies", {
   postId: integer("post_id").references(() => community.id).notNull(),
   userId: integer("user_id").references(() => users.id).notNull(),
   content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// community reply likes/dislikes table
+export const communityReplyLikes = pgTable("community_reply_likes", {
+  id: serial("id").primaryKey(),
+  replyId: integer("reply_id").references(() => communityReplies.id).notNull(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  isLike: boolean("is_like").notNull(), // true = like, false = dislike
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -280,9 +292,15 @@ export const communityLikesRelations = relations(communityLikes, ({ one }) => ({
   user: one(users, { fields: [communityLikes.userId], references: [users.id] }),
 }));
 
-export const communityRepliesRelations = relations(communityReplies, ({ one }) => ({
+export const communityRepliesRelations = relations(communityReplies, ({ one, many }) => ({
   post: one(community, { fields: [communityReplies.postId], references: [community.id] }),
   user: one(users, { fields: [communityReplies.userId], references: [users.id] }),
+  likes: many(communityReplyLikes),
+}));
+
+export const communityReplyLikesRelations = relations(communityReplyLikes, ({ one }) => ({
+  reply: one(communityReplies, { fields: [communityReplyLikes.replyId], references: [communityReplies.id] }),
+  user: one(users, { fields: [communityReplyLikes.userId], references: [users.id] }),
 }));
 
 export type User = InferSelectModel<typeof users>;

@@ -83,14 +83,16 @@
   }
 </script>
 
-<div class="min-h-screen text-white font-medium relative overflow-hidden" style="background: linear-gradient(to bottom, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
-  <!-- Subtle pattern overlay -->
-  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 20px 20px;"></div>
-  <main class="max-w-7xl mx-auto px-4 py-10 space-y-8">
-    <section class="rounded-3xl border-2 border-gray-700 bg-gradient-to-br from-gray-900/50 to-gray-900/30 p-8 shadow-lg backdrop-blur">
+<div class="min-h-screen text-white font-medium relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
+  <!-- Animated gradient overlay -->
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+  <!-- Subtle dot pattern -->
+  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
+  <main class="max-w-7xl mx-auto px-4 py-10 space-y-8 relative z-10">
+    <section class="rounded-3xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-8">
       <div class="space-y-2 text-center mb-8">
-        <p class="text-xs uppercase tracking-[0.35em] text-gray-400">Quiz Management</p>
-        <h1 class="text-3xl font-semibold text-white">Quiz Administration</h1>
+        <p class="text-xs uppercase tracking-[0.35em] text-amber-400/70">Quiz Management</p>
+        <h1 class="text-3xl font-semibold text-amber-400">Quiz Administration</h1>
         <p class="text-gray-300">Create, edit, and manage quiz questions and categories</p>
       </div>
 
@@ -115,46 +117,46 @@
         method="POST" 
         action="?/create" 
         use:enhance 
-        class="mb-8 bg-white/20 border-2 border-white/30 p-6 rounded-2xl shadow-lg backdrop-blur-sm transition-all duration-300"
+        class="mb-8 bg-gray-800/40 border-2 border-amber-400/30 p-6 rounded-2xl shadow-lg backdrop-blur-sm transition-all duration-300"
       >
-        <h2 class="text-xl font-semibold mb-4 text-[#4a1c1c]">Create New Quiz</h2>
+        <h2 class="text-xl font-semibold mb-4 text-amber-400">Create New Quiz</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label for="title" class="block text-sm font-medium text-[#4a1c1c] mb-1">Title</label>
+            <label for="title" class="block text-sm font-medium text-amber-300/80 mb-1">Title</label>
             <input
               type="text"
               name="title"
               id="title"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               required
             />
           </div>
           <div>
-            <label for="points" class="block text-sm font-medium text-[#4a1c1c] mb-1">Points</label>
+            <label for="points" class="block text-sm font-medium text-amber-300/80 mb-1">Points</label>
             <input
               type="number"
               name="points"
               id="points"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               required
             />
           </div>
           <div>
-            <label for="answer" class="block text-sm font-medium text-[#4a1c1c] mb-1">Answer</label>
+            <label for="answer" class="block text-sm font-medium text-amber-300/80 mb-1">Answer</label>
             <input
               type="text"
               name="answer"
               id="answer"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               required
             />
           </div>
           <div>
-            <label for="difficulty" class="block text-sm font-medium text-[#4a1c1c] mb-1">Difficulty</label>
+            <label for="difficulty" class="block text-sm font-medium text-amber-300/80 mb-1">Difficulty</label>
             <select
               name="difficulty"
               id="difficulty"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             >
               <option value="EASY">Easy</option>
               <option value="MEDIUM" selected>Medium</option>
@@ -162,11 +164,11 @@
             </select>
           </div>
           <div>
-            <label for="quizCategoryId" class="block text-sm font-medium text-[#4a1c1c] mb-1">Category</label>
+            <label for="quizCategoryId" class="block text-sm font-medium text-amber-300/80 mb-1">Category</label>
             <select
               name="quizCategoryId"
               id="quizCategoryId"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               required
             >
               {#each data.categories as category}
@@ -175,11 +177,11 @@
             </select>
           </div>
           <div>
-            <label for="challengeTypeId" class="block text-sm font-medium text-[#4a1c1c] mb-1">Challenge Type</label>
+            <label for="challengeTypeId" class="block text-sm font-medium text-amber-300/80 mb-1">Challenge Type</label>
             <select
               name="challengeTypeId"
               id="challengeTypeId"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               required
             >
               {#each [...new Map(data.challengeTypes.map(type => [type.name, type])).values()] as type}
@@ -188,46 +190,46 @@
             </select>
           </div>
           <div class="md:col-span-2">
-            <label for="description" class="block text-sm font-medium text-[#4a1c1c] mb-1">Description</label>
+            <label for="description" class="block text-sm font-medium text-amber-300/80 mb-1">Description</label>
             <textarea
               name="description"
               id="description"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               rows="4"
             ></textarea>
           </div>
           <div class="md:col-span-2">
-            <label for="explanation" class="block text-sm font-medium text-[#4a1c1c] mb-1">Explanation</label>
+            <label for="explanation" class="block text-sm font-medium text-amber-300/80 mb-1">Explanation</label>
             <textarea
               name="explanation"
               id="explanation"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               rows="4"
             ></textarea>
           </div>
           <div>
-            <label for="timeLimit" class="block text-sm font-medium text-[#4a1c1c] mb-1">Time Limit (seconds)</label>
+            <label for="timeLimit" class="block text-sm font-medium text-amber-300/80 mb-1">Time Limit (seconds)</label>
             <input
               type="number"
               name="timeLimit"
               id="timeLimit"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             />
           </div>
           <div>
-            <label for="options" class="block text-sm font-medium text-[#4a1c1c] mb-1">Options (JSON)</label>
+            <label for="options" class="block text-sm font-medium text-amber-300/80 mb-1">Options (JSON)</label>
             <input
               type="text"
               name="options"
               id="options"
-              class="mt-1 p-2 w-full border rounded text-[#4a1c1c]"
+              class="mt-1 p-2 w-full bg-gray-800/50 border border-amber-400/30 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               placeholder='e.g., ["Option 1", "Option 2", "Option 3"]'
             />
           </div>
         </div>
         <button
           type="submit"
-          class="mt-4 bg-[#7a2a2a] text-[#4a1c1c] px-3 py-1 rounded hover:bg-[#5a1a1a] transition-colors"
+          class="mt-4 bg-amber-600/90 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
         >
           Create Quiz
         </button>
@@ -239,8 +241,8 @@
       {/if}
 
       <!-- Filter Section -->
-      <div class="mb-8 bg-gray-900/30 border border-gray-700 rounded-2xl p-6 backdrop-blur-sm max-w-6xl mx-auto">
-        <h3 class="text-lg font-medium text-white mb-6 text-center">Search & Filter</h3>
+      <div class="mb-8 bg-gray-800/40 border border-amber-400/20 rounded-2xl p-6 backdrop-blur-sm max-w-6xl mx-auto">
+        <h3 class="text-lg font-medium text-amber-400 mb-6 text-center">Search & Filter</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Search Title -->
           <div>
@@ -309,14 +311,14 @@
       </div>
 
       <!-- Quiz List -->
-      <h2 class="text-xl font-semibold mb-4">Existing Quizzes</h2>
+      <h2 class="text-xl font-semibold mb-4 text-amber-400">Existing Quizzes</h2>
       {#if filteredQuizzes.length === 0}
-        <div class="text-center py-12 bg-white/5 rounded-2xl border-2 border-dashed border-white/10">
-          <svg class="mx-auto h-12 w-12 text-[#7a2a2a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="text-center py-12 bg-gray-800/30 rounded-2xl border-2 border-dashed border-amber-400/20">
+          <svg class="mx-auto h-12 w-12 text-amber-400/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0111 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" />
           </svg>
-          <h3 class="mt-2 text-lg font-medium text-[#4a1c1c]">No quizzes found</h3>
-          <p class="mt-1 text-white/60">Try adjusting your search or create a new quiz.</p>
+          <h3 class="mt-2 text-lg font-medium text-amber-400">No quizzes found</h3>
+          <p class="mt-1 text-gray-300">Try adjusting your search or create a new quiz.</p>
           {#if searchTitle || searchCategory || searchChallengeType || searchDifficulty}
             <button 
               on:click={() => {
@@ -325,7 +327,7 @@
                 searchChallengeType = '';
                 searchDifficulty = '';
               }}
-              class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="mt-4 inline-flex items-center px-4 py-2 border border-amber-400/30 text-sm font-medium rounded-md text-amber-300 bg-amber-600/20 hover:bg-amber-600/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
             >
               Clear filters
             </button>
@@ -334,35 +336,35 @@
       {:else}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {#each filteredQuizzes as quiz}
-            <div class="group relative bg-white/20 border-2 border-white/30 rounded-2xl p-6 hover:border-[#7a2a2a] transition-all duration-300 hover:shadow-lg">
+            <div class="group relative bg-gray-800/40 border-2 border-amber-400/30 rounded-2xl p-6 hover:border-amber-400/50 transition-all duration-300 hover:shadow-lg">
               <!-- Quiz Header -->
               <div class="flex justify-between items-start mb-4">
                 <div>
-                  <h3 class="text-lg font-semibold text-[#4a1c1c] group-hover:text-[#7a2a2a] transition-colors">
+                  <h3 class="text-lg font-semibold text-white group-hover:text-amber-400 transition-colors">
                     {quiz.title}
                   </h3>
                   <div class="flex items-center mt-1 space-x-2">
                     {#if quiz.categoryName}
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900/50 text-[#4a1c1c]">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
                         {quiz.categoryName}
                       </span>
                     {/if}
                     {#if quiz.challengeTypeName}
-                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-white/10 text-[#4a1c1c]">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-700/50 text-gray-300 border border-gray-600">
                         {quiz.challengeTypeName}
                       </span>
                     {/if}
                   </div>
                 </div>
                 <div class="flex items-center space-x-1">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-900/50 text-[#4a1c1c]">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     {quiz.points} pts
                   </span>
                   {#if quiz.difficulty}
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                      quiz.difficulty === 'Easy' ? 'bg-green-900/50 text-[#4a1c1c]' :
-                      quiz.difficulty === 'Medium' ? 'bg-yellow-900/50 text-[#4a1c1c]' :
-                      'bg-red-900/50 text-[#4a1c1c]'
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {
+                      quiz.difficulty === 'Easy' ? 'bg-green-600/20 text-green-300 border border-green-600/30' :
+                      quiz.difficulty === 'Medium' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
+                      'bg-red-600/20 text-red-300 border border-red-600/30'
                     }">
                       {quiz.difficulty}
                     </span>
@@ -371,40 +373,40 @@
               </div>
 
               <!-- Quiz Description -->
-              <div class="prose prose-invert prose-sm text-[#4a1c1c] mb-4">
+              <div class="prose prose-invert prose-sm text-gray-300 mb-4">
                 <p class="line-clamp-3">{quiz.description || 'No description provided.'}</p>
               </div>
 
               <!-- Quiz Metadata -->
-              <div class="mt-4 pt-4 border-t border-white/10 text-sm">
+              <div class="mt-4 pt-4 border-t border-amber-400/20 text-sm">
                 <div class="flex items-center justify-between py-1">
-                  <span class="text-[#4a1c1c]">Time Limit:</span>
-                  <span class="font-medium text-[#4a1c1c]">{quiz.timeLimit || 'N/A'} min</span>
+                  <span class="text-gray-400">Time Limit:</span>
+                  <span class="font-medium text-amber-400">{quiz.timeLimit || 'N/A'} min</span>
                 </div>
                 <div class="flex items-center justify-between py-1">
-                  <span class="text-[#4a1c1c]">Answer:</span>
-                  <span class="font-mono bg-white/10 px-2 py-0.5 rounded text-[#4a1c1c]">{quiz.answer || 'N/A'}</span>
+                  <span class="text-gray-400">Answer:</span>
+                  <span class="font-mono bg-gray-700/50 px-2 py-0.5 rounded text-amber-300">{quiz.answer || 'N/A'}</span>
                 </div>
                 {#if quiz.explanation}
-                  <div class="mt-2 pt-2 border-t border-white/5">
-                    <p class="text-[#4a1c1c]">Explanation:</p>
-                    <p class="text-[#4a1c1c] text-sm">{quiz.explanation}</p>
+                  <div class="mt-2 pt-2 border-t border-amber-400/10">
+                    <p class="text-gray-400">Explanation:</p>
+                    <p class="text-gray-300 text-sm">{quiz.explanation}</p>
                   </div>
                 {/if}
                 {#if quiz.options}
-                  <div class="mt-2 pt-2 border-t border-white/5">
-                    <p class="text-[#4a1c1c]">Options:</p>
-                    <p class="text-[#4a1c1c] text-sm">{formatOptions(quiz.options)}</p>
+                  <div class="mt-2 pt-2 border-t border-amber-400/10">
+                    <p class="text-gray-400">Options:</p>
+                    <p class="text-gray-300 text-sm">{formatOptions(quiz.options)}</p>
                   </div>
                 {/if}
               </div>
 
               <!-- Actions -->
-              <div class="mt-6 pt-4 border-t border-white/10 flex justify-end space-x-2">
+              <div class="mt-6 pt-4 border-t border-amber-400/20 flex justify-end space-x-2">
                 <button
                   type="button"
                   on:click={() => openEditModal(quiz)}
-                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-[#4a1c1c] bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
@@ -415,7 +417,7 @@
                 <button
                   type="button"
                   on:click={() => confirmDelete(quiz.id)}
-                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-[#4a1c1c] bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0111 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
@@ -433,9 +435,9 @@
   <!-- Edit Quiz Modal -->
   {#if editingQuiz}
     <div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div class="bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto border-2 border-white/30">
+      <div class="bg-gray-900/95 border-2 border-amber-400/50 rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
         <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-[#4a1c1c]">Edit Quiz</h3>
+          <h3 class="text-2xl font-bold text-amber-400">Edit Quiz</h3>
           <button 
             on:click={closeEditModal}
             class="text-gray-400 hover:text-white"
@@ -474,45 +476,45 @@
           <input type="hidden" name="id" value={editingQuiz.id} />
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label for="edit-title" class="block text-sm font-medium text-white/80 mb-1">Title</label>
+              <label for="edit-title" class="block text-sm font-medium text-amber-300/80 mb-1">Title</label>
               <input
                 type="text"
                 name="title"
                 id="edit-title"
                 bind:value={editingQuiz.title}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 required
               />
             </div>
             <div>
-              <label for="edit-points" class="block text-sm font-medium text-white/80 mb-1">Points</label>
+              <label for="edit-points" class="block text-sm font-medium text-amber-300/80 mb-1">Points</label>
               <input
                 type="number"
                 name="points"
                 id="edit-points"
                 bind:value={editingQuiz.points}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 required
               />
             </div>
             <div>
-              <label for="edit-answer" class="block text-sm font-medium text-white/80 mb-1">Answer</label>
+              <label for="edit-answer" class="block text-sm font-medium text-amber-300/80 mb-1">Answer</label>
               <input
                 type="text"
                 name="answer"
                 id="edit-answer"
                 bind:value={editingQuiz.answer}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 required
               />
             </div>
             <div>
-              <label for="edit-difficulty" class="block text-sm font-medium text-white/80 mb-1">Difficulty</label>
+              <label for="edit-difficulty" class="block text-sm font-medium text-amber-300/80 mb-1">Difficulty</label>
               <select
                 name="difficulty"
                 id="edit-difficulty"
                 bind:value={editingQuiz.difficulty}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               >
                 <option value="EASY">Easy</option>
                 <option value="MEDIUM">Medium</option>
@@ -520,11 +522,11 @@
               </select>
             </div>
             <div>
-              <label for="edit-category" class="block text-sm font-medium text-white/80 mb-1">Category</label>
+              <label for="edit-category" class="block text-sm font-medium text-amber-300/80 mb-1">Category</label>
               <select
                 name="quizCategoryId"
                 id="edit-category"
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 required
               >
                 {#each data.categories as category}
@@ -538,11 +540,11 @@
               </select>
             </div>
             <div>
-              <label for="edit-challenge-type" class="block text-sm font-medium text-white/80 mb-1">Challenge Type</label>
+              <label for="edit-challenge-type" class="block text-sm font-medium text-amber-300/80 mb-1">Challenge Type</label>
               <select
                 name="challengeTypeId"
                 id="edit-challenge-type"
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 required
               >
                 {#each data.challengeTypes as type}
@@ -556,29 +558,29 @@
               </select>
             </div>
             <div class="md:col-span-2">
-              <label for="edit-description" class="block text-sm font-medium text-white/80 mb-1">Description</label>
+              <label for="edit-description" class="block text-sm font-medium text-amber-300/80 mb-1">Description</label>
               <textarea
                 name="description"
                 id="edit-description"
                 value={editingQuiz.description || ''}
                 on:input={(e) => editingQuiz.description = e.target.value}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 rows="3"
               ></textarea>
             </div>
             <div class="md:col-span-2">
-              <label for="edit-explanation" class="block text-sm font-medium text-white/80 mb-1">Explanation</label>
+              <label for="edit-explanation" class="block text-sm font-medium text-amber-300/80 mb-1">Explanation</label>
               <textarea
                 name="explanation"
                 id="edit-explanation"
                 value={editingQuiz.explanation || ''}
                 on:input={(e) => editingQuiz.explanation = e.target.value}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 rows="3"
               ></textarea>
             </div>
             <div class="md:col-span-2">
-              <label for="edit-options" class="block text-sm font-medium text-white/80 mb-1">Options (JSON array)</label>
+              <label for="edit-options" class="block text-sm font-medium text-amber-300/80 mb-1">Options (JSON array)</label>
               <input
                 type="text"
                 name="options"
@@ -591,19 +593,19 @@
                     // Keep the invalid JSON as is for user to correct
                   }
                 }}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 placeholder='["Option 1", "Option 2", "Option 3"]'
               />
             </div>
             <div>
-              <label for="edit-time-limit" class="block text-sm font-medium text-white/80 mb-1">Time Limit (seconds)</label>
+              <label for="edit-time-limit" class="block text-sm font-medium text-amber-300/80 mb-1">Time Limit (seconds)</label>
               <input
                 type="number"
                 name="timeLimit"
                 id="edit-time-limit"
                 value={editingQuiz.timeLimit || ''}
                 on:input={(e) => editingQuiz.timeLimit = e.target.value ? parseInt(e.target.value) : null}
-                class="w-full bg-white/30 border border-white/30 rounded-lg px-4 py-2 text-[#4a1c1c] focus:outline-none focus:ring-2 focus:ring-[#7a2a2a] focus:border-transparent"
+                class="w-full bg-gray-800/50 border border-amber-400/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
             </div>
           </div>
@@ -631,10 +633,10 @@
   <!-- Delete Confirmation Modal -->
   {#if showDeleteConfirm}
     <div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div class="bg-gradient-to-br from-[#ffb0b0] to-[#ffd4d4] rounded-2xl p-6 max-w-md w-full border-2 border-white/30">
-        <h3 class="text-xl font-bold text-[#4a1c1c] mb-4">Confirm Delete</h3>
-        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-          <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="bg-gray-900/95 border-2 border-red-500/50 rounded-2xl p-6 max-w-md w-full shadow-2xl">
+        <h3 class="text-xl font-bold text-red-400 mb-4">Confirm Delete</h3>
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-600/20 border border-red-500/30">
+          <svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
