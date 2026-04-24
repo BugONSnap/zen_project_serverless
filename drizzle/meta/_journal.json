@@ -57,6 +57,20 @@
       "when": 1764557750922,
       "tag": "0007_past_dazzler",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1769064648905,
+      "tag": "0008_crazy_mystique",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1769070075225,
+      "tag": "0009_gigantic_lady_bullseye",
+      "breakpoints": true
     }
   ]
 }
