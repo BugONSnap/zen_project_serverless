@@ -176,6 +176,25 @@ export const communityReplyLikes = pgTable("community_reply_likes", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// admin visits log table
+export const adminVisits = pgTable("admin_visits", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  page: text("page").notNull(),
+  visitedAt: timestamp("visited_at").defaultNow(),
+});
+
+// site visits log table (tracks all visitors, logged in or not)
+export const siteVisits = pgTable("site_visits", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id"), // Optional: for tracking anonymous users
+  userId: integer("user_id").references(() => users.id), // Nullable: null for anonymous users
+  page: text("page").notNull(),
+  referrer: text("referrer"),
+  userAgent: text("user_agent"),
+  visitedAt: timestamp("visited_at").defaultNow(),
+});
+
 // Relations
 export const userTypesRelations = relations(userTypes, ({ many }) => ({
   users: many(users),
@@ -301,6 +320,20 @@ export const communityRepliesRelations = relations(communityReplies, ({ one, man
 export const communityReplyLikesRelations = relations(communityReplyLikes, ({ one }) => ({
   reply: one(communityReplies, { fields: [communityReplyLikes.replyId], references: [communityReplies.id] }),
   user: one(users, { fields: [communityReplyLikes.userId], references: [users.id] }),
+}));
+
+export const adminVisitsRelations = relations(adminVisits, ({ one }) => ({
+  user: one(users, {
+    fields: [adminVisits.userId],
+    references: [users.id],
+  }),
+}));
+
+export const siteVisitsRelations = relations(siteVisits, ({ one }) => ({
+  user: one(users, {
+    fields: [siteVisits.userId],
+    references: [users.id],
+  }),
 }));
 
 export type User = InferSelectModel<typeof users>;

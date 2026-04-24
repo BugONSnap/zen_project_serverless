@@ -2,7 +2,7 @@ import type { PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-import { users, quizzes, userProgress, quizCategories, quizResults, community, communityLikes, communityReplies, communityReplyLikes, userTypes } from "$lib/server/db/schema";
+import { users, quizzes, userProgress, quizCategories, quizResults, community, communityLikes, communityReplies, communityReplyLikes, userTypes, adminVisits, siteVisits } from "$lib/server/db/schema";
 import { eq, sql, count, gte, and } from "drizzle-orm";
 
 export const load: PageServerLoad = async ({ cookies }) => {
@@ -41,6 +41,12 @@ export const load: PageServerLoad = async ({ cookies }) => {
     if (!isAuthorized) {
       throw redirect(302, "/");
     }
+
+    // Log admin page visit
+    await db.insert(adminVisits).values({
+      userId: user.id,
+      page: "/admin",
+    });
 
     // Get total users count
     const [totalUsers] = await db
@@ -148,6 +154,29 @@ export const load: PageServerLoad = async ({ cookies }) => {
       .from(community)
       .where(gte(community.createdAt, sevenDaysAgo));
 
+    // 8. Site visits (last 7 days) - all visitors, logged in or not
+    const [siteVisitsCount] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(siteVisits)
+      .where(gte(siteVisits.visitedAt, sevenDaysAgo));
+
+    // 9. Unique visitors (by session_id) - last 7 days
+    const [uniqueVisitorsCount] = await db
+      .select({ count: sql<number>`COUNT(DISTINCT ${siteVisits.sessionId})` })
+      .from(siteVisits)
+      .where(gte(siteVisits.visitedAt, sevenDaysAgo));
+
+    // 10. Logged-in vs anonymous visitors - last 7 days
+    const [loggedInVisits] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(siteVisits)
+      .where(gte(siteVisits.visitedAt, sevenDaysAgo));
+
+    const [anonymousVisits] = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(siteVisits)
+      .where(gte(siteVisits.visitedAt, sevenDaysAgo));
+
     return {
       loading: false,
       isAuthorized: true,
@@ -168,6 +197,10 @@ export const load: PageServerLoad = async ({ cookies }) => {
         totalUsers: Number(totalUsers?.count) || 0,
         activeQuizzes: activeQuizzesCount,
         totalCategories: Number(quizCategoriesCount?.count) || 0
+      },
+      siteStats: {
+        totalVisits: Number(siteVisitsCount?.count || 0),
+        uniqueVisitors: Number(uniqueVisitorsCount?.count || 0),
       },
       error: "",
     };

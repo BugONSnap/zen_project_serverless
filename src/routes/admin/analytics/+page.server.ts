@@ -1,6 +1,7 @@
 import type { PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/index';
-import { users, userProgress, quizCategories, community, communityLikes, communityReplies, communityReplyLikes, userTypes, quizResults } from '$lib/server/db/schema';
+import { users, userProgress, quizCategories, community, communityLikes, communityReplies, communityReplyLikes, userTypes, quizResults, adminVisits } from '$lib/server/db/schema';
 import { sql, eq, inArray, gte } from 'drizzle-orm';
 
 // Explicit type for frontend data
@@ -40,7 +41,42 @@ interface AnalyticsData {
 
 const REQUIRED_SECTIONS = ['HTML', 'CSS', 'JS', 'Advanced JS'];
 
-export const load = (async (): Promise<AnalyticsData> => {
+export const load = (async ({ cookies }): Promise<AnalyticsData> => {
+  // Check for session cookie
+  const session = cookies.get("session");
+  if (!session) {
+    throw redirect(302, "/");
+  }
+
+  // Fetch user data to verify adminLevel
+  const userData = await db
+    .select({
+      id: users.id,
+      username: users.username,
+      adminLevel: users.adminLevel,
+    })
+    .from(users)
+    .where(eq(users.id, parseInt(session)))
+    .limit(1);
+
+  if (userData.length === 0) {
+    throw redirect(302, "/");
+  }
+
+  const user = userData[0];
+  // Check if user is super admin (0) or admin (1)
+  const isAuthorized = user.adminLevel === 0 || user.adminLevel === 1;
+
+  if (!isAuthorized) {
+    throw redirect(302, "/");
+  }
+
+  // Log admin analytics page visit
+  await db.insert(adminVisits).values({
+    userId: user.id,
+    page: "/admin/analytics",
+  });
+
   try {
     // Total users
     const [{ count: totalUsers }] = await db.select({ count: sql<number>`COUNT(*)` }).from(users);

@@ -5,6 +5,7 @@
   export let data: PageData;
 
   const { isAuthorized, username, error, weeklyReport } = data;
+  const siteStats = (data as any).siteStats;
 
   // Format date for display
   function getWeekRange() {
@@ -130,6 +131,22 @@
         </div>
       </div>
 
+      <!-- Site Visits Card -->
+      <div class="rounded-2xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-6 hover:border-amber-400/50 transition-all">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold text-amber-400">Site Visits</h3>
+          <svg class="w-8 h-8 text-amber-400/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+        </div>
+        <div class="space-y-2">
+          <p class="text-4xl font-bold text-white">{siteStats?.totalVisits || 0}</p>
+          <p class="text-sm text-gray-400">Total visits this week</p>
+          <p class="text-xs text-amber-300/70 mt-2">{siteStats?.uniqueVisitors || 0} unique visitors</p>
+        </div>
+      </div>
+
       <!-- Quick Actions Card -->
       <div class="rounded-2xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-6 hover:border-amber-400/50 transition-all">
         <div class="flex items-center justify-between mb-4">
@@ -171,6 +188,10 @@
         <div>
           <p class="text-sm text-amber-300/70 mb-2">Platform Health</p>
           <p class="text-base"><span class="text-amber-400 font-semibold">{weeklyReport.activeUsers} active users</span> participated in community discussions, indicating healthy platform engagement.</p>
+        </div>
+        <div>
+          <p class="text-sm text-amber-300/70 mb-2">Website Traffic</p>
+          <p class="text-base">The website received <span class="text-amber-400 font-semibold">{siteStats?.totalVisits || 0} visits</span> this week from <span class="text-amber-400 font-semibold">{siteStats?.uniqueVisitors || 0} unique visitors</span> (both logged in and anonymous users).</p>
         </div>
       </div>
     </div>
