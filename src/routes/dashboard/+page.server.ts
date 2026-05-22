@@ -40,6 +40,7 @@ export const load: PageServerLoad = async ({ locals }) => {
       id: user.id,
       username: user.username,
       email: user.email,
+      adminLevel: user.adminLevel,
     },
     totalPoints: user.totalPoints || 0,
     totalCompleted,
