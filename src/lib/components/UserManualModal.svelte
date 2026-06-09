@@ -15,7 +15,7 @@
     const quickStart = [
         'Use Quick actions on the dashboard to open HTML, CSS, JavaScript, or Advanced JS quizzes.',
         'Open Learn from the header for guided lessons between quiz sessions.',
-        'Earn points on correct answers — your rank and leaderboard position follow total points.',
+        'Earn points on correct answers  your rank and leaderboard position follow total points.',
         'Resume interrupted quizzes from the In-progress section when it appears.'
     ];
 
@@ -173,7 +173,7 @@
                             <div class="text-center sm:text-left">
                                 <span class="inline-flex text-4xl mb-3" aria-hidden="true">📘</span>
                                 <p class="text-gray-300 text-sm leading-relaxed">
-                                    Hi <span class="text-amber-300 font-semibold">{username}</span> — welcome to
+                                    Hi <span class="text-amber-300 font-semibold">{username}</span>  welcome to
                                     <strong class="text-white">Zentry</strong>. This short guide shows where everything lives
                                     after you sign in.
                                 </p>
@@ -258,7 +258,7 @@
                                         {/each}
                                     </div>
                                 </div>
-                                <p><strong class="text-white">Difficulty:</strong> EASY, MEDIUM, HARD — correct answers add points.</p>
+                                <p><strong class="text-white">Difficulty:</strong> EASY, MEDIUM, HARD  correct answers add points.</p>
                                 <p><strong class="text-white">Progress:</strong> Category progress on the dashboard tracks completed vs total quizzes.</p>
                                 <p><strong class="text-white">Resume:</strong> In-progress quizzes appear with a Resume button linking to <code class="text-amber-300/90 text-xs">/quiz</code>.</p>
                                 <p><strong class="text-white">Header:</strong> Dashboard, Playground, Learn, Leaderboard, Community, Profile avatar, Logout.</p>
@@ -266,16 +266,16 @@
                         {:else}
                             <ul class="space-y-3 text-sm text-gray-300">
                                 <li class="manual-tip">
-                                    <strong class="text-white">Playground</strong> — live preview, console, save snippets.
+                                    <strong class="text-white">Playground</strong>  live preview, console, save snippets.
                                 </li>
                                 <li class="manual-tip">
-                                    <strong class="text-white">Profile</strong> — progress, username, user type (Student / Professional / Hobbyist).
+                                    <strong class="text-white">Profile</strong>  progress, username, user type (Student / Professional / Hobbyist).
                                 </li>
                                 <li class="manual-tip">
-                                    <strong class="text-white">Community</strong> — post with 1–5 stars; like, dislike, or reply.
+                                    <strong class="text-white">Community</strong>  post with 1–5 stars; like, dislike, or reply.
                                 </li>
                             </ul>
-                            <p class="mt-4 text-center text-xs text-gray-500">You’re ready — explore from Quick actions below.</p>
+                            <p class="mt-4 text-center text-xs text-gray-500">You’re ready  explore from Quick actions below.</p>
                         {/if}
                     </div>
                 {/key}
