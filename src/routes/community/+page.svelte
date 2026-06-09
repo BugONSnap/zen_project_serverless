@@ -1,5 +1,13 @@
 <script lang="ts">
     import DashboardHeader from '$lib/DashboardHeader.svelte';
+    import {
+        SUBREDDITS,
+        getPostSubreddit,
+        getSubredditMeta,
+        stripSubredditPrefix,
+        withSubredditPrefix,
+        countPostsBySubreddit
+    } from '$lib/communityUtils';
     export let data: { posts: any[], user?: any };
     
     // Post creation
@@ -29,6 +37,14 @@
     
     // Search
     let searchQuery = '';
+    let activeSubreddit: string | 'all' = 'all';
+    let selectedSubreddit = 'zenttry';
+
+    function getFlair(post: any): string {
+        return post.user?.userType?.name ?? 'MEMBER';
+    }
+
+    $: subredditCounts = countPostsBySubreddit(posts);
     
     // Voting for posts
     let likeLoading: Record<number, boolean> = {};
@@ -164,13 +180,22 @@
     $: sortedPosts = (() => {
         let filtered = [...posts];
         
+        // Apply subreddit filter
+        if (activeSubreddit !== 'all') {
+            filtered = filtered.filter((post) => getPostSubreddit(post) === activeSubreddit);
+        }
+
         // Apply search filter
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(post => 
-                post.content.toLowerCase().includes(query) ||
-                post.user?.username?.toLowerCase().includes(query)
-            );
+            filtered = filtered.filter(post => {
+                const sub = getSubredditMeta(getPostSubreddit(post));
+                return (
+                    stripSubredditPrefix(post.content).toLowerCase().includes(query) ||
+                    post.user?.username?.toLowerCase().includes(query) ||
+                    sub.label.toLowerCase().includes(query)
+                );
+            });
         }
         
         // Apply sorting
@@ -289,7 +314,7 @@
             const res = await fetch('', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content, rating: Number(rating) })
+                body: JSON.stringify({ content: withSubredditPrefix(selectedSubreddit, content), rating: Number(rating) })
             });
             const result = await res.json();
             if (res.ok) {
@@ -335,7 +360,8 @@
     // Edit functions
     function startEdit(post: any) {
         editingPost = { ...post };
-        editContent = post.content;
+        selectedSubreddit = getPostSubreddit(post);
+        editContent = stripSubredditPrefix(post.content);
         editRating = post.rating;
         editError = '';
     }
@@ -348,12 +374,14 @@
             const res = await fetch('', {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ postId: editingPost.id, content: editContent, rating: Number(editRating) })
+                body: JSON.stringify({ postId: editingPost.id, content: withSubredditPrefix(selectedSubreddit, editContent), rating: Number(editRating) })
             });
             const result = await res.json();
             if (res.ok) {
                 posts = posts.map((post: { id: number, content: string, rating: number }) =>
-                    post.id === editingPost.id ? { ...post, content: editContent, rating: editRating } : post
+                    post.id === editingPost.id
+                        ? { ...post, content: withSubredditPrefix(selectedSubreddit, editContent), rating: editRating }
+                        : post
                 );
                 editingPost = null;
             } else {
@@ -519,367 +547,449 @@
 </script>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
     .community-container {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Poppins', Arial, sans-serif;
     }
-    
+
+    .reddit-sidebar {
+        background: #111113;
+        border: 1px solid #2a2a2e;
+        border-radius: 8px;
+    }
+
+    .subreddit-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 6px;
+        color: #d7dadc;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        transition: background 0.15s;
+    }
+
+    .subreddit-item:hover {
+        background: #1a1a1d;
+    }
+
+    .subreddit-item.active {
+        background: #1f1a14;
+        color: #fbbf24;
+    }
+
     .post-card {
-        background: rgba(31, 41, 55, 0.6);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        transition: all 0.3s;
+        background: #161617;
+        border: 1px solid #2a2a2e;
+        border-radius: 4px;
+        transition: border-color 0.15s;
     }
-    
+
     .post-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.1);
+        border-color: #3d3d42;
     }
-    
+
     .vote-button {
         background: transparent;
         border: none;
-        color: #9ca3af;
+        color: #818384;
         cursor: pointer;
-        padding: 6px;
-        transition: all 0.2s;
-        border-radius: 6px;
+        padding: 4px;
+        transition: color 0.15s;
+        border-radius: 2px;
     }
-    
+
     .vote-button:hover {
-        background: rgba(217, 119, 6, 0.1);
-        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.05);
     }
-    
+
     .vote-button.upvoted {
-        color: #fbbf24;
+        color: #ff4500;
     }
-    
+
     .vote-button.downvoted {
-        color: #60a5fa;
+        color: #7193ff;
     }
-    
+
     .score {
         font-weight: 700;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 16px;
-        color: #d1d5db;
+        color: #d7dadc;
+        min-width: 20px;
+        text-align: center;
     }
-    
+
     .score.positive {
-        color: #fbbf24;
+        color: #ff4500;
     }
-    
+
     .score.negative {
-        color: #60a5fa;
+        color: #7193ff;
     }
-    
+
     .user-avatar {
-        width: 32px;
-        height: 32px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         background: linear-gradient(135deg, #fbbf24 0%, #10b981 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 10px;
         color: #1f2937;
-        border: 2px solid rgba(251, 191, 36, 0.3);
-        box-shadow: 0 2px 8px rgba(217, 119, 6, 0.2);
+        flex-shrink: 0;
     }
-    
+
     .sort-button {
         background: transparent;
         border: none;
-        color: #9ca3af;
+        color: #818384;
         cursor: pointer;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.2s;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.15s;
     }
-    
+
     .sort-button:hover {
-        background: rgba(217, 119, 6, 0.1);
-        color: #fbbf24;
+        background: #1a1a1d;
+        color: #d7dadc;
     }
-    
+
     .sort-button.active {
-        background: rgba(217, 119, 6, 0.2);
+        background: #1f1a14;
         color: #fbbf24;
+    }
+
+    .subreddit-link {
         font-weight: 700;
+        color: #d7dadc;
+        font-size: 12px;
     }
-    
+
+    .subreddit-link:hover {
+        text-decoration: underline;
+    }
+
+    .flair {
+        display: inline-flex;
+        align-items: center;
+        padding: 1px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        background: #272729;
+        color: #d97706;
+    }
+
+    .action-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 2px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #818384;
+        transition: background 0.15s;
+    }
+
+    .action-pill:hover {
+        background: #272729;
+        color: #d7dadc;
+    }
+
     .create-post-card {
-        background: rgba(31, 41, 55, 0.8);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        box-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.2);
+        background: #161617;
+        border: 1px solid #2a2a2e;
+        border-radius: 4px;
     }
-    
+
     .reply-thread {
         margin-left: 0;
         margin-top: 0;
+        border-left: 2px solid #343536;
     }
-    
+
     .modal-overlay {
         background: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(4px);
     }
-    
+
     .modal-content {
-        background: rgba(31, 41, 55, 0.95);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 2px solid rgba(217, 119, 6, 0.3);
-        border-radius: 16px;
+        background: #161617;
+        border: 1px solid #2a2a2e;
+        border-radius: 8px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .feed-toolbar {
+        background: #161617;
+        border: 1px solid #2a2a2e;
+        border-radius: 4px;
     }
 </style>
 
-<div class="min-h-screen w-full bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white community-container relative" style="font-family: poppins;">
-    <!-- Decorative background elements -->
+<div class="min-h-screen w-full text-white font-medium relative overflow-hidden dashboard-bg community-container" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
     <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
     <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
-    
+
     <DashboardHeader title="Community" user={data.user} pageName="Community" />
     
-    <main class="max-w-4xl mx-auto px-4 py-6 relative z-10">
-        <!-- Top Ribbon with Search, Create Post, and Sort -->
-        <div class="mb-6 bg-gray-800/80 backdrop-blur-sm rounded-2xl p-4 border-2 border-gray-700/50 shadow-xl">
-            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
-                <!-- Search Bar -->
-                <div class="flex-1 relative">
-                    <input 
-                        type="text" 
-                        class="w-full bg-gray-900/60 border-2 border-gray-700 rounded-lg px-4 py-3 pl-12 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 transition-colors"
-                        placeholder=" Search posts and users..."
-                        bind:value={searchQuery}
-                    />
-                    <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
-                        🔍
-                    </div>
-                </div>
-                
-                <!-- Create Post Button -->
-                <div class="flex-shrink-0">
-                    {#if data.user}
-                        <button 
-                            class="w-full md:w-auto bg-amber-400 hover:bg-amber-300 text-gray-900 font-bold py-3 px-6 rounded-lg text-base shadow-lg hover:shadow-xl transition-all ring-2 ring-amber-500 ring-offset-2 ring-offset-gray-800 flex items-center justify-center gap-2"
-                            on:click={() => showCreatePost = !showCreatePost}
-                        >
-                            {#if showCreatePost}
-                                <span>✕</span> <span>Cancel</span>
-                            {:else}
-                                <span>✏️</span> <span>Create Post</span>
-                            {/if}
-                        </button>
-                    {:else}
-                        <a 
-                            href="/login"
-                            class="w-full md:w-auto bg-amber-400 hover:bg-amber-300 text-gray-900 font-bold py-3 px-6 rounded-lg text-base shadow-lg hover:shadow-xl transition-all ring-2 ring-amber-500 ring-offset-2 ring-offset-gray-800 flex items-center justify-center gap-2"
-                        >
-                            <span>🔐</span> <span>Login</span>
-                        </a>
-                    {/if}
-                </div>
-            </div>
-            
-            <!-- Sort Options -->
-            <div class="mt-4 pt-4 border-t border-gray-700/50 flex items-center gap-2 flex-wrap">
-                <span class="text-sm font-semibold text-gray-400 mr-2">Sort by:</span>
-                <button 
-                    class="sort-button {sortBy === 'hot' ? 'active' : ''}"
-                    on:click={() => sortBy = 'hot'}
-                >
-                    🔥 Hot
-                </button>
-                <button 
-                    class="sort-button {sortBy === 'new' ? 'active' : ''}"
-                    on:click={() => sortBy = 'new'}
-                >
-                    ✨ New
-                </button>
-                <button 
-                    class="sort-button {sortBy === 'top' ? 'active' : ''}"
-                    on:click={() => sortBy = 'top'}
-                >
-                    ⬆️ Top
-                </button>
-                {#if searchQuery.trim()}
-                    <span class="ml-auto text-sm text-gray-400">
-                        {sortedPosts.length} {sortedPosts.length === 1 ? 'result' : 'results'}
-                    </span>
-                {/if}
-            </div>
-        </div>
-
-        <!-- Create Post Card -->
-        {#if showCreatePost && data.user}
-            <div class="create-post-card mb-6 bg-gray-800/90 backdrop-blur-sm border border-amber-400/30 rounded-2xl shadow-xl">
-                <div class="p-6">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-emerald-400 flex items-center justify-center font-bold text-gray-900">
-                            {data.user?.username?.charAt(0).toUpperCase() ?? '?'}
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Create a post</h3>
-                            <p class="text-sm text-gray-400">Share your thoughts with the community</p>
-                        </div>
-                    </div>
-                    <form on:submit|preventDefault={submitPost} class="space-y-4">
-                        <textarea 
-                            class="w-full bg-gray-900/60 border-2 border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 resize-none transition-colors" 
-                            rows="5" 
-                            bind:value={content} 
-                            maxlength="500" 
-                            placeholder="What's on your mind? Share your experience with ZenTry..."
-                            required
-                        ></textarea>
-                        <div class="flex items-center justify-between flex-wrap gap-4">
-                            <div class="flex items-center gap-3">
-                                <label for="rating" class="text-sm font-semibold text-gray-300">Rating:</label>
-                                <select 
-                                    id="rating" 
-                                    class="bg-gray-900/60 border-2 border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-amber-400 transition-colors font-medium"
-                                    bind:value={rating} 
-                                    required
-                                >
-                                    <option value="1">⭐ 1 Star</option>
-                                    <option value="2">⭐⭐ 2 Stars</option>
-                                    <option value="3">⭐⭐⭐ 3 Stars</option>
-                                    <option value="4">⭐⭐⭐⭐ 4 Stars</option>
-                                    <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
-                                </select>
-                            </div>
-                            <button 
-                                type="submit" 
-                                class="bg-amber-400 hover:bg-amber-300 text-gray-900 font-bold py-3 px-8 rounded-lg text-base shadow-lg hover:shadow-xl transition-all ring-2 ring-amber-500 ring-offset-2 ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled={submitting}
-                            >
-                                {submitting ? '📤 Posting...' : '🚀 Post'}
-                            </button>
-                        </div>
-                        {#if error}
-                            <div class="bg-red-900/30 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg text-sm">{error}</div>
-                        {/if}
-                    </form>
-                </div>
-            </div>
-        {/if}
-
-        <!-- Posts List -->
-        {#if sortedPosts.length === 0}
-            <div class="post-card p-12 text-center bg-gray-800/60 backdrop-blur-sm border-2 border-gray-700/50 rounded-2xl">
-                <div class="text-6xl mb-4">💬</div>
-                <p class="text-gray-300 text-xl font-semibold mb-2">No posts yet</p>
-                <p class="text-gray-400">Be the first to share your thoughts with the community!</p>
-                {#if data.user}
-                    <button 
-                        class="mt-6 bg-amber-400 hover:bg-amber-300 text-gray-900 font-bold py-3 px-6 rounded-lg transition-all"
-                        on:click={() => showCreatePost = true}
+    <main class="max-w-7xl mx-auto px-4 py-4 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)_280px] gap-4">
+            <!-- Left Sidebar: Subreddits -->
+            <aside class="hidden lg:block space-y-4">
+                <div class="reddit-sidebar p-3">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-[#818384] px-2 mb-2">Communities</h2>
+                    <button
+                        class="subreddit-item {activeSubreddit === 'all' ? 'active' : ''}"
+                        on:click={() => activeSubreddit = 'all'}
                     >
-                        Create First Post
+                        <span class="text-lg">🏠</span>
+                        <span class="flex-1">Home</span>
+                        <span class="text-xs text-[#818384]">{posts.length}</span>
                     </button>
-                {/if}
-            </div>
-        {:else}
-            <div class="space-y-4">
-                {#each sortedPosts as post (post.id)}
-                    <article class="post-card p-4 flex gap-4 bg-gray-800/60 backdrop-blur-sm border-2 border-gray-700/50 rounded-xl hover:border-amber-400/50 transition-all">
-                        <!-- Voting Section (Left) -->
-                        <div class="flex flex-col items-center gap-1 pt-1">
-                            <button 
-                                class="vote-button {userVoteStatus(post) === 1 ? 'upvoted' : ''}"
-                                disabled={likeLoading[post.id] || !data.user}
-                                on:click={() => toggleVote(post.id, true)}
-                                aria-label="Upvote"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M12.877 19H7.123A1.125 1.125 0 0 1 6 17.877V11H2.126a1.114 1.114 0 0 1-1.007-.7 1.249 1.249 0 0 1 .171-1.343L9.166 1.23a1.128 1.128 0 0 1 1.668.004l7.872 8.715a1.25 1.25 0 0 1 .176 1.348 1.113 1.113 0 0 1-1.005.7H14v6.877A1.125 1.125 0 0 1 12.877 19ZM7.25 17.75h5.5v-8h4.934L10 2.31 2.258 9.75H7.25v8ZM2.227 9.785l-.012.016c.01-.006.014-.01.012-.016Z"/>
-                                </svg>
-                            </button>
-                            <span class="score {getScore(post) > 0 ? 'positive' : getScore(post) < 0 ? 'negative' : ''}">
-                                {getScore(post)}
-                            </span>
-                            <button 
-                                class="vote-button {userVoteStatus(post) === -1 ? 'downvoted' : ''}"
-                                disabled={likeLoading[post.id] || !data.user}
-                                on:click={() => toggleVote(post.id, false)}
-                                aria-label="Downvote"
-                            >
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="transform: rotate(180deg);">
-                                    <path d="M12.877 19H7.123A1.125 1.125 0 0 1 6 17.877V11H2.126a1.114 1.114 0 0 1-1.007-.7 1.249 1.249 0 0 1 .171-1.343L9.166 1.23a1.128 1.128 0 0 1 1.668.004l7.872 8.715a1.25 1.25 0 0 1 .176 1.348 1.113 1.113 0 0 1-1.005.7H14v6.877A1.125 1.125 0 0 1 12.877 19ZM7.25 17.75h5.5v-8h4.934L10 2.31 2.258 9.75H7.25v8ZM2.227 9.785l-.012.016c.01-.006.014-.01.012-.016Z"/>
-                                </svg>
-                            </button>
+                    {#each subredditCounts as sub}
+                        <button
+                            class="subreddit-item {activeSubreddit === sub.id ? 'active' : ''}"
+                            on:click={() => activeSubreddit = sub.id}
+                        >
+                            <span class="text-lg">{sub.icon}</span>
+                            <span class="flex-1 truncate">{sub.label}</span>
+                            <span class="text-xs text-[#818384]">{sub.count}</span>
+                        </button>
+                    {/each}
+                </div>
+            </aside>
+
+            <!-- Center Feed -->
+            <div class="min-w-0 space-y-3">
+                <!-- Mobile subreddit picker -->
+                <div class="lg:hidden reddit-sidebar p-2">
+                    <select
+                        class="w-full bg-[#0b0b0c] border border-[#2a2a2e] rounded px-3 py-2 text-sm text-[#d7dadc] focus:outline-none focus:border-amber-400"
+                        bind:value={activeSubreddit}
+                    >
+                        <option value="all">🏠 Home all communities</option>
+                        {#each SUBREDDITS as sub}
+                            <option value={sub.id}>{sub.icon} {sub.label}</option>
+                        {/each}
+                    </select>
+                </div>
+
+                <!-- Feed toolbar -->
+                <div class="feed-toolbar p-3">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <div class="flex-1 relative">
+                            <input
+                                type="text"
+                                class="w-full bg-[#0b0b0c] border border-[#2a2a2e] rounded-full px-4 py-2 pl-10 text-sm text-[#d7dadc] placeholder-[#818384] focus:outline-none focus:border-amber-400"
+                                placeholder="Search posts, users, or r/communities..."
+                                bind:value={searchQuery}
+                            />
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#818384]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="8" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke-width="2"/>
+                            </svg>
                         </div>
+                        {#if data.user}
+                            <button
+                                class="bg-[#d97706] hover:bg-[#f59e0b] text-white font-bold py-2 px-5 rounded-full text-sm transition-colors"
+                                on:click={() => {
+                                    if (!showCreatePost && activeSubreddit !== 'all') selectedSubreddit = activeSubreddit;
+                                    showCreatePost = !showCreatePost;
+                                }}
+                            >
+                                {showCreatePost ? 'Cancel' : 'Create Post'}
+                            </button>
+                        {:else}
+                            <a href="/login" class="bg-[#d97706] hover:bg-[#f59e0b] text-white font-bold py-2 px-5 rounded-full text-sm text-center transition-colors">
+                                Log in to post
+                            </a>
+                        {/if}
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-[#2a2a2e] flex items-center gap-1 flex-wrap">
+                        <button class="sort-button {sortBy === 'hot' ? 'active' : ''}" on:click={() => sortBy = 'hot'}>🔥 Hot</button>
+                        <button class="sort-button {sortBy === 'new' ? 'active' : ''}" on:click={() => sortBy = 'new'}>✨ New</button>
+                        <button class="sort-button {sortBy === 'top' ? 'active' : ''}" on:click={() => sortBy = 'top'}>⬆ Top</button>
+                        {#if activeSubreddit !== 'all'}
+                            <span class="ml-auto text-xs text-[#818384]">
+                                viewing {getSubredditMeta(activeSubreddit).label}
+                            </span>
+                        {:else if searchQuery.trim()}
+                            <span class="ml-auto text-xs text-[#818384]">
+                                {sortedPosts.length} {sortedPosts.length === 1 ? 'result' : 'results'}
+                            </span>
+                        {/if}
+                    </div>
+                </div>
 
-                        <!-- Post Content (Right) -->
-                        <div class="flex-1 min-w-0">
-                            <!-- Post Header -->
-                            <div class="flex items-center gap-2 mb-2 text-xs text-[#818384]">
-                                <div class="user-avatar">
-                                    {post.user?.username?.charAt(0).toUpperCase() ?? '?'}
+                <!-- Create Post Card -->
+                {#if showCreatePost && data.user}
+                    <div class="create-post-card p-4">
+                        <form on:submit|preventDefault={submitPost} class="space-y-3">
+                            <div class="flex items-center gap-2 text-sm text-[#818384] mb-1">
+                                <div class="user-avatar" style="width:24px;height:24px;font-size:11px;">
+                                    {data.user?.username?.charAt(0).toUpperCase() ?? '?'}
                                 </div>
-                                <span class="font-semibold text-[#d7dadc] hover:underline cursor-pointer">
-                                    u/{post.user?.username ?? 'Unknown'}
-                                </span>
-                                <span class="text-[#818384]">•</span>
-                                <span>{timeAgo(post.createdAt)}</span>
-                                {#if post.user?.userType?.name}
-                                    <span class="px-2 py-0.5 bg-[#272729] rounded-full text-[#d97706] font-medium">
-                                        {post.user.userType.name}
-                                    </span>
-                                {/if}
-                                <span class="ml-auto flex items-center gap-1 text-yellow-400">
-                                    {'★'.repeat(post.rating)}
-                                </span>
-                                {#if data.user && (post.userId === data.user.id || (data.user.adminLevel ?? 2) <= 1)}
-                                    <button 
-                                        class="text-[#818384] hover:text-[#d7dadc] px-2 py-1 rounded hover:bg-[#272729] transition-colors"
-                                        on:click={() => startEdit(post)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button 
-                                        class="text-red-400 hover:text-red-300 px-2 py-1 rounded hover:bg-[#272729] transition-colors"
-                                        on:click={() => confirmDelete(post.id)}
-                                    >
-                                        Delete
-                                    </button>
-                                {/if}
+                                <span>Posting as <span class="text-[#d7dadc] font-semibold">u/{data.user?.username}</span></span>
                             </div>
-
-                            <!-- Post Title/Content -->
-                            <div class="mb-2">
-                                <p class="text-[#d7dadc] text-sm leading-relaxed whitespace-pre-wrap break-words">
-                                    {post.content}
-                                </p>
-                            </div>
-
-                            <!-- Post Actions -->
-                            <div class="flex items-center gap-3 mt-3 pt-3 border-t border-gray-700/50">
-                                {#if data.user}
-                                    <button 
-                                        class="flex items-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-4 py-2 rounded-lg transition-colors font-medium text-sm border border-emerald-500/30"
-                                        on:click={() => toggleReplyInput(post.id)}
+                            <div class="flex flex-wrap gap-3">
+                                <div class="flex-1 min-w-[180px]">
+                                    <label for="subreddit" class="text-xs font-bold text-[#818384] uppercase tracking-wide">Choose a community</label>
+                                    <select
+                                        id="subreddit"
+                                        class="mt-1 w-full bg-[#0b0b0c] border border-[#2a2a2e] text-[#d7dadc] rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-400"
+                                        bind:value={selectedSubreddit}
                                     >
-                                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-                                            <path d="M13.5 2.5a1 1 0 0 0-1-1h-11a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h2.5l2 2 2-2H12.5a1 1 0 0 0 1-1v-9Z"/>
-                                        </svg>
-                                        <span>💬 Comment</span>
-                                    </button>
-                                {/if}
-                                <button 
-                                    class="flex items-center gap-2 text-gray-400 hover:text-amber-400 px-4 py-2 rounded-lg hover:bg-gray-700/30 transition-colors font-medium text-sm"
-                                    on:click={() => toggleExpand(post.id)}
+                                        {#each SUBREDDITS as sub}
+                                            <option value={sub.id}>{sub.icon} {sub.label}</option>
+                                        {/each}
+                                    </select>
+                                </div>
+                                <div class="flex-1 min-w-[140px]">
+                                    <label for="rating" class="text-xs font-bold text-[#818384] uppercase tracking-wide">Rating</label>
+                                    <select
+                                        id="rating"
+                                        class="mt-1 w-full bg-[#0b0b0c] border border-[#2a2a2e] text-[#d7dadc] rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-400"
+                                        bind:value={rating}
+                                        required
+                                    >
+                                        <option value="5">⭐⭐⭐⭐⭐</option>
+                                        <option value="4">⭐⭐⭐⭐</option>
+                                        <option value="3">⭐⭐⭐</option>
+                                        <option value="2">⭐⭐</option>
+                                        <option value="1">⭐</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="post-title" class="text-xs font-bold text-[#818384] uppercase tracking-wide">Title / Body</label>
+                                <textarea
+                                    id="post-title"
+                                    class="mt-1 w-full bg-[#0b0b0c] border border-[#2a2a2e] rounded p-3 text-sm text-[#d7dadc] placeholder-[#818384] focus:outline-none focus:border-amber-400 resize-none"
+                                    rows="4"
+                                    bind:value={content}
+                                    maxlength="500"
+                                    placeholder="An interesting title or text post..."
+                                    required
+                                ></textarea>
+                            </div>
+                            <div class="flex justify-end">
+                                <button
+                                    type="submit"
+                                    class="bg-[#d97706] hover:bg-[#f59e0b] text-white font-bold py-2 px-6 rounded-full text-sm disabled:opacity-50"
+                                    disabled={submitting}
                                 >
-                                    {expandedPosts.has(post.id) ? '👁️ Hide' : '👁️ Show'} ({post.replies?.length || 0}) comments
+                                    {submitting ? 'Posting...' : 'Post'}
                                 </button>
                             </div>
+                            {#if error}
+                                <div class="bg-red-900/30 border border-red-500/50 text-red-300 px-3 py-2 rounded text-sm">{error}</div>
+                            {/if}
+                        </form>
+                    </div>
+                {/if}
+
+                <!-- Posts List -->
+                {#if sortedPosts.length === 0}
+                    <div class="post-card p-10 text-center">
+                        <div class="text-4xl mb-3">💬</div>
+                        <p class="text-[#d7dadc] text-lg font-semibold mb-1">No posts here yet</p>
+                        <p class="text-[#818384] text-sm">
+                            {#if activeSubreddit !== 'all'}
+                                Be the first to post in {getSubredditMeta(activeSubreddit).label}!
+                            {:else}
+                                Be the first to share something with the community!
+                            {/if}
+                        </p>
+                        {#if data.user}
+                            <button
+                                class="mt-4 bg-[#d97706] hover:bg-[#f59e0b] text-white font-bold py-2 px-5 rounded-full text-sm"
+                                on:click={() => showCreatePost = true}
+                            >
+                                Create Post
+                            </button>
+                        {/if}
+                    </div>
+                {:else}
+                    <div class="space-y-2">
+                        {#each sortedPosts as post (post.id)}
+                            {@const sub = getSubredditMeta(getPostSubreddit(post))}
+                            <article class="post-card flex">
+                                <!-- Voting -->
+                                <div class="flex flex-col items-center gap-0.5 py-2 px-2 bg-[#0b0b0c] rounded-l">
+                                    <button
+                                        class="vote-button {userVoteStatus(post) === 1 ? 'upvoted' : ''}"
+                                        disabled={likeLoading[post.id] || !data.user}
+                                        on:click={() => toggleVote(post.id, true)}
+                                        aria-label="Upvote"
+                                    >
+                                        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M12.877 19H7.123A1.125 1.125 0 0 1 6 17.877V11H2.126a1.114 1.114 0 0 1-1.007-.7 1.249 1.249 0 0 1 .171-1.343L9.166 1.23a1.128 1.128 0 0 1 1.668.004l7.872 8.715a1.25 1.25 0 0 1 .176 1.348 1.113 1.113 0 0 1-1.005.7H14v6.877A1.125 1.125 0 0 1 12.877 19ZM7.25 17.75h5.5v-8h4.934L10 2.31 2.258 9.75H7.25v8Z"/>
+                                        </svg>
+                                    </button>
+                                    <span class="score {getScore(post) > 0 ? 'positive' : getScore(post) < 0 ? 'negative' : ''}">
+                                        {getScore(post)}
+                                    </span>
+                                    <button
+                                        class="vote-button {userVoteStatus(post) === -1 ? 'downvoted' : ''}"
+                                        disabled={likeLoading[post.id] || !data.user}
+                                        on:click={() => toggleVote(post.id, false)}
+                                        aria-label="Downvote"
+                                    >
+                                        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="transform: rotate(180deg);">
+                                            <path d="M12.877 19H7.123A1.125 1.125 0 0 1 6 17.877V11H2.126a1.114 1.114 0 0 1-1.007-.7 1.249 1.249 0 0 1 .171-1.343L9.166 1.23a1.128 1.128 0 0 1 1.668.004l7.872 8.715a1.25 1.25 0 0 1 .176 1.348 1.113 1.113 0 0 1-1.005.7H14v6.877A1.125 1.125 0 0 1 12.877 19ZM7.25 17.75h5.5v-8h4.934L10 2.31 2.258 9.75H7.25v8Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <!-- Post body -->
+                                <div class="flex-1 min-w-0 py-2 pr-3">
+                                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-[#818384] mb-1">
+                                        <button
+                                            class="subreddit-link hover:underline"
+                                            on:click={() => activeSubreddit = sub.id}
+                                        >{sub.label}</button>
+                                        <span>•</span>
+                                        <span>Posted by</span>
+                                        <span class="text-[#d7dadc] font-medium hover:underline cursor-pointer">u/{post.user?.username ?? 'Unknown'}</span>
+                                        <span>•</span>
+                                        <span>{timeAgo(post.createdAt)}</span>
+                                        <span class="flair">{getFlair(post)}</span>
+                                        {#if data.user && (post.userId === data.user.id || (data.user.adminLevel ?? 2) <= 1)}
+                                            <span class="ml-auto flex gap-1">
+                                                <button class="text-[#818384] hover:text-[#d7dadc] px-1" on:click={() => startEdit(post)}>Edit</button>
+                                                <button class="text-red-400 hover:text-red-300 px-1" on:click={() => confirmDelete(post.id)}>Delete</button>
+                                            </span>
+                                        {/if}
+                                    </div>
+
+                                    <p class="text-[#d7dadc] text-[15px] leading-snug font-medium whitespace-pre-wrap break-words mb-1">
+                                        {stripSubredditPrefix(post.content)}
+                                    </p>
+                                    <div class="text-xs text-yellow-500/80 mb-2">{'★'.repeat(post.rating)}</div>
+
+                                    <div class="flex items-center gap-1">
+                                        {#if data.user}
+                                            <button class="action-pill" on:click={() => toggleReplyInput(post.id)}>
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M13.5 2.5a1 1 0 0 0-1-1h-11a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h2.5l2 2 2-2H12.5a1 1 0 0 0 1-1v-9Z"/></svg>
+                                                {post.replies?.length || 0} Comments
+                                            </button>
+                                        {/if}
+                                        <button class="action-pill" on:click={() => toggleExpand(post.id)}>
+                                            {expandedPosts.has(post.id) ? 'Hide' : 'Show'} thread
+                                        </button>
+                                        <span class="action-pill opacity-60 cursor-default">Share</span>
+                                        <span class="action-pill opacity-60 cursor-default">Save</span>
+                                    </div>
 
                             <!-- Reply Input -->
                             {#if showReplyInput[post.id] && data.user}
@@ -1307,9 +1417,64 @@
                             {/if}
                         </div>
                     </article>
-                {/each}
+                        {/each}
+                    </div>
+                {/if}
             </div>
-        {/if}
+
+            <!-- Right Sidebar -->
+            <aside class="hidden lg:block space-y-4">
+                {#if activeSubreddit !== 'all'}
+                    {@const activeSub = getSubredditMeta(activeSubreddit)}
+                    <div class="reddit-sidebar overflow-hidden">
+                        <div class="h-12" style="background: linear-gradient(135deg, {activeSub.color}33, #161617);"></div>
+                        <div class="p-4 -mt-6">
+                            <div class="w-14 h-14 rounded-full bg-[#161617] border-4 border-[#161617] flex items-center justify-center text-2xl mb-2">
+                                {activeSub.icon}
+                            </div>
+                            <h2 class="text-lg font-bold text-[#d7dadc]">{activeSub.label}</h2>
+                            <p class="text-xs text-[#818384] mt-1">{activeSub.description}</p>
+                            <div class="mt-3 pt-3 border-t border-[#2a2a2e] text-xs text-[#818384]">
+                                <span class="font-bold text-[#d7dadc]">{subredditCounts.find(s => s.id === activeSubreddit)?.count ?? 0}</span> posts
+                            </div>
+                        </div>
+                    </div>
+                {:else}
+                    <div class="reddit-sidebar p-4">
+                        <h2 class="text-sm font-bold text-[#d7dadc] mb-2">About ZenTry Community</h2>
+                        <p class="text-xs text-[#818384] leading-relaxed">
+                            A Reddit-style hub for learners. Pick a community, post your thoughts, upvote the best content, and join the discussion.
+                        </p>
+                    </div>
+                {/if}
+
+                <div class="reddit-sidebar p-4">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-[#818384] mb-3">Popular Communities</h2>
+                    <div class="space-y-2">
+                        {#each subredditCounts.slice(0, 5) as sub}
+                            <button
+                                class="w-full flex items-center gap-2 text-left text-sm text-[#d7dadc] hover:text-amber-400 transition-colors"
+                                on:click={() => activeSubreddit = sub.id}
+                            >
+                                <span>{sub.icon}</span>
+                                <span class="flex-1 truncate">{sub.label}</span>
+                                <span class="text-xs text-[#818384]">{sub.count}</span>
+                            </button>
+                        {/each}
+                    </div>
+                </div>
+
+                <div class="reddit-sidebar p-4">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-[#818384] mb-2">Community Rules</h2>
+                    <ol class="text-xs text-[#818384] space-y-1.5 list-decimal list-inside">
+                        <li>Be respectful to fellow learners</li>
+                        <li>Stay on topic for each r/ community</li>
+                        <li>No spam or self-promotion</li>
+                        <li>Help others we're all learning</li>
+                    </ol>
+                </div>
+            </aside>
+        </div>
     </main>
 
     <!-- Edit Modal -->
@@ -1320,26 +1485,38 @@
                     <div class="text-3xl">✏️</div>
                     <h2 class="text-2xl font-bold text-white">Edit Post</h2>
                 </div>
+                <div class="mb-4">
+                    <label for="editSubreddit" class="text-xs font-bold text-[#818384] uppercase">Community</label>
+                    <select
+                        id="editSubreddit"
+                        class="mt-1 w-full bg-[#0b0b0c] border border-[#2a2a2e] text-[#d7dadc] rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-400"
+                        bind:value={selectedSubreddit}
+                    >
+                        {#each SUBREDDITS as sub}
+                            <option value={sub.id}>{sub.label}</option>
+                        {/each}
+                    </select>
+                </div>
                 <textarea 
-                    class="w-full bg-gray-900/60 border-2 border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 resize-none mb-4 transition-colors" 
+                    class="w-full bg-[#0b0b0c] border border-[#2a2a2e] rounded p-4 text-[#d7dadc] placeholder-[#818384] focus:outline-none focus:border-amber-400 resize-none mb-4" 
                     rows="5" 
                     bind:value={editContent} 
                     maxlength="500" 
                     required
                 ></textarea>
                 <div class="flex items-center gap-4 mb-4">
-                    <label for="editRating" class="text-sm font-semibold text-gray-300">Rating:</label>
+                    <label for="editRating" class="text-sm font-semibold text-[#818384]">Rating:</label>
                     <select 
                         id="editRating" 
-                        class="bg-gray-900/60 border-2 border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:border-amber-400 transition-colors font-medium"
+                        class="bg-[#0b0b0c] border border-[#2a2a2e] text-[#d7dadc] rounded px-4 py-2 focus:outline-none focus:border-amber-400 text-sm"
                         bind:value={editRating} 
                         required
                     >
-                        <option value="1">⭐ 1 Star</option>
-                        <option value="2">⭐⭐ 2 Stars</option>
-                        <option value="3">⭐⭐⭐ 3 Stars</option>
-                        <option value="4">⭐⭐⭐⭐ 4 Stars</option>
-                        <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+                        <option value="1">⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
                     </select>
                 </div>
                 {#if editError}

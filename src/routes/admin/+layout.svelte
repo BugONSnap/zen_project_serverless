@@ -41,12 +41,14 @@
   
   .admin-layout {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     font-family: 'Poppins', Arial, sans-serif;
     font-weight: 500;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
     color: #e5e7eb;
-    background: linear-gradient(to bottom, #0f172a 0%, #1a1f2e 50%, #111827 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%);
   }
   .admin-layout::before {
     content: '';
@@ -75,16 +77,21 @@
     width: 100%;
   }
   .admin-footer {
-    border-top: 1px solid rgba(217, 119, 6, 0.2);
-    background-color: rgba(15, 23, 42, 0.6);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin-top: auto;
+    border-top: 1px solid rgba(217, 119, 6, 0.25);
+    background: linear-gradient(to right, #111827 0%, #0f172a 50%, #111827 100%);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(20px);
-    padding: 1rem 0;
-    margin-top: 2rem;
+    padding: 1.25rem 0;
     text-align: center;
-    color: #e5e7eb;
-    border-bottom-left-radius: 1.5rem;
-    border-bottom-right-radius: 1.5rem;
+    color: rgba(229, 231, 235, 0.85);
+    position: relative;
+    z-index: 10;
+  }
+  .admin-footer p {
+    margin: 0;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
   }
   .btn-primary {
     background-color: #d97706;
@@ -107,11 +114,35 @@
     color: #d97706;
     text-decoration: underline;
   }
+  :global(.admin-select),
+  :global(select.admin-select) {
+    background-color: #1f2937;
+    color: #f3f4f6;
+    border: 1px solid rgba(217, 119, 6, 0.35);
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  :global(.admin-select:hover),
+  :global(select.admin-select:hover) {
+    border-color: rgba(217, 119, 6, 0.6);
+    background-color: #374151;
+  }
+  :global(.admin-select:focus),
+  :global(select.admin-select:focus) {
+    outline: none;
+    border-color: #d97706;
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.35);
+  }
+  :global(.admin-select option),
+  :global(select.admin-select option) {
+    background-color: #1f2937;
+    color: #f3f4f6;
+  }
 </style>
 
 <div class="admin-layout">
-  <!-- Admin Header, Main Content, Footer will render inside -->
-  <header class="admin-header">
+  <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
+  <header class="admin-header relative z-10">
     <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
       <button 
         type="button" 
@@ -146,7 +177,7 @@
             <a href="/admin" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Home</a>
             <a href="/admin/users" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Users</a>
             <a href="/admin/quizzes" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Quizzes</a>
-            <a href="/admin/community" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Community</a>
+            <a href="/admin/admin_community" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Community</a>
             <a href="/admin/analytics" class="block px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => showMenu = false}>Analytics</a>
             <button class="block w-full text-left px-6 py-3 text-base text-white hover:bg-gray-800 hover:text-amber-400 transition-colors" on:click={() => { handleLogout(); showMenu = false; }}>Logout</button>
           </div>
@@ -154,10 +185,10 @@
       </div>
     </div>
   </header>
-  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
     <slot />
   </main>
-  <footer class="rounded-b-3xl border-t border-white/10 bg-black/50 shadow-2xl backdrop-blur py-4 mt-8 text-center text-white/80">
+  <footer class="admin-footer w-full">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <p>&copy; 2025 Zentry Admin. All rights reserved.</p>
     </div>

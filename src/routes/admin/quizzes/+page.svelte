@@ -83,25 +83,17 @@
   }
 </script>
 
-<div class="min-h-screen text-white font-medium relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
-  <!-- Animated gradient overlay -->
-  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
-  <!-- Subtle dot pattern -->
-  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
-  <main class="max-w-7xl mx-auto px-4 py-10 space-y-8 relative z-10">
-    <section class="rounded-3xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-8">
-      <div class="space-y-2 text-center mb-8">
-        <p class="text-xs uppercase tracking-[0.35em] text-amber-400/70">Quiz Management</p>
-        <h1 class="text-3xl font-semibold text-amber-400">Quiz Administration</h1>
-        <p class="text-gray-300">Create, edit, and manage quiz questions and categories</p>
-      </div>
-
-      <!-- Create/Edit Toggle -->
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold text-white">Quizzes</h2>
+<div class="space-y-6">
+    <section class="rounded-3xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-6 md:p-8 space-y-8">
+      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between border-b border-amber-400/15 pb-6">
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-[0.35em] text-amber-400/70">Quiz Management</p>
+          <h1 class="text-3xl font-semibold text-amber-400">Quiz Administration</h1>
+          <p class="text-sm text-gray-400 max-w-xl">Create, edit, and manage quiz questions and categories.</p>
+        </div>
         <button
           type="button"
-          class="flex items-center gap-2 bg-amber-600/90 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+          class="inline-flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-500 text-white px-5 py-2.5 rounded-xl transition-colors font-semibold text-sm shrink-0"
           on:click={() => isCreating = !isCreating}
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -241,15 +233,19 @@
       {/if}
 
       <!-- Filter Section -->
-      <div class="mb-8 bg-gray-800/40 border border-amber-400/20 rounded-2xl p-6 backdrop-blur-sm max-w-6xl mx-auto">
-        <h3 class="text-lg font-medium text-amber-400 mb-6 text-center">Search & Filter</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Search Title -->
-          <div>
-            <label for="searchTitle" class="block text-sm font-medium text-gray-300 mb-2">Search Title</label>
+      <div class="bg-gray-800/30 border border-amber-400/15 rounded-2xl p-5 md:p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <h3 class="text-sm font-semibold uppercase tracking-wider text-amber-400/90">Search & Filter</h3>
+          <p class="text-xs text-gray-500">
+            Showing {filteredQuizzes.length} of {data.quizzes.length} quizzes
+          </p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <div class="sm:col-span-2 xl:col-span-1">
+            <label for="searchTitle" class="field-label">Search title</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                 </svg>
               </div>
@@ -258,52 +254,34 @@
                 id="searchTitle"
                 bind:value={searchTitle}
                 placeholder="Search quizzes..."
-                class="pl-10 w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                class="field-input pl-9"
               />
             </div>
           </div>
-          
-          <!-- Category Filter -->
           <div>
-            <label for="searchCategory" class="block text-sm font-medium text-gray-300 mb-2">Filter by Category</label>
-            <select
-              id="searchCategory"
-              bind:value={searchCategory}
-              class="w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            >
-              <option value="" class="bg-gray-900 text-white">All Categories</option>
+            <label for="searchCategory" class="field-label">Category</label>
+            <select id="searchCategory" bind:value={searchCategory} class="field-input admin-select">
+              <option value="">All Categories</option>
               {#each categories as category}
-                <option value={category} class="bg-gray-900 text-white">{category}</option>
+                <option value={category}>{category}</option>
               {/each}
             </select>
           </div>
-          
-          <!-- Challenge Type Filter -->
           <div>
-            <label for="searchChallengeType" class="block text-sm font-medium text-gray-300 mb-2">Filter by Type</label>
-            <select
-              id="searchChallengeType"
-              bind:value={searchChallengeType}
-              class="w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            >
-              <option value="" class="bg-gray-900 text-white">All Types</option>
+            <label for="searchChallengeType" class="field-label">Type</label>
+            <select id="searchChallengeType" bind:value={searchChallengeType} class="field-input admin-select">
+              <option value="">All Types</option>
               {#each challengeTypes as type}
-                <option value={type} class="bg-gray-900 text-white">{type}</option>
+                <option value={type}>{type}</option>
               {/each}
             </select>
           </div>
-          
-          <!-- Difficulty Filter -->
           <div>
-            <label for="searchDifficulty" class="block text-sm font-medium text-gray-300 mb-2">Filter by Difficulty</label>
-            <select
-              id="searchDifficulty"
-              bind:value={searchDifficulty}
-              class="w-full bg-gray-900/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            >
-              <option value="" class="bg-gray-900 text-white">All Difficulties</option>
+            <label for="searchDifficulty" class="field-label">Difficulty</label>
+            <select id="searchDifficulty" bind:value={searchDifficulty} class="field-input admin-select">
+              <option value="">All Difficulties</option>
               {#each difficulties as difficulty}
-                <option value={difficulty} class="bg-gray-900 text-white">{difficulty}</option>
+                <option value={difficulty}>{difficulty}</option>
               {/each}
             </select>
           </div>
@@ -311,7 +289,8 @@
       </div>
 
       <!-- Quiz List -->
-      <h2 class="text-xl font-semibold mb-4 text-amber-400">Existing Quizzes</h2>
+      <div class="space-y-5">
+        <h2 class="text-lg font-semibold text-white">Existing Quizzes</h2>
       {#if filteredQuizzes.length === 0}
         <div class="text-center py-12 bg-gray-800/30 rounded-2xl border-2 border-dashed border-amber-400/20">
           <svg class="mx-auto h-12 w-12 text-amber-400/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -334,103 +313,84 @@
           {/if}
         </div>
       {:else}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 items-stretch">
           {#each filteredQuizzes as quiz}
-            <div class="group relative bg-gray-800/40 border-2 border-amber-400/30 rounded-2xl p-6 hover:border-amber-400/50 transition-all duration-300 hover:shadow-lg">
-              <!-- Quiz Header -->
-              <div class="flex justify-between items-start mb-4">
-                <div>
-                  <h3 class="text-lg font-semibold text-white group-hover:text-amber-400 transition-colors">
-                    {quiz.title}
-                  </h3>
-                  <div class="flex items-center mt-1 space-x-2">
-                    {#if quiz.categoryName}
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                        {quiz.categoryName}
-                      </span>
-                    {/if}
-                    {#if quiz.challengeTypeName}
-                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-700/50 text-gray-300 border border-gray-600">
-                        {quiz.challengeTypeName}
-                      </span>
-                    {/if}
-                  </div>
-                </div>
-                <div class="flex items-center space-x-1">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                    {quiz.points} pts
+            <article class="quiz-card group flex flex-col bg-gray-800/35 border border-amber-400/20 rounded-2xl p-5 md:p-6 hover:border-amber-400/40 transition-all duration-200 hover:shadow-lg hover:shadow-amber-900/10">
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="quiz-badge quiz-badge-points">{quiz.points} pts</span>
+                {#if quiz.difficulty}
+                  <span class="quiz-badge {
+                    quiz.difficulty === 'Easy' ? 'quiz-badge-easy' :
+                    quiz.difficulty === 'Medium' ? 'quiz-badge-medium' :
+                    'quiz-badge-hard'
+                  }">
+                    {quiz.difficulty}
                   </span>
-                  {#if quiz.difficulty}
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {
-                      quiz.difficulty === 'Easy' ? 'bg-green-600/20 text-green-300 border border-green-600/30' :
-                      quiz.difficulty === 'Medium' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-                      'bg-red-600/20 text-red-300 border border-red-600/30'
-                    }">
-                      {quiz.difficulty}
-                    </span>
-                  {/if}
-                </div>
+                {/if}
               </div>
 
-              <!-- Quiz Description -->
-              <div class="prose prose-invert prose-sm text-gray-300 mb-4">
-                <p class="line-clamp-3">{quiz.description || 'No description provided.'}</p>
+              <h3 class="text-base font-semibold text-white leading-snug line-clamp-2 group-hover:text-amber-300 transition-colors mb-3">
+                {quiz.title}
+              </h3>
+
+              <div class="flex flex-wrap gap-2 mb-4">
+                {#if quiz.categoryName}
+                  <span class="quiz-tag">{quiz.categoryName}</span>
+                {/if}
+                {#if quiz.challengeTypeName}
+                  <span class="quiz-tag quiz-tag-muted">{quiz.challengeTypeName}</span>
+                {/if}
               </div>
 
-              <!-- Quiz Metadata -->
-              <div class="mt-4 pt-4 border-t border-amber-400/20 text-sm">
-                <div class="flex items-center justify-between py-1">
-                  <span class="text-gray-400">Time Limit:</span>
-                  <span class="font-medium text-amber-400">{quiz.timeLimit || 'N/A'} min</span>
+              <p class="text-sm text-gray-400 leading-relaxed line-clamp-3 flex-1 mb-5">
+                {quiz.description || 'No description provided.'}
+              </p>
+
+              <div class="space-y-2.5 text-sm border-t border-amber-400/10 pt-4 mb-5">
+                <div class="flex items-center justify-between gap-3">
+                  <span class="text-gray-500 shrink-0">Time limit</span>
+                  <span class="font-medium text-amber-300 text-right">{quiz.timeLimit || 'N/A'} min</span>
                 </div>
-                <div class="flex items-center justify-between py-1">
-                  <span class="text-gray-400">Answer:</span>
-                  <span class="font-mono bg-gray-700/50 px-2 py-0.5 rounded text-amber-300">{quiz.answer || 'N/A'}</span>
+                <div class="flex items-start justify-between gap-3">
+                  <span class="text-gray-500 shrink-0 pt-0.5">Answer</span>
+                  <code class="answer-chip">{quiz.answer || 'N/A'}</code>
                 </div>
                 {#if quiz.explanation}
-                  <div class="mt-2 pt-2 border-t border-amber-400/10">
-                    <p class="text-gray-400">Explanation:</p>
-                    <p class="text-gray-300 text-sm">{quiz.explanation}</p>
-                  </div>
-                {/if}
-                {#if quiz.options}
-                  <div class="mt-2 pt-2 border-t border-amber-400/10">
-                    <p class="text-gray-400">Options:</p>
-                    <p class="text-gray-300 text-sm">{formatOptions(quiz.options)}</p>
+                  <div class="pt-2">
+                    <p class="text-gray-500 text-xs mb-1">Explanation</p>
+                    <p class="text-gray-400 text-xs leading-relaxed line-clamp-2">{quiz.explanation}</p>
                   </div>
                 {/if}
               </div>
 
-              <!-- Actions -->
-              <div class="mt-6 pt-4 border-t border-amber-400/20 flex justify-end space-x-2">
+              <div class="mt-auto flex gap-2 pt-1">
                 <button
                   type="button"
                   on:click={() => openEditModal(quiz)}
-                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg text-white bg-blue-600/90 hover:bg-blue-600 transition-colors"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                   </svg>
                   Edit
                 </button>
-                
                 <button
                   type="button"
                   on:click={() => confirmDelete(quiz.id)}
-                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg text-white bg-red-600/90 hover:bg-red-600 transition-colors"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0111 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                   </svg>
                   Delete
                 </button>
               </div>
-            </div>
+            </article>
           {/each}
         </div>
       {/if}
+      </div>
     </section>
-  </main>
 
   <!-- Edit Quiz Modal -->
   {#if editingQuiz}
@@ -690,27 +650,121 @@
   {/if}
 
   <style>
-    .prose {
-      color: inherit;
+    .field-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: rgba(251, 191, 36, 0.65);
+      margin-bottom: 0.375rem;
     }
-    .prose p {
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
+
+    .field-input {
+      width: 100%;
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid rgba(75, 85, 99, 0.6);
+      border-radius: 0.625rem;
+      padding: 0.625rem 0.875rem;
+      font-size: 0.875rem;
+      color: #f3f4f6;
     }
+
+    .field-input:focus {
+      outline: none;
+      border-color: #d97706;
+      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.25);
+    }
+
+    .field-input::placeholder {
+      color: #6b7280;
+    }
+
+    .quiz-card {
+      min-height: 100%;
+    }
+
+    .quiz-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.375rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .quiz-badge-points {
+      background: rgba(217, 119, 6, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(217, 119, 6, 0.3);
+    }
+
+    .quiz-badge-easy {
+      background: rgba(22, 163, 74, 0.15);
+      color: #86efac;
+      border: 1px solid rgba(22, 163, 74, 0.3);
+    }
+
+    .quiz-badge-medium {
+      background: rgba(217, 119, 6, 0.15);
+      color: #fcd34d;
+      border: 1px solid rgba(217, 119, 6, 0.3);
+    }
+
+    .quiz-badge-hard {
+      background: rgba(220, 38, 38, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+    }
+
+    .quiz-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(217, 119, 6, 0.12);
+      color: #fcd34d;
+      border: 1px solid rgba(217, 119, 6, 0.25);
+    }
+
+    .quiz-tag-muted {
+      background: rgba(55, 65, 81, 0.5);
+      color: #d1d5db;
+      border-color: rgba(75, 85, 99, 0.6);
+      border-radius: 0.375rem;
+    }
+
+    .answer-chip {
+      font-family: ui-monospace, monospace;
+      font-size: 0.75rem;
+      background: rgba(31, 41, 55, 0.8);
+      color: #fcd34d;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.375rem;
+      border: 1px solid rgba(75, 85, 99, 0.5);
+      word-break: break-all;
+      text-align: right;
+      max-width: 65%;
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     .line-clamp-3 {
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    
-    /* Smooth transitions */
-    .transition-all {
-      transition-property: all;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 200ms;
-    }
-    
+
     /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 8px;

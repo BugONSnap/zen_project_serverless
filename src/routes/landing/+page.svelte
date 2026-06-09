@@ -20,7 +20,7 @@
         <span class="text-amber-400">the ZenTry way.</span>
       </h1>
       <p class="text-lg md:text-xl text-gray-300 max-w-lg mb-7 font-medium">
-        Interactive quizzes, hands-on playgrounds, and step-by-step mastery—powered by a friendly mascot! Discover a learning journey designed for all levels. Dive in. <span class="text-emerald-300 font-semibold">Try, learn, master!</span>
+        Interactive quizzes, hands on playgrounds, and step by step mastery powered by a friendly mascot! Discover a learning journey designed for all levels. Dive in. <span class="text-emerald-300 font-semibold">Try, learn, master!</span>
       </p>
       <div class="flex gap-4 flex-wrap">
         <a href="/login" class="px-8 py-4 rounded-lg bg-amber-400 text-gray-900 font-bold text-lg shadow-lg hover:bg-amber-300 transition ring-2 ring-amber-500 ring-offset-2">Get Started</a>
@@ -33,7 +33,7 @@
         <img src="/server-logo.png" alt="ZenTry Mascot Logo" class="w-52 h-52 mt-8 drop-shadow-2xl bg-white rounded-full border-4 border-amber-400" />
         <div class="px-8 py-4 pb-8 flex flex-col items-center">
           <h2 class="text-2xl font-bold text-amber-300 mb-1 text-center">Meet the ZenTry Mascot</h2>
-          <p class="text-gray-200 text-center text-md font-medium">Curious. Focused. Always drooling for more code.<br /> ZenTry guides your journey from newbie to pro—one <span class="text-emerald-400 font-semibold">try</span> at a time!</p>
+          <p class="text-gray-200 text-center text-md font-medium">Curious. Focused. Always drooling for more code.<br /> ZenTry guides your journey from newbie to pro one <span class="text-emerald-400 font-semibold">try</span> at a time!</p>
         </div>
       </div>
     </div>
@@ -50,9 +50,14 @@
       </div>
       <!-- Playground Card -->
       <div style="font-family: poppins;" class="bg-gray-800/90 rounded-2xl shadow-xl p-7 flex flex-col items-center text-center border-t-4 border-blue-400">
-        <div class="text-4xl mb-2">🧪</div>
+        <div class="mb-2 flex items-center justify-center w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-400/30">
+          <svg class="w-8 h-8 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+        </div>
         <h3 class="font-bold text-xl mb-2">Code Playground</h3>
-        <p class="text-gray-300 text-base">Experiment in a safe coding environment. Test your HTML, CSS, and JS. Instant results—no setup needed!</p>
+        <p class="text-gray-300 text-base">Experiment in a safe coding environment. Test your HTML, CSS, and JS. Instant results no setup needed!</p>
       </div>
       <!-- Leaderboard Card -->
       <div style="font-family: poppins;" class="bg-gray-800/90 rounded-2xl shadow-xl p-7 flex flex-col items-center text-center border-t-4 border-amber-400">

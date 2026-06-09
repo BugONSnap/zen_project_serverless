@@ -201,13 +201,7 @@
     });
 </script>
 
-<div class="min-h-screen text-white relative" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
-  <!-- Animated gradient overlay -->
-  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
-  <!-- Subtle dot pattern -->
-  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
-  
-    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 relative z-10">
+<div class="space-y-8">
         <!-- Header -->
         <div class="text-center mb-12" in:fly={{ y: -20, duration: 400 }}>
             <h1 class="text-4xl font-bold text-amber-400 mb-2">Analytics Dashboard</h1>
@@ -731,5 +725,4 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>

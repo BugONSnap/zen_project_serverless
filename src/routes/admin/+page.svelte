@@ -21,14 +21,8 @@
   }
 </script>
 
-<div class="min-h-screen text-white relative" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
-  <!-- Animated gradient overlay -->
-  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
-  <!-- Subtle dot pattern -->
-  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
-
 {#if data.loading}
-  <div class="flex justify-center items-center min-h-[60vh] relative z-10">
+  <div class="flex justify-center items-center min-h-[40vh]">
     <div class="border border-emerald-400 bg-emerald-600/10 text-emerald-100 px-8 py-5 rounded-2xl shadow-xl text-lg font-semibold text-center">
       Loading...
     </div>
@@ -197,10 +191,9 @@
     </div>
   </div>
 {:else}
-  <div class="flex justify-center items-center min-h-[60vh] relative z-10">
+  <div class="flex justify-center items-center min-h-[40vh]">
     <div class="border border-amber-400 bg-gray-900/40 text-amber-200 px-8 py-5 rounded-2xl shadow-xl text-lg font-semibold text-center">
       Access denied. Redirecting to login...
     </div>
   </div>
 {/if}
-</div>

@@ -71,6 +71,32 @@
     border-radius: 4px;
   }
   
+  .role-select {
+    background-color: #1f2937;
+    color: #f3f4f6;
+    border: 1px solid rgba(217, 119, 6, 0.35);
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .role-select:hover {
+    border-color: rgba(217, 119, 6, 0.6);
+    background-color: #374151;
+  }
+
+  .role-select:focus {
+    outline: none;
+    border-color: #d97706;
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.35);
+  }
+
+  .role-select option {
+    background-color: #1f2937;
+    color: #f3f4f6;
+  }
+
   /* Tablet and mobile styles */
   @media (max-width: 1024px) {
     .user-card {
@@ -102,23 +128,16 @@
   }
 </style>
 
-<div class="min-h-screen text-white relative" style="background: linear-gradient(135deg, #0f172a 0%, #1a1f2e 50%, #111827 100%); font-family: poppins;">
-  <!-- Animated gradient overlay -->
-  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #d97706 0%, transparent 50%), radial-gradient(circle at 80% 80%, #1e40af 0%, transparent 50%); mix-blend-mode: screen;"></div>
-  <!-- Subtle dot pattern -->
-  <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 50px 50px;"></div>
-
 {#if loading}
-  <div class="text-center py-12 relative z-10">
+  <div class="text-center py-12">
     <p class="text-lg font-semibold text-amber-400">Loading...</p>
   </div>
 {:else if error}
-  <div class="text-center py-12 relative z-10">
+  <div class="text-center py-12">
     <p class="text-red-400 font-semibold">{error}</p>
   </div>
 {:else}
-  <main class="max-w-6xl mx-auto px-4 py-6 space-y-6 relative z-10">
-    <section class="rounded-3xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-8">
+  <section class="rounded-3xl border-2 border-amber-400/30 bg-gray-900/60 backdrop-blur-xl shadow-2xl p-8">
       <div class="text-center space-y-2 mb-8">
         <p class="text-xs uppercase tracking-[0.35em] text-amber-400/70">Administration</p>
         <h1 class="text-3xl font-bold text-amber-400 dashboard-heading">User Management</h1>
@@ -197,7 +216,7 @@
                       <select
                         name="adminLevel"
                         value={user.adminLevel.toString()}
-                        class="border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        class="role-select admin-select"
                         on:change={(e) => {
                           const target = e.target as HTMLSelectElement | null;
                           if (target && target.form) {
@@ -330,7 +349,7 @@
                       <select
                         name="adminLevel"
                         value={user.adminLevel.toString()}
-                        class="border border-amber-400/30 bg-gray-800/50 text-white rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                        class="role-select admin-select"
                         on:change={(e) => {
                           const target = e.target as HTMLSelectElement | null;
                           if (target && target.form) {
@@ -412,8 +431,6 @@
         </div>
       {/each}
     </div>
-  {/if}
+    {/if}
   </section>
-</main>
 {/if}
-</div>
