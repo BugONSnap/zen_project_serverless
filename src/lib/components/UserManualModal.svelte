@@ -34,7 +34,7 @@
     ];
 
     const socialRoutes: ManualLink[] = [
-        { label: 'Code Playground', href: '/playground', description: 'Live HTML/CSS/JS editor with preview and saved snippets.' },
+        { label: 'Code Playground', href: '/playground', description: 'Live HTML/CSS/JS editor with preview.' },
         { label: 'Leaderboard', href: '/leaderboard', description: 'Top learners ranked by points.' },
         { label: 'Community', href: '/community', description: 'Feedback, ratings, likes, and replies.' }
     ];
@@ -68,7 +68,6 @@
     $: pageIndex = Math.min(currentPage, totalPages - 1);
     $: progressPercent = totalPages > 1 ? ((pageIndex + 1) / totalPages) * 100 : 100;
 
-    /** Map logical slide index to pageLabels index (admin inserts extra slide). */
     $: slideKey = (() => {
         if (pageIndex === 0) return 'welcome';
         if (pageIndex === 1) return 'quickstart';
@@ -197,12 +196,10 @@
                             <ul class="space-y-2 mb-4">
                                 <li class="manual-route-card">
                                     <a href="/dashboard" class="manual-link">Dashboard</a>
-                                    <span class="text-gray-500 text-xs"> /dashboard</span>
                                     <p class="text-xs text-gray-400 mt-1">Stats, progress, quick actions.</p>
                                 </li>
                                 <li class="manual-route-card">
                                     <a href="/profile" class="manual-link">Profile</a>
-                                    <span class="text-gray-500 text-xs"> /profile</span>
                                     <p class="text-xs text-gray-400 mt-1">Username, progress, account settings.</p>
                                 </li>
                             </ul>
@@ -211,7 +208,6 @@
                                 {#each quizRoutes as link}
                                     <li class="manual-route-card">
                                         <a href={link.href} class="manual-link">{link.label}</a>
-                                        <span class="text-gray-500 text-xs"> {link.href}</span>
                                         <p class="text-xs text-gray-400 mt-1">{link.description}</p>
                                     </li>
                                 {/each}
@@ -222,7 +218,6 @@
                                 {#each learnRoutes as link}
                                     <li class="manual-route-card">
                                         <a href={link.href} class="manual-link">{link.label}</a>
-                                        <span class="text-gray-500 text-xs"> {link.href}</span>
                                         <p class="text-xs text-gray-400 mt-1">{link.description}</p>
                                     </li>
                                 {/each}
@@ -232,7 +227,6 @@
                                 {#each socialRoutes as link}
                                     <li class="manual-route-card">
                                         <a href={link.href} class="manual-link">{link.label}</a>
-                                        <span class="text-gray-500 text-xs"> {link.href}</span>
                                         <p class="text-xs text-gray-400 mt-1">{link.description}</p>
                                     </li>
                                 {/each}
@@ -243,7 +237,6 @@
                                 {#each adminRoutes as link}
                                     <li class="manual-route-card border-amber-500/20">
                                         <a href={link.href} class="manual-link">{link.label}</a>
-                                        <span class="text-gray-500 text-xs"> {link.href}</span>
                                         <p class="text-xs text-gray-400 mt-1">{link.description}</p>
                                     </li>
                                 {/each}
@@ -275,7 +268,7 @@
                                     <strong class="text-white">Community</strong>  post with 1–5 stars; like, dislike, or reply.
                                 </li>
                             </ul>
-                            <p class="mt-4 text-center text-xs text-gray-500">You’re ready  explore from Quick actions below.</p>
+                            <p class="mt-4 text-center text-xs text-gray-500">You're ready  explore from Quick actions below.</p>
                         {/if}
                     </div>
                 {/key}
